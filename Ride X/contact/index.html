@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1730" />
+    <title>Contact Ride X | Jeddah Private Transport</title>
+    <meta
+      name="description"
+      content="Contact Ride X in Jeddah through WhatsApp, phone, email, or the inquiry form — for transport requests, quotes, and corporate coordination."
+    />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <!-- REPLACE-ME: update canonical/og:url/og:image with the real domain before launch -->
+    <link rel="canonical" href="https://ridex.sa/contact/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ride X" />
+    <meta property="og:title" content="Contact Ride X | Jeddah Private Transport" />
+    <meta property="og:description" content="Reach Ride X on WhatsApp, by phone, or by email for transport requests and corporate coordination in Jeddah." />
+    <meta property="og:url" content="https://ridex.sa/contact/" />
+    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (() => {
+        const language = (() => {
+          try {
+            return localStorage.getItem("rideXLanguage") === "ar" ? "ar" : "en";
+          } catch {
+            return "en";
+          }
+        })();
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.classList.add(`lang-${language}`);
+        if (language === "ar") {
+          document.documentElement.classList.add("language-pending");
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Ride X navigation">
+      <a class="brand" href="../index.html" aria-label="Ride X home">
+        <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+        <span>Ride X</span>
+      </a>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open navigation menu" aria-controls="siteNavPanel" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-shell" id="siteNavPanel">
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html" data-i18n="nav.home">Home</a>
+          <a href="../services/index.html" data-i18n="nav.services">Services</a>
+          <a class="nav-quote" href="../quote/index.html" data-i18n="nav.quote">Quote</a>
+          <a href="../about/index.html" data-i18n="nav.about">About</a>
+          <a href="index.html" aria-current="page" data-i18n="nav.contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="control-button" id="languageToggle" type="button" aria-label="Switch to Arabic">
+            <span data-i18n="controls.language">🇸🇦 Arabic</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="services-hero contact-hero" aria-labelledby="contact-hero-title">
+        <div class="services-hero-content">
+          <p class="eyebrow" data-i18n="contactPage.hero.eyebrow">CONTACT RIDE X</p>
+          <h1 id="contact-hero-title" data-i18n="contactPage.hero.title">Reach Ride X directly.</h1>
+          <p class="hero-copy" data-i18n="contactPage.hero.copy">
+            For transport requests, quotes, or corporate coordination in Jeddah — contact Ride X
+            through WhatsApp, phone, or email.
+          </p>
+        </div>
+      </section>
+
+      <section class="contact-layout" id="contact" aria-label="Ride X contact options">
+        <div class="contact-card-list">
+          <article class="contact-method-card">
+            <div class="card-top">
+              <span class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z" /></svg>
+              </span>
+              <span class="card-index">01</span>
+            </div>
+            <h2 data-i18n="contactPage.whatsapp.title">WhatsApp</h2>
+            <p data-i18n="contactPage.whatsapp.copy">Fastest way to start a transport request and get a same-day reply.</p>
+            <a class="button button-primary" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="contactPage.whatsapp.button">Chat on WhatsApp</a>
+          </article>
+
+          <article class="contact-method-card">
+            <div class="card-top">
+              <span class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.4 2.1L8 9.6a16 16 0 0 0 6.4 6.4l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.6.5 2.5.6A2 2 0 0 1 22 16.9z" /></svg>
+              </span>
+              <span class="card-index">02</span>
+            </div>
+            <h2 data-i18n="contactPage.phone.title">Phone</h2>
+            <p data-i18n="contactPage.phone.copy">Call Ride X for direct coordination during working hours.</p>
+            <a class="button button-quote" href="tel:+966547433452" data-i18n="contactPage.phone.button">Call Ride X</a>
+          </article>
+
+          <article class="contact-method-card">
+            <div class="card-top">
+              <span class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+              </span>
+              <span class="card-index">03</span>
+            </div>
+            <h2 data-i18n="contactPage.email.title">Email</h2>
+            <p data-i18n="contactPage.email.copy">Send quote details, corporate inquiries, or partnership requests.</p>
+            <!-- REPLACE-ME: set the real business email address once the domain is live -->
+            <a class="button button-quote" href="mailto:contact@ridex.sa" data-i18n="contactPage.email.button">Email Ride X</a>
+          </article>
+        </div>
+
+        <section class="quote-form-card contact-form-card" aria-labelledby="contact-form-title">
+          <p class="eyebrow" data-i18n="contactPage.form.eyebrow">Quick inquiry</p>
+          <h2 id="contact-form-title" data-i18n="contactPage.form.title">Send a message.</h2>
+          <p class="form-note" data-i18n="contactPage.response">Messages are usually answered the same day during working hours.</p>
+          <form class="contact-form" novalidate>
+            <label class="spam-check" aria-hidden="true">
+              Leave this field empty
+              <input name="website" type="text" autocomplete="off" tabindex="-1" data-spam-check="true" />
+            </label>
+            <div class="form-grid">
+              <label class="field">
+                <span><span data-i18n="contactPage.form.name">Full Name</span> <b aria-hidden="true">*</b></span>
+                <input id="contactName" name="fullName" type="text" autocomplete="name" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="contactPage.form.phone">Phone Number</span> <b aria-hidden="true">*</b></span>
+                <input id="contactPhone" name="phone" type="tel" autocomplete="tel" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="contactPage.form.email">Email</span> <b aria-hidden="true">*</b></span>
+                <input id="contactEmail" name="email" type="email" autocomplete="email" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="contactPage.form.type">Inquiry Type</span> <b aria-hidden="true">*</b></span>
+                <select id="inquiryType" name="inquiryType" required>
+                  <option value="" data-i18n="contactPage.form.type.placeholder">Select an inquiry type</option>
+                  <option value="Request a Quote" data-i18n="contactPage.form.type.quote">Request a Quote</option>
+                  <option value="General Question" data-i18n="contactPage.form.type.general">General Question</option>
+                  <option value="Corporate Transport" data-i18n="contactPage.form.type.corporate">Corporate Transport</option>
+                  <option value="Partnership" data-i18n="contactPage.form.type.partnership">Partnership</option>
+                </select>
+              </label>
+              <label class="field field-wide">
+                <span><span data-i18n="contactPage.form.message">Message</span> <b aria-hidden="true">*</b></span>
+                <textarea id="contactMessage" name="message" rows="5" required></textarea>
+                <span class="field-hint" data-i18n="contactPage.form.message.hint">For ride requests: include pickup, destination, date, time, and passenger count.</span>
+              </label>
+            </div>
+            <p class="form-status" id="contactStatus" aria-live="polite"></p>
+            <button class="button button-quote submit-button" type="submit" data-i18n="contactPage.form.submit">Send Message</button>
+            <p class="form-privacy">
+              <span data-i18n="quotePage.privacy">Your details are used only to prepare and respond to your request.</span>
+              <a href="../privacy/index.html" data-i18n="footer.privacy">Privacy Policy</a>
+            </p>
+          </form>
+        </section>
+      </section>
+
+      <section class="trust-grid" aria-labelledby="contact-info-title">
+        <h2 id="contact-info-title" class="visually-hidden">Contact information</h2>
+        <article>
+          <span class="value-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img"><path d="M12 6v6l4 2" /><circle cx="12" cy="12" r="10" /></svg>
+          </span>
+          <h3 data-i18n="contactPage.hours.title">Operating Hours</h3>
+          <!-- REPLACE-ME: set the exact daily operating hours once confirmed -->
+          <p data-i18n="contactPage.hours.copy">Open seven days a week. Send your request any time — messages are answered during working hours.</p>
+        </article>
+        <article>
+          <span class="value-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" /></svg>
+          </span>
+          <h3 data-i18n="contactPage.include.title">What to Include</h3>
+          <p data-i18n="contactPage.include.copy">Pickup location, destination, date and time, passenger count, and the service type — that's everything needed for a fast quote.</p>
+        </article>
+        <article>
+          <span class="value-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img"><path d="M6 22V4c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v18" /><path d="M6 12H4c-.6 0-1 .4-1 1v9" /><path d="M18 9h2c.6 0 1 .4 1 1v12" /><path d="M10 6h4" /><path d="M10 10h4" /></svg>
+          </span>
+          <h3 data-i18n="contactPage.corporate.title">Corporate Inquiries</h3>
+          <p data-i18n="contactPage.corporate.copy">For corporate accounts and recurring staff transport, mention your company name and typical schedule — Ride X follows up directly.</p>
+        </article>
+      </section>
+
+      <section class="service-area-card" aria-labelledby="service-area-title">
+        <span class="value-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+        </span>
+        <div>
+          <h2 id="service-area-title" data-i18n="contactPage.area.title">Based in Jeddah, Saudi Arabia.</h2>
+          <p data-i18n="contactPage.area.copy">
+            Ride X coordinates transport across Jeddah, including King Abdulaziz International Airport.
+            Trips beyond Jeddah can be requested and are confirmed based on availability.
+          </p>
+        </div>
+      </section>
+
+      <section class="final-quote-cta" aria-labelledby="contact-final-title">
+        <div>
+          <p class="eyebrow" data-i18n="quotePage.final.eyebrow">Direct contact</p>
+          <h2 id="contact-final-title" data-i18n="contactPage.final.title">Need a quote instead?</h2>
+          <p data-i18n="contactPage.final.copy">
+            If you already know the pickup, destination, date, and service type, use the quote page for the fastest structured request.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-quote" href="../quote/index.html" data-i18n="contactPage.final.quote">Request a Quote</a>
+          <a class="button button-primary" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="contactPage.final.whatsapp">Chat on WhatsApp</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html" aria-label="Ride X home">
+            <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+            <span>Ride X</span>
+          </a>
+          <p data-i18n="footer.tagline">Private transport coordination in Jeddah — airport transfers, family rides, corporate transport, and scheduled trips.</p>
+          <p class="footer-area" data-i18n="footer.area">Service area: Jeddah, Saudi Arabia</p>
+        </div>
+        <nav class="footer-col" aria-label="Footer services">
+          <h3 data-i18n="footer.col.services">Services</h3>
+          <a href="../services/index.html" data-i18n="footer.svc.airport">Airport Transfers</a>
+          <a href="../services/index.html" data-i18n="footer.svc.family">Family Transportation</a>
+          <a href="../services/index.html" data-i18n="footer.svc.corporate">Corporate Transport</a>
+          <a href="../services/index.html" data-i18n="footer.svc.scheduled">Scheduled Rides</a>
+        </nav>
+        <nav class="footer-col" aria-label="Footer company">
+          <h3 data-i18n="footer.col.company">Company</h3>
+          <a href="../about/index.html" data-i18n="footer.about">About</a>
+          <a href="index.html" data-i18n="footer.contact">Contact</a>
+          <a href="../quote/index.html" data-i18n="footer.quote">Request a Quote</a>
+        </nav>
+        <div class="footer-col">
+          <h3 data-i18n="footer.col.contact">Contact</h3>
+          <a href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="footer.whatsapp">WhatsApp</a>
+          <a href="tel:+966547433452" dir="ltr">+966 54 743 3452</a>
+          <!-- REPLACE-ME: set the real business email address once the domain is live -->
+          <a href="mailto:contact@ridex.sa" dir="ltr">contact@ridex.sa</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-year>2026</span> <span data-i18n="footer.rights">Ride X. All rights reserved.</span></p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="../privacy/index.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="../terms/index.html" data-i18n="footer.terms">Terms of Service</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="../supabase-config.js"></script>
+    <script src="../script.js"></script>
+  </body>
+</html>

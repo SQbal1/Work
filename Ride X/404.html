@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1730" />
+    <title>Page Not Found | Ride X</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <script>
+      (() => {
+        const language = (() => {
+          try {
+            return localStorage.getItem("rideXLanguage") === "ar" ? "ar" : "en";
+          } catch {
+            return "en";
+          }
+        })();
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.classList.add(`lang-${language}`);
+        if (language === "ar") {
+          document.documentElement.classList.add("language-pending");
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Ride X navigation">
+      <a class="brand" href="/index.html" aria-label="Ride X home">
+        <span class="brand-mark"><img src="/assets/logo.png" alt="Ride X logo" /></span>
+        <span>Ride X</span>
+      </a>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open navigation menu" aria-controls="siteNavPanel" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-shell" id="siteNavPanel">
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/index.html" data-i18n="nav.home">Home</a>
+          <a href="/services/index.html" data-i18n="nav.services">Services</a>
+          <a class="nav-quote" href="/quote/index.html" data-i18n="nav.quote">Quote</a>
+          <a href="/about/index.html" data-i18n="nav.about">About</a>
+          <a href="/contact/index.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="control-button" id="languageToggle" type="button" aria-label="Switch to Arabic">
+            <span data-i18n="controls.language">🇸🇦 Arabic</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="notfound-section" aria-labelledby="notfound-title">
+        <div>
+          <p class="eyebrow" data-i18n="notfound.eyebrow">404</p>
+          <h1 id="notfound-title" data-i18n="notfound.title">This page took a wrong turn.</h1>
+          <p class="hero-copy" data-i18n="notfound.copy">
+            The page you're looking for doesn't exist or has moved. Head back home, or request a ride directly.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-quote" href="/index.html" data-i18n="notfound.home">Back to Home</a>
+            <a class="button button-primary" href="/quote/index.html" data-i18n="notfound.quote">Request a Quote</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/supabase-config.js"></script>
+    <script src="/script.js"></script>
+  </body>
+</html>

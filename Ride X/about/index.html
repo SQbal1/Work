@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1730" />
+    <title>About Ride X | Jeddah Transport Service</title>
+    <meta
+      name="description"
+      content="Ride X is a Jeddah-based private transport service focused on families, visitors, and businesses — built on clear communication, scheduling, and confirmed details before every ride."
+    />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <!-- REPLACE-ME: update canonical/og:url/og:image with the real domain before launch -->
+    <link rel="canonical" href="https://ridex.sa/about/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ride X" />
+    <meta property="og:title" content="About Ride X | Jeddah Transport Service" />
+    <meta property="og:description" content="A Jeddah transport service built on clear communication, careful scheduling, and details confirmed before every ride." />
+    <meta property="og:url" content="https://ridex.sa/about/" />
+    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (() => {
+        const language = (() => {
+          try {
+            return localStorage.getItem("rideXLanguage") === "ar" ? "ar" : "en";
+          } catch {
+            return "en";
+          }
+        })();
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.classList.add(`lang-${language}`);
+        if (language === "ar") {
+          document.documentElement.classList.add("language-pending");
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Ride X navigation">
+      <a class="brand" href="../index.html" aria-label="Ride X home">
+        <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+        <span>Ride X</span>
+      </a>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open navigation menu" aria-controls="siteNavPanel" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-shell" id="siteNavPanel">
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html" data-i18n="nav.home">Home</a>
+          <a href="../services/index.html" data-i18n="nav.services">Services</a>
+          <a class="nav-quote" href="../quote/index.html" data-i18n="nav.quote">Quote</a>
+          <a href="index.html" aria-current="page" data-i18n="nav.about">About</a>
+          <a href="../contact/index.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="control-button" id="languageToggle" type="button" aria-label="Switch to Arabic">
+            <span data-i18n="controls.language">🇸🇦 Arabic</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="services-hero about-hero" aria-labelledby="about-hero-title">
+        <!-- Codex: About hero uses distinct Jeddah/corporate background, not homepage image -->
+        <img
+          class="about-hero-bg"
+          src="../assets/about-jeddah-corporate-hero.jpg"
+          width="2200"
+          height="1238"
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          fetchpriority="auto"
+        />
+        <div class="services-hero-content">
+          <p class="eyebrow" data-i18n="aboutPage.hero.eyebrow">ABOUT RIDE X</p>
+          <h1 id="about-hero-title" data-i18n="aboutPage.hero.title">
+            A Jeddah transport service built on clear communication.
+          </h1>
+          <p class="hero-copy" data-i18n="aboutPage.hero.copy">
+            Ride X exists to make transport in Jeddah simpler and more dependable — for families,
+            visitors, and businesses that want every trip agreed clearly before it starts.
+          </p>
+        </div>
+      </section>
+
+      <section class="about-approach" aria-labelledby="approach-title">
+        <div class="approach-copy">
+          <p class="eyebrow" data-i18n="aboutPage.approach.eyebrow">Who we serve</p>
+          <h2 id="approach-title" data-i18n="aboutPage.approach.title">Built for how people in Jeddah actually travel.</h2>
+          <p data-i18n="aboutPage.approach.copy1">
+            Families arranging trips and appointments. Visitors landing at King Abdulaziz International
+            Airport. Businesses moving staff and receiving guests. Each needs the same things: a clear
+            price, a confirmed time, and a vehicle that fits.
+          </p>
+          <p data-i18n="aboutPage.approach.copy2">
+            The goal is not simply to move people from one location to another. The goal is to make the
+            entire process feel predictable, professional, and easy to manage — from the first message
+            to the drop-off.
+          </p>
+          <p class="approach-flow" aria-label="Ride X coordination flow">
+            <span data-i18n="aboutPage.approach.flow.start">First message</span>
+            <span aria-hidden="true"></span>
+            <span data-i18n="aboutPage.approach.flow.confirm">Confirmed trip</span>
+            <span aria-hidden="true"></span>
+            <span data-i18n="aboutPage.approach.flow.dropoff">Drop-off</span>
+          </p>
+        </div>
+
+        <!-- Codex: About operating philosophy grid -->
+        <div class="approach-card-grid">
+          <div class="approach-route" aria-hidden="true">
+            <span class="approach-route-line"></span>
+            <span class="approach-route-node approach-route-node--one"></span>
+            <span class="approach-route-node approach-route-node--two"></span>
+            <span class="approach-route-node approach-route-node--three"></span>
+            <span class="approach-route-node approach-route-node--four"></span>
+          </div>
+          <article>
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.approach.clear">Clear Communication</h3>
+          </article>
+          <article>
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M8 2v4" /><path d="M16 2v4" /><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.approach.reliable">Careful Scheduling</h3>
+          </article>
+          <article>
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M4 20h16" /><path d="m6 16 6-12 6 12" /><path d="M8.5 11h7" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.approach.practical">Practical Solutions</h3>
+          </article>
+          <article>
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M12 6v6l4 2" /><circle cx="12" cy="12" r="10" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.approach.support">Responsive Support</h3>
+          </article>
+        </div>
+      </section>
+
+      <!-- Codex: Operating principles presented as one connected system, not isolated cards -->
+      <section class="trust-grid about-choice-grid about-principles-system" aria-labelledby="choice-title">
+        <p class="eyebrow" data-i18n="aboutPage.choice.eyebrow">Our operating principles</p>
+        <h2 id="choice-title" class="principles-title" data-i18n="aboutPage.choice.title">The principles behind every coordinated trip.</h2>
+        <p class="principles-lead" data-i18n="aboutPage.choice.lead">Four standards behind every quote we send and every trip we run.</p>
+        <div class="principles-panel">
+          <div class="principles-network" aria-hidden="true">
+            <span class="principles-link principles-link--horizontal"></span>
+            <span class="principles-link principles-link--vertical"></span>
+            <span class="principles-hub">
+              <span>Ride X</span>
+              <strong data-i18n="aboutPage.choice.system">Coordinated trip</strong>
+            </span>
+          </div>
+          <article class="principle-node principle-node--trust">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.choice.trust">Trust Before Price</h3>
+            <p data-i18n="aboutPage.choice.trust.copy">Customers need confidence before they need transportation — every detail is agreed first.</p>
+          </article>
+          <article class="principle-node principle-node--accountability">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.choice.founder">Direct Accountability</h3>
+            <p data-i18n="aboutPage.choice.founder.copy">Founder-led service: the person coordinating your trip is responsible for its quality.</p>
+          </article>
+          <article class="principle-node principle-node--jeddah">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.choice.saudi">Jeddah-First</h3>
+            <p data-i18n="aboutPage.choice.saudi.copy">Built around the communication habits, timing, and expectations of customers in Jeddah.</p>
+          </article>
+          <article class="principle-node principle-node--certainty">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
+            </span>
+            <h3 data-i18n="aboutPage.choice.scale">No Surprises</h3>
+            <p data-i18n="aboutPage.choice.scale.copy">The price you approve is the price you pay, and the vehicle you expect is the vehicle that arrives.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="vision-panel" aria-labelledby="vision-title">
+        <svg class="vision-beacon" viewBox="0 0 720 720" aria-hidden="true" focusable="false">
+          <defs>
+            <radialGradient id="vision-beacon-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.34" />
+              <stop offset="38%" stop-color="#7b91bd" stop-opacity="0.12" />
+              <stop offset="100%" stop-color="#7b91bd" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="vision-beacon-line" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.04" />
+              <stop offset="55%" stop-color="#ffffff" stop-opacity="0.16" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02" />
+            </linearGradient>
+          </defs>
+          <g class="vision-beacon-chaos">
+            <path d="M472 620l64-32 42 26 72-48" />
+            <path d="M508 548l58 18 44-48 52 20" />
+            <path d="M548 664l34-50 72 18" />
+            <path d="M598 596l48-74" />
+            <path d="M444 672l44-34" />
+          </g>
+          <g class="vision-beacon-rings">
+            <circle cx="360" cy="330" r="286" />
+            <circle cx="360" cy="330" r="224" />
+            <circle cx="360" cy="330" r="164" />
+            <circle cx="360" cy="330" r="104" />
+            <path d="M360 44v572" />
+            <path d="M74 330h572" />
+            <path d="M158 128l404 404" />
+            <path d="M562 128L158 532" />
+          </g>
+          <circle class="vision-beacon-glow" cx="360" cy="330" r="128" />
+          <circle class="vision-beacon-core" cx="360" cy="330" r="5" />
+        </svg>
+        <div class="vision-narrative">
+          <p class="eyebrow" data-i18n="aboutPage.vision.eyebrow">Why Ride X exists</p>
+          <h2 id="vision-title" data-i18n="aboutPage.vision.title">Transport in Jeddah deserved a clearer process.</h2>
+          <div class="vision-copy">
+            <p data-i18n="aboutPage.vision.copy1">
+              Too many transport arrangements rely on vague timing, unclear pricing, and last-minute
+              changes. Ride X was created to remove that uncertainty.
+            </p>
+            <p data-i18n="aboutPage.vision.copy2">
+              Every request follows the same path: send the details, receive a clear quote, confirm over
+              WhatsApp, and know your vehicle and pickup time before the trip.
+            </p>
+            <p data-i18n="aboutPage.vision.copy3">
+              As Ride X grows, the focus stays the same: reliable transport and a better customer experience.
+            </p>
+          </div>
+        </div>
+        <aside class="vision-path" aria-labelledby="vision-path-title">
+          <div class="vision-path-head">
+            <span class="vision-path-kicker" data-i18n="aboutPage.vision.path.kicker">The Ride X path</span>
+            <h3 id="vision-path-title" data-i18n="aboutPage.vision.path.title">From request to confirmed ride</h3>
+          </div>
+          <ol class="vision-path-steps">
+            <li>
+              <span class="vision-path-node">1</span>
+              <div class="vision-path-text">
+                <strong data-i18n="aboutPage.vision.path.step1.title">Send the details</strong>
+                <p data-i18n="aboutPage.vision.path.step1.copy">Route, timing, and passengers in one message.</p>
+              </div>
+            </li>
+            <li>
+              <span class="vision-path-node">2</span>
+              <div class="vision-path-text">
+                <strong data-i18n="aboutPage.vision.path.step2.title">Receive a clear quote</strong>
+                <p data-i18n="aboutPage.vision.path.step2.copy">A fixed price, agreed before anything is booked.</p>
+              </div>
+            </li>
+            <li>
+              <span class="vision-path-node vision-path-node--final">3</span>
+              <div class="vision-path-text">
+                <strong data-i18n="aboutPage.vision.path.step3.title">Confirm on WhatsApp</strong>
+                <p data-i18n="aboutPage.vision.path.step3.copy">Your vehicle and pickup time, set before the trip.</p>
+              </div>
+            </li>
+          </ol>
+        </aside>
+      </section>
+
+      <section class="timeline-section how-section about-expect-journey" aria-labelledby="expect-title">
+        <p class="eyebrow" data-i18n="aboutPage.expect.eyebrow">Before every ride</p>
+        <h2 id="expect-title" data-i18n="aboutPage.expect.title">What you'll know before the trip starts.</h2>
+        <div class="timeline-list trip-prep-system">
+          <div class="trip-prep-operations" aria-labelledby="trip-prep-workflow-title">
+            <div class="trip-prep-panel-heading">
+              <span data-i18n="aboutPage.expect.workflow.kicker">Ride X coordination</span>
+              <h3 id="trip-prep-workflow-title" data-i18n="aboutPage.expect.workflow.title">What happens after approval</h3>
+            </div>
+            <ol class="trip-prep-flow">
+              <li>
+                <span class="trip-prep-node">01</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.workflow.quote">Quote approved</strong>
+                  <p data-i18n="aboutPage.expect.workflow.quote.copy">Your approved price becomes the operating brief for the trip.</p>
+                </div>
+              </li>
+              <li>
+                <span class="trip-prep-node">02</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.workflow.planning">Route and timing planned</strong>
+                  <p data-i18n="aboutPage.expect.workflow.planning.copy">Pickup timing, airport needs, and route context are checked before dispatch.</p>
+                </div>
+              </li>
+              <li>
+                <span class="trip-prep-node">03</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.workflow.vehicle">Vehicle assignment</strong>
+                  <p data-i18n="aboutPage.expect.workflow.vehicle.copy">The vehicle profile is matched to passengers, luggage, and service expectations.</p>
+                </div>
+              </li>
+              <li>
+                <span class="trip-prep-node">04</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.workflow.driver">Driver confirmation</strong>
+                  <p data-i18n="aboutPage.expect.workflow.driver.copy">Final driver and WhatsApp coordination details are prepared before pickup.</p>
+                </div>
+              </li>
+            </ol>
+            <div class="trip-dispatch-readiness" aria-labelledby="trip-dispatch-title">
+              <div class="trip-dispatch-heading">
+                <span data-i18n="aboutPage.expect.dispatch.kicker">Dispatch readiness</span>
+                <strong id="trip-dispatch-title" data-i18n="aboutPage.expect.dispatch.title">Preparation status</strong>
+              </div>
+              <div class="trip-dispatch-route" aria-hidden="true">
+                <span class="trip-dispatch-line"></span>
+                <span class="trip-dispatch-point trip-dispatch-point--one"></span>
+                <span class="trip-dispatch-point trip-dispatch-point--two"></span>
+                <span class="trip-dispatch-point trip-dispatch-point--three"></span>
+              </div>
+              <ul class="trip-dispatch-list">
+                <li>
+                  <span aria-hidden="true"></span>
+                  <span data-i18n="aboutPage.expect.dispatch.route">Route checked</span>
+                </li>
+                <li>
+                  <span aria-hidden="true"></span>
+                  <span data-i18n="aboutPage.expect.dispatch.vehicle">Vehicle matched</span>
+                </li>
+                <li>
+                  <span aria-hidden="true"></span>
+                  <span data-i18n="aboutPage.expect.dispatch.driver">Driver handoff ready</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <aside class="trip-prep-confirmation" aria-labelledby="trip-prep-confirmation-title">
+            <div class="trip-prep-panel-heading">
+              <span data-i18n="aboutPage.expect.confirm.kicker">Customer confirmation</span>
+              <h3 id="trip-prep-confirmation-title" data-i18n="aboutPage.expect.confirm.title">Uncertainty removed before pickup</h3>
+            </div>
+            <ul class="trip-prep-checklist">
+              <li>
+                <span aria-hidden="true">✓</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.step1">A confirmed price</strong>
+                  <p data-i18n="aboutPage.expect.step1.copy">The quote you approve is the final price — agreed before anything is booked.</p>
+                </div>
+              </li>
+              <li>
+                <span aria-hidden="true">✓</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.step2">A confirmed pickup time</strong>
+                  <p data-i18n="aboutPage.expect.step2.copy">Timing is agreed in advance — including flight-aware planning for airport trips.</p>
+                </div>
+              </li>
+              <li>
+                <span aria-hidden="true">✓</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.step3">The vehicle type</strong>
+                  <p data-i18n="aboutPage.expect.step3.copy">Matched to your passenger count and luggage, and confirmed with the quote.</p>
+                </div>
+              </li>
+              <li>
+                <span aria-hidden="true">✓</span>
+                <div>
+                  <strong data-i18n="aboutPage.expect.step4">Driver details</strong>
+                  <p data-i18n="aboutPage.expect.step4.copy">Shared before pickup, with WhatsApp coordination available throughout the trip.</p>
+                </div>
+              </li>
+            </ul>
+            <p class="trip-prep-assurance" data-i18n="aboutPage.expect.confirm.assurance">One confirmed view of the trip before the vehicle moves.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="service-area-card" aria-labelledby="company-info-title">
+        <span class="value-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M9 13h6" /><path d="M9 17h6" /></svg>
+        </span>
+        <div>
+          <h2 id="company-info-title" data-i18n="aboutPage.company.title">Company information.</h2>
+          <p data-i18n="aboutPage.company.copy">
+            Ride X operates as a Jeddah-based transport coordination service. Official company details
+            and registration information are available on request and will be published on this page.
+          </p>
+          <!-- REPLACE-ME: when available, publish here the official company name,
+               Commercial Registration (CR) number, VAT number, and founder details.
+               Do not publish until the real documents are confirmed. -->
+        </div>
+      </section>
+
+      <section class="final-quote-cta" id="contact" aria-labelledby="about-final-title">
+        <div>
+          <p class="eyebrow" data-i18n="quotePage.final.eyebrow">Direct contact</p>
+          <h2 id="about-final-title" data-i18n="aboutPage.final.title">Need transport support?</h2>
+          <p data-i18n="aboutPage.final.copy">
+            Whether you're arranging personal travel or business transportation, Ride X is ready to help coordinate the next step.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-quote" href="../quote/index.html" data-i18n="aboutPage.final.quote">Request a Quote</a>
+          <a class="button button-primary" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="aboutPage.final.whatsapp">Chat on WhatsApp</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html" aria-label="Ride X home">
+            <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+            <span>Ride X</span>
+          </a>
+          <p data-i18n="footer.tagline">Private transport coordination in Jeddah — airport transfers, family rides, corporate transport, and scheduled trips.</p>
+          <p class="footer-area" data-i18n="footer.area">Service area: Jeddah, Saudi Arabia</p>
+        </div>
+        <nav class="footer-col" aria-label="Footer services">
+          <h3 data-i18n="footer.col.services">Services</h3>
+          <a href="../services/index.html" data-i18n="footer.svc.airport">Airport Transfers</a>
+          <a href="../services/index.html" data-i18n="footer.svc.family">Family Transportation</a>
+          <a href="../services/index.html" data-i18n="footer.svc.corporate">Corporate Transport</a>
+          <a href="../services/index.html" data-i18n="footer.svc.scheduled">Scheduled Rides</a>
+        </nav>
+        <nav class="footer-col" aria-label="Footer company">
+          <h3 data-i18n="footer.col.company">Company</h3>
+          <a href="index.html" data-i18n="footer.about">About</a>
+          <a href="../contact/index.html" data-i18n="footer.contact">Contact</a>
+          <a href="../quote/index.html" data-i18n="footer.quote">Request a Quote</a>
+        </nav>
+        <div class="footer-col">
+          <h3 data-i18n="footer.col.contact">Contact</h3>
+          <a href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="footer.whatsapp">WhatsApp</a>
+          <a href="tel:+966547433452" dir="ltr">+966 54 743 3452</a>
+          <!-- REPLACE-ME: set the real business email address once the domain is live -->
+          <a href="mailto:contact@ridex.sa" dir="ltr">contact@ridex.sa</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-year>2026</span> <span data-i18n="footer.rights">Ride X. All rights reserved.</span></p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="../privacy/index.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="../terms/index.html" data-i18n="footer.terms">Terms of Service</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="../supabase-config.js"></script>
+    <script src="../script.js"></script>
+  </body>
+</html>

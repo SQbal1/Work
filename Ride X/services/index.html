@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1730" />
+    <title>Transport Services in Jeddah | Ride X</title>
+    <meta
+      name="description"
+      content="Ride X services in Jeddah: airport transfers at King Abdulaziz International Airport, family transportation, corporate transport, and scheduled rides booked in advance."
+    />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <!-- REPLACE-ME: update canonical/og:url/og:image with the real domain before launch -->
+    <link rel="canonical" href="https://ridex.sa/services/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ride X" />
+    <meta property="og:title" content="Transport Services in Jeddah | Ride X" />
+    <meta property="og:description" content="Airport transfers, family transportation, corporate transport, and scheduled rides in Jeddah — with clear quotes confirmed before every trip." />
+    <meta property="og:url" content="https://ridex.sa/services/" />
+    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (() => {
+        const language = (() => {
+          try {
+            return localStorage.getItem("rideXLanguage") === "ar" ? "ar" : "en";
+          } catch {
+            return "en";
+          }
+        })();
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.classList.add(`lang-${language}`);
+        if (language === "ar") {
+          document.documentElement.classList.add("language-pending");
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Ride X navigation">
+      <a class="brand" href="../index.html" aria-label="Ride X home">
+        <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+        <span>Ride X</span>
+      </a>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open navigation menu" aria-controls="siteNavPanel" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-shell" id="siteNavPanel">
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html" data-i18n="nav.home">Home</a>
+          <a href="index.html" aria-current="page" data-i18n="nav.services">Services</a>
+          <a class="nav-quote" href="../quote/index.html" data-i18n="nav.quote">Quote</a>
+          <a href="../about/index.html" data-i18n="nav.about">About</a>
+          <a href="../contact/index.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="control-button" id="languageToggle" type="button" aria-label="Switch to Arabic">
+            <span data-i18n="controls.language">🇸🇦 Arabic</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="services-hero services-hero-fleet" aria-labelledby="services-hero-title">
+        <div class="services-hero-content">
+          <p class="eyebrow" data-i18n="servicesPage.hero.eyebrow">SERVICES</p>
+          <h1 id="services-hero-title" data-i18n="servicesPage.hero.title">Transport services for how Jeddah actually moves.</h1>
+          <p class="hero-copy" data-i18n="servicesPage.hero.copy">
+            Airport transfers, family transportation, corporate transport, and scheduled rides — each
+            arranged with a clear quote and confirmed details before the trip.
+          </p>
+        </div>
+
+        <!-- Claude Code: services hero moving vehicle paths -->
+        <div class="hero-fleet" aria-hidden="true">
+          <svg class="hero-fleet-art" viewBox="0 0 600 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
+            <defs>
+              <linearGradient id="routeFade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="600" y2="0">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="0" />
+                <stop offset="0.18" stop-color="#ffffff" stop-opacity="0.16" />
+                <stop offset="0.82" stop-color="#ffffff" stop-opacity="0.16" />
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+
+            <!-- Far lane — van (faint, slow) -->
+            <g class="route-lane route-lane--van" transform="translate(0 150)">
+              <line class="route-line" x1="10" y1="0" x2="590" y2="0" />
+              <circle class="route-node" cx="150" cy="0" r="3" />
+              <circle class="route-node" cx="430" cy="0" r="3" />
+              <g class="route-car route-car--van">
+                <g transform="translate(0 -45) scale(0.3)">
+                  <ellipse class="route-shadow" cx="232" cy="150" rx="210" ry="12" />
+                  <path class="fleet-body fleet-body--van" d="M6 92 C6 56 12 40 34 36 L150 22 C170 16 196 14 232 14 L420 14 C446 16 458 30 458 64 L458 116 L392 116 A34 34 0 0 1 324 116 L150 116 A34 34 0 0 1 82 116 L6 116 Z" />
+                  <path class="fleet-glass" d="M44 46 L152 32 C170 28 192 26 220 26 L300 26 L300 62 L44 62 Z" />
+                  <circle class="fleet-tyre" cx="116" cy="116" r="34" />
+                  <circle class="fleet-rim" cx="116" cy="116" r="14" />
+                  <circle class="fleet-tyre" cx="358" cy="116" r="34" />
+                  <circle class="fleet-rim" cx="358" cy="116" r="14" />
+                </g>
+              </g>
+            </g>
+
+            <!-- Mid lane — SUV -->
+            <g class="route-lane route-lane--suv" transform="translate(0 290)">
+              <line class="route-line" x1="10" y1="0" x2="590" y2="0" />
+              <circle class="route-node" cx="100" cy="0" r="3" />
+              <circle class="route-node" cx="360" cy="0" r="3" />
+              <g class="route-car route-car--suv">
+                <g transform="translate(0 -51) scale(0.35)">
+                  <ellipse class="route-shadow" cx="222" cy="146" rx="204" ry="12" />
+                  <path class="fleet-body fleet-body--suv" d="M6 96 C6 70 14 60 40 58 L92 52 C108 20 140 10 180 10 L286 10 C326 12 348 26 360 56 L404 64 C430 68 440 80 440 104 L440 112 L380 112 A34 34 0 0 1 312 112 L150 112 A34 34 0 0 1 82 112 L6 112 Z" />
+                  <path class="fleet-glass" d="M116 50 C132 24 156 20 184 20 L284 20 C320 22 336 34 346 52 Z" />
+                  <circle class="fleet-tyre" cx="116" cy="112" r="34" />
+                  <circle class="fleet-rim" cx="116" cy="112" r="14" />
+                  <circle class="fleet-tyre" cx="346" cy="112" r="34" />
+                  <circle class="fleet-rim" cx="346" cy="112" r="14" />
+                </g>
+              </g>
+            </g>
+
+            <!-- Near lane — sedan (main vehicle: red sill + pulsing stop) -->
+            <g class="route-lane route-lane--sedan" transform="translate(0 430)">
+              <line class="route-line" x1="10" y1="0" x2="590" y2="0" />
+              <circle class="route-node" cx="120" cy="0" r="3" />
+              <circle class="route-pulse" cx="470" cy="0" r="4" />
+              <g class="route-car route-car--sedan">
+                <g transform="translate(0 -57) scale(0.4)">
+                  <ellipse class="route-shadow" cx="228" cy="144" rx="214" ry="13" />
+                  <path class="fleet-body fleet-body--sedan" d="M6 98 C6 76 14 68 38 66 L98 58 C120 22 156 8 200 8 L270 8 C322 10 348 30 360 62 L416 70 C440 74 452 84 452 104 L452 110 L386 110 A33 33 0 0 1 320 110 L150 110 A33 33 0 0 1 84 110 L6 110 Z" />
+                  <path class="fleet-glass fleet-glass--front" d="M120 54 C140 28 168 18 200 18 L266 18 C310 20 332 36 342 58 Z" />
+                  <path class="route-accent" d="M40 96 L420 100" />
+                  <circle class="fleet-tyre" cx="117" cy="110" r="33" />
+                  <circle class="fleet-rim" cx="117" cy="110" r="14" />
+                  <circle class="fleet-tyre" cx="353" cy="110" r="33" />
+                  <circle class="fleet-rim" cx="353" cy="110" r="14" />
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Claude Code: services flashcard deck -->
+      <section class="services-deck section-band" aria-label="Ride X service offerings">
+        <div class="service-deck" id="serviceDeck">
+          <div class="deck-tabs" role="tablist" aria-label="Ride X services">
+            <button class="deck-tab" type="button" role="tab" id="deck-tab-0" aria-selected="true" aria-controls="deck-panel-0" data-index="0">
+              <span class="deck-tab-num">01</span>
+              <span class="deck-tab-label" data-i18n="servicesPage.airport.title">Airport Transfers</span>
+            </button>
+            <button class="deck-tab" type="button" role="tab" id="deck-tab-1" aria-selected="false" aria-controls="deck-panel-1" data-index="1" tabindex="-1">
+              <span class="deck-tab-num">02</span>
+              <span class="deck-tab-label" data-i18n="servicesPage.family.title">Family Transportation</span>
+            </button>
+            <button class="deck-tab" type="button" role="tab" id="deck-tab-2" aria-selected="false" aria-controls="deck-panel-2" data-index="2" tabindex="-1">
+              <span class="deck-tab-num">03</span>
+              <span class="deck-tab-label" data-i18n="servicesPage.corporate.title">Corporate Transport</span>
+            </button>
+            <button class="deck-tab" type="button" role="tab" id="deck-tab-3" aria-selected="false" aria-controls="deck-panel-3" data-index="3" tabindex="-1">
+              <span class="deck-tab-num">04</span>
+              <span class="deck-tab-label" data-i18n="servicesPage.scheduled.title">Scheduled Rides</span>
+            </button>
+          </div>
+
+          <div class="deck-stage">
+            <article class="deck-slide is-active" role="tabpanel" id="deck-panel-0" aria-labelledby="deck-tab-0" tabindex="0">
+              <div class="service-detail-main">
+                <div class="card-top">
+                  <span class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img">
+                      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                  </span>
+                  <span class="card-index">01</span>
+                </div>
+                <h2 data-i18n="servicesPage.airport.title">Airport Transfers</h2>
+                <p data-i18n="servicesPage.airport.copy">
+                  Pickups and drop-offs at King Abdulaziz International Airport for visitors, families, and
+                  business travelers — planned around your actual flight time, not a rough estimate.
+                </p>
+                <a class="button button-quote" href="../quote/index.html" data-i18n="servicesPage.airport.cta">Request airport transfer</a>
+              </div>
+              <div class="use-case-panel">
+                <p class="eyebrow" data-i18n="servicesPage.useCases">Example use cases</p>
+                <ul class="use-case-list">
+                  <li data-i18n="servicesPage.airport.use1">Arrival pickups</li>
+                  <li data-i18n="servicesPage.airport.use2">Departure drop-offs</li>
+                  <li data-i18n="servicesPage.airport.use3">Hotel transfers</li>
+                  <li data-i18n="servicesPage.airport.use4">Visitor reception</li>
+                </ul>
+                <p class="share-note" data-i18n="servicesPage.airport.share">When requesting: share your flight time, terminal, passenger count, and luggage.</p>
+              </div>
+            </article>
+
+            <article class="deck-slide" role="tabpanel" id="deck-panel-1" aria-labelledby="deck-tab-1" tabindex="0">
+              <div class="service-detail-main">
+                <div class="card-top">
+                  <span class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.9" />
+                      <path d="M16 3.1a4 4 0 0 1 0 7.8" />
+                    </svg>
+                  </span>
+                  <span class="card-index">02</span>
+                </div>
+                <h2 data-i18n="servicesPage.family.title">Family Transportation</h2>
+                <p data-i18n="servicesPage.family.copy">
+                  Dependable rides for family outings, appointments, school and guest trips — with the
+                  passenger details agreed in advance so the right vehicle arrives every time.
+                </p>
+                <a class="button button-quote" href="../quote/index.html" data-i18n="servicesPage.family.cta">Request family transport</a>
+              </div>
+              <div class="use-case-panel">
+                <p class="eyebrow" data-i18n="servicesPage.useCases">Example use cases</p>
+                <ul class="use-case-list">
+                  <li data-i18n="servicesPage.family.use1">Family outings</li>
+                  <li data-i18n="servicesPage.family.use2">Appointments</li>
+                  <li data-i18n="servicesPage.family.use3">Guest transportation</li>
+                  <li data-i18n="servicesPage.family.use4">Regular family trips</li>
+                </ul>
+                <p class="share-note" data-i18n="servicesPage.family.share">When requesting: mention who is travelling and any comfort or seating needs.</p>
+              </div>
+            </article>
+
+            <article class="deck-slide" role="tabpanel" id="deck-panel-2" aria-labelledby="deck-tab-2" tabindex="0">
+              <div class="service-detail-main">
+                <div class="card-top">
+                  <span class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img">
+                      <path d="M6 22V4c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v18" />
+                      <path d="M6 12H4c-.6 0-1 .4-1 1v9" />
+                      <path d="M18 9h2c.6 0 1 .4 1 1v12" />
+                      <path d="M10 6h4" />
+                      <path d="M10 10h4" />
+                      <path d="M10 14h4" />
+                      <path d="M10 18h4" />
+                    </svg>
+                  </span>
+                  <span class="card-index">03</span>
+                </div>
+                <h2 data-i18n="servicesPage.corporate.title">Corporate Transport</h2>
+                <p data-i18n="servicesPage.corporate.copy">
+                  Professional coordination for employees, executives, meetings, events, and business
+                  visitors. Recurring staff transport and corporate arrangements are discussed directly.
+                </p>
+                <a class="button button-quote" href="../quote/index.html" data-i18n="servicesPage.corporate.cta">Request corporate transport</a>
+              </div>
+              <div class="use-case-panel">
+                <p class="eyebrow" data-i18n="servicesPage.useCases">Example use cases</p>
+                <ul class="use-case-list">
+                  <li data-i18n="servicesPage.corporate.use1">Staff movement</li>
+                  <li data-i18n="servicesPage.corporate.use2">Executive transport</li>
+                  <li data-i18n="servicesPage.corporate.use3">Business meetings</li>
+                  <li data-i18n="servicesPage.corporate.use4">Corporate guests</li>
+                </ul>
+                <p class="share-note" data-i18n="servicesPage.corporate.share">When requesting: include your company name and the typical schedule or route.</p>
+              </div>
+            </article>
+
+            <article class="deck-slide" role="tabpanel" id="deck-panel-3" aria-labelledby="deck-tab-3" tabindex="0">
+              <div class="service-detail-main">
+                <div class="card-top">
+                  <span class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img">
+                      <path d="M8 2v4" />
+                      <path d="M16 2v4" />
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <path d="M3 10h18" />
+                    </svg>
+                  </span>
+                  <span class="card-index">04</span>
+                </div>
+                <h2 data-i18n="servicesPage.scheduled.title">Scheduled Rides</h2>
+                <p data-i18n="servicesPage.scheduled.copy">
+                  Advance bookings for planned trips, multi-stop routes, events, and group movement — with
+                  timing, pickup points, and follow-up handled in one clear flow.
+                </p>
+                <a class="button button-quote" href="../quote/index.html" data-i18n="servicesPage.scheduled.cta">Request scheduled ride</a>
+              </div>
+              <div class="use-case-panel">
+                <p class="eyebrow" data-i18n="servicesPage.useCases">Example use cases</p>
+                <ul class="use-case-list">
+                  <li data-i18n="servicesPage.scheduled.use1">Planned trips</li>
+                  <li data-i18n="servicesPage.scheduled.use2">Multi-stop routes</li>
+                  <li data-i18n="servicesPage.scheduled.use3">Event logistics</li>
+                  <li data-i18n="servicesPage.scheduled.use4">Group movement</li>
+                </ul>
+                <p class="share-note" data-i18n="servicesPage.scheduled.share">When requesting: list the stops, dates, and how many passengers per trip.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="deck-controls">
+            <button class="deck-arrow deck-prev" type="button" aria-label="Previous service">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" /></svg>
+            </button>
+            <p class="deck-counter" aria-hidden="true">
+              <span class="deck-counter-current">01</span>
+              <span class="deck-counter-sep">/</span>
+              <span class="deck-counter-total">04</span>
+            </p>
+            <button class="deck-arrow deck-next" type="button" aria-label="Next service">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="services-why trust-grid" id="why" aria-labelledby="services-why-title">
+        <p class="eyebrow" data-i18n="servicesPage.why.eyebrow">Why Ride X</p>
+        <h2 id="services-why-title" class="visually-hidden">Why Ride X</h2>
+        <article>
+          <span class="value-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z" /></svg>
+          </span>
+          <h3 data-i18n="servicesPage.why.clear">Clear Communication</h3>
+          <p data-i18n="servicesPage.why.clear.copy">Straightforward details, practical follow-up, and simple coordination from the first message.</p>
+        </article>
+        <article>
+          <span class="value-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img"><path d="M8 2v4" /><path d="M16 2v4" /><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18" /></svg>
+          </span>
+          <h3 data-i18n="servicesPage.why.professional">Suitable Vehicle Matching</h3>
+          <p data-i18n="servicesPage.why.professional.copy">Passenger count, luggage, and trip type decide the vehicle — agreed with you before confirmation.</p>
+        </article>
+        <article>
+          <span class="value-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img"><path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg>
+          </span>
+          <h3 data-i18n="servicesPage.why.founder">Details Before Booking</h3>
+          <p data-i18n="servicesPage.why.founder.copy">Price, timing, and vehicle confirmed before the trip — you approve everything first.</p>
+        </article>
+      </section>
+
+      <section class="final-quote-cta" id="contact" aria-labelledby="services-final-title">
+        <div>
+          <p class="eyebrow" data-i18n="quotePage.final.eyebrow">Direct contact</p>
+          <h2 id="services-final-title" data-i18n="servicesPage.final.title">Need transport arranged?</h2>
+          <p data-i18n="servicesPage.final.copy">
+            Tell us what you need and Ride X will reply with a clear quote and the next step.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-quote" href="../quote/index.html" data-i18n="servicesPage.final.quote">Request a Quote</a>
+          <a class="button button-primary" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="servicesPage.final.whatsapp">Chat on WhatsApp</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html" aria-label="Ride X home">
+            <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+            <span>Ride X</span>
+          </a>
+          <p data-i18n="footer.tagline">Private transport coordination in Jeddah — airport transfers, family rides, corporate transport, and scheduled trips.</p>
+          <p class="footer-area" data-i18n="footer.area">Service area: Jeddah, Saudi Arabia</p>
+        </div>
+        <nav class="footer-col" aria-label="Footer services">
+          <h3 data-i18n="footer.col.services">Services</h3>
+          <a href="index.html" data-i18n="footer.svc.airport">Airport Transfers</a>
+          <a href="index.html" data-i18n="footer.svc.family">Family Transportation</a>
+          <a href="index.html" data-i18n="footer.svc.corporate">Corporate Transport</a>
+          <a href="index.html" data-i18n="footer.svc.scheduled">Scheduled Rides</a>
+        </nav>
+        <nav class="footer-col" aria-label="Footer company">
+          <h3 data-i18n="footer.col.company">Company</h3>
+          <a href="../about/index.html" data-i18n="footer.about">About</a>
+          <a href="../contact/index.html" data-i18n="footer.contact">Contact</a>
+          <a href="../quote/index.html" data-i18n="footer.quote">Request a Quote</a>
+        </nav>
+        <div class="footer-col">
+          <h3 data-i18n="footer.col.contact">Contact</h3>
+          <a href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="footer.whatsapp">WhatsApp</a>
+          <a href="tel:+966547433452" dir="ltr">+966 54 743 3452</a>
+          <!-- REPLACE-ME: set the real business email address once the domain is live -->
+          <a href="mailto:contact@ridex.sa" dir="ltr">contact@ridex.sa</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-year>2026</span> <span data-i18n="footer.rights">Ride X. All rights reserved.</span></p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="../privacy/index.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="../terms/index.html" data-i18n="footer.terms">Terms of Service</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="../supabase-config.js"></script>
+    <script src="../script.js"></script>
+  </body>
+</html>

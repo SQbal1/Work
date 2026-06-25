@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1730" />
+    <title>Request a Quote | Ride X Jeddah</title>
+    <meta
+      name="description"
+      content="Request a transport quote in Jeddah: airport transfers, family transportation, corporate transport, or scheduled rides. Clear price confirmed before your trip."
+    />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <!-- REPLACE-ME: update canonical/og:url/og:image with the real domain before launch -->
+    <link rel="canonical" href="https://ridex.sa/quote/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ride X" />
+    <meta property="og:title" content="Request a Quote | Ride X Jeddah" />
+    <meta property="og:description" content="Send your trip details and receive a clear quote before anything is confirmed. Airport, family, corporate, and scheduled rides in Jeddah." />
+    <meta property="og:url" content="https://ridex.sa/quote/" />
+    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (() => {
+        const language = (() => {
+          try {
+            return localStorage.getItem("rideXLanguage") === "ar" ? "ar" : "en";
+          } catch {
+            return "en";
+          }
+        })();
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.classList.add(`lang-${language}`);
+        if (language === "ar") {
+          document.documentElement.classList.add("language-pending");
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Ride X navigation">
+      <a class="brand" href="../index.html" aria-label="Ride X home">
+        <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+        <span>Ride X</span>
+      </a>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open navigation menu" aria-controls="siteNavPanel" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-shell" id="siteNavPanel">
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html" data-i18n="nav.home">Home</a>
+          <a href="../services/index.html" data-i18n="nav.services">Services</a>
+          <a class="nav-quote" href="index.html" aria-current="page" data-i18n="nav.quote">Quote</a>
+          <a href="../about/index.html" data-i18n="nav.about">About</a>
+          <a href="../contact/index.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="control-button" id="languageToggle" type="button" aria-label="Switch to Arabic">
+            <span data-i18n="controls.language">🇸🇦 Arabic</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="quote-hero" aria-labelledby="quote-hero-title">
+        <div class="quote-hero-inner">
+          <div class="quote-hero-content">
+            <p class="eyebrow" data-i18n="quotePage.hero.eyebrow">REQUEST A QUOTE</p>
+            <h1 id="quote-hero-title" data-i18n="quotePage.hero.title">Get a clear price before the trip starts.</h1>
+            <p class="hero-copy" data-i18n="quotePage.hero.copy">
+              Tell us where, when, and what type of transport you need. Ride X reviews the details and
+              replies with a quote — nothing is booked until you approve it.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-quote" href="#quote-form" data-i18n="quotePage.hero.cta">Scroll to Form</a>
+            </div>
+          </div>
+
+          <!-- Codex: quote hero journey preview -->
+          <aside class="quote-journey-preview" aria-label="Trip preparation preview">
+            <!-- Codex: hero-to-route continuity system -->
+            <div class="qjp-panel">
+              <div class="qjp-header">
+                <span class="qjp-status-dot" aria-hidden="true"></span>
+                <span data-i18n="quotePage.heroPreview.status">Trip preparation</span>
+              </div>
+              <div class="qjp-stage" aria-hidden="true">
+                <svg class="qjp-route-art" viewBox="0 0 470 300" focusable="false">
+                  <defs>
+                    <linearGradient id="qjpRouteGlow" x1="0" y1="1" x2="1" y2="0">
+                      <stop offset="0" stop-color="rgba(255,255,255,0.18)" />
+                      <stop offset="0.48" stop-color="rgba(255,255,255,0.78)" />
+                      <stop offset="1" stop-color="rgba(211,35,46,0.92)" />
+                    </linearGradient>
+                    <radialGradient id="qjpFocus" cx="50%" cy="50%" r="50%">
+                      <stop offset="0" stop-color="rgba(255,255,255,0.22)" />
+                      <stop offset="1" stop-color="rgba(255,255,255,0)" />
+                    </radialGradient>
+                  </defs>
+                  <rect class="qjp-soft-grid" x="58" y="34" width="354" height="220" rx="18" />
+                  <g class="qjp-guide-lines">
+                    <path d="M94 68H388" />
+                    <path d="M94 128H388" />
+                    <path d="M94 188H388" />
+                    <path d="M136 42V238" />
+                    <path d="M224 42V238" />
+                    <path d="M312 42V238" />
+                  </g>
+                  <circle class="qjp-focus qjp-focus--pickup" cx="122" cy="216" r="42" />
+                  <circle class="qjp-focus qjp-focus--destination" cx="352" cy="82" r="46" />
+                  <path class="qjp-route-shadow" d="M122 216 L206 216 Q224 216 224 198 L224 148 Q224 130 242 130 L318 130 Q336 130 336 112 L336 82 L352 82" pathLength="1" />
+                  <path class="qjp-route-line" d="M122 216 L206 216 Q224 216 224 198 L224 148 Q224 130 242 130 L318 130 Q336 130 336 112 L336 82 L352 82" pathLength="1" />
+                  <circle class="qjp-waypoint" cx="224" cy="170" r="2" />
+                  <circle class="qjp-waypoint" cx="288" cy="130" r="2" />
+                  <g class="qjp-node qjp-node--pickup" transform="translate(122 216)">
+                    <circle class="qjp-node-ring" r="10" />
+                    <circle class="qjp-node-core" r="4" />
+                  </g>
+                  <g class="qjp-node qjp-node--destination" transform="translate(352 82)">
+                    <circle class="qjp-node-ring" r="10" />
+                    <circle class="qjp-node-core" r="4" />
+                  </g>
+                  <g class="qjp-marker" transform="translate(288 130)">
+                    <circle class="qjp-marker-halo" r="12" />
+                    <circle class="qjp-marker-dot" r="4" />
+                  </g>
+                </svg>
+              </div>
+              <div class="qjp-trip-card">
+                <div>
+                  <span class="qjp-card-kicker" data-i18n="quotePage.heroPreview.kicker">Route window</span>
+                  <strong data-i18n="quotePage.heroPreview.route">Jeddah pickup</strong>
+                </div>
+                <span class="qjp-card-pill" data-i18n="quotePage.heroPreview.pill">Preparing</span>
+              </div>
+              <ol class="qjp-checks">
+                <li>
+                  <span></span>
+                  <p data-i18n="quotePage.heroPreview.stepRoute">Route details queued</p>
+                </li>
+                <li>
+                  <span></span>
+                  <p data-i18n="quotePage.heroPreview.stepVehicle">Executive vehicle match</p>
+                </li>
+                <li>
+                  <span></span>
+                  <p data-i18n="quotePage.heroPreview.stepQuote">Quote review ready</p>
+                </li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="quote-layout" aria-label="Quote request details">
+        <aside class="quote-aside">
+          <!-- Claude Code: quote route-map visual
+               Stylized Jeddah trip-coordination panel: abstract coastal map (Red Sea
+               kept on the west — deliberately NOT mirrored in RTL, geography doesn't
+               flip), an animated pickup→destination route, a gliding vehicle marker,
+               and a coordination checklist that reacts to the quote form fields. -->
+          <div class="quote-map-card" id="quoteMapCard">
+            <div class="qm-head">
+              <p class="qm-live">
+                <span class="qm-live-dot" aria-hidden="true"></span>
+                <span data-i18n="quotePage.map.live">Live trip preview</span>
+              </p>
+              <span class="qm-city" data-i18n="stats.market.value">Jeddah</span>
+            </div>
+            <div class="qm-stage">
+              <svg class="qm-map" viewBox="0 0 460 332" aria-hidden="true" focusable="false">
+                <defs>
+                  <linearGradient id="qmSurface" x1="0" y1="0" x2="0.7" y2="1">
+                    <stop offset="0" stop-color="#0d1f40" />
+                    <stop offset="1" stop-color="#060f22" />
+                  </linearGradient>
+                  <clipPath id="qmClip"><rect x="1" y="1" width="458" height="330" rx="15" /></clipPath>
+                </defs>
+                <rect class="qm-surface" x="1" y="1" width="458" height="330" rx="15" />
+                <g clip-path="url(#qmClip)">
+                  <!-- Red Sea + corniche coastline (west of the city) -->
+                  <path class="qm-sea" d="M92 -10 C 76 50 100 116 86 178 C 75 224 94 286 80 342 L -10 342 L -10 -10 Z" />
+                  <path class="qm-coast" d="M92 -10 C 76 50 100 116 86 178 C 75 224 94 286 80 342" />
+                  <path class="qm-wave" d="M74 -10 C 58 50 82 116 68 178 C 57 224 76 286 62 342" />
+                  <path class="qm-wave qm-wave--far" d="M52 -10 C 36 50 60 116 46 178 C 35 224 54 286 40 342" />
+                  <!-- Abstract city grid: the route follows the brighter major roads -->
+                  <g class="qm-grid">
+                    <line class="qm-road" x1="132" y1="0" x2="132" y2="332" />
+                    <line class="qm-road" x1="172" y1="0" x2="172" y2="332" />
+                    <line class="qm-road" x1="252" y1="0" x2="252" y2="332" />
+                    <line class="qm-road" x1="292" y1="0" x2="292" y2="332" />
+                    <line class="qm-road" x1="340" y1="0" x2="340" y2="332" />
+                    <line class="qm-road" x1="384" y1="0" x2="384" y2="332" />
+                    <line class="qm-road" x1="424" y1="0" x2="424" y2="332" />
+                    <line class="qm-road" x1="96" y1="44" x2="460" y2="44" />
+                    <line class="qm-road" x1="92" y1="124" x2="460" y2="124" />
+                    <line class="qm-road" x1="88" y1="204" x2="460" y2="204" />
+                    <line class="qm-road" x1="84" y1="288" x2="460" y2="288" />
+                    <line class="qm-road qm-road--major" x1="212" y1="0" x2="212" y2="332" />
+                    <line class="qm-road qm-road--major" x1="308" y1="0" x2="308" y2="332" />
+                    <line class="qm-road qm-road--major" x1="96" y1="84" x2="460" y2="84" />
+                    <line class="qm-road qm-road--major" x1="90" y1="164" x2="460" y2="164" />
+                    <line class="qm-road qm-road--major" x1="86" y1="258" x2="460" y2="258" />
+                    <line class="qm-road qm-road--avenue" x1="118" y1="332" x2="318" y2="-10" />
+                  </g>
+                  <!-- District blocks -->
+                  <g class="qm-blocks">
+                    <rect x="142" y="92" width="58" height="44" rx="3" />
+                    <rect x="222" y="52" width="44" height="40" rx="3" />
+                    <rect x="320" y="132" width="52" height="44" rx="3" />
+                    <rect x="120" y="172" width="60" height="42" rx="3" />
+                    <rect x="224" y="214" width="68" height="50" rx="3" />
+                    <rect x="318" y="216" width="58" height="48" rx="3" />
+                    <rect x="352" y="40" width="48" height="32" rx="3" />
+                  </g>
+                  <!-- King Abdulaziz Int'l landmark node -->
+                  <g class="qm-air" transform="translate(170 44)">
+                    <circle class="qm-air-pad" r="13" />
+                    <path class="qm-air-plane" transform="translate(-7.8 -7.3) scale(0.65)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5Z" />
+                    <text class="qm-air-code" y="29" text-anchor="middle">JED</text>
+                  </g>
+                  <!-- Route: drawn on reveal; the marker glides along the same path -->
+                  <path class="qm-route-casing" d="M110 258 L200 258 Q212 258 212 246 L212 176 Q212 164 224 164 L296 164 Q308 164 308 152 L308 96 Q308 84 320 84 L350 84" pathLength="1" />
+                  <path class="qm-route-core" d="M110 258 L200 258 Q212 258 212 246 L212 176 Q212 164 224 164 L296 164 Q308 164 308 152 L308 96 Q308 84 320 84 L350 84" pathLength="1" />
+                  <path class="qm-route-ready" d="M110 258 L200 258 Q212 258 212 246 L212 176 Q212 164 224 164 L296 164 Q308 164 308 152 L308 96 Q308 84 320 84 L350 84" />
+                  <circle class="qm-waypoint" cx="212" cy="205" r="1.8" />
+                  <circle class="qm-waypoint" cx="260" cy="164" r="1.8" />
+                  <!-- Pickup node -->
+                  <g class="qm-node-wrap qm-node-wrap--pickup" transform="translate(110 258)">
+                    <g class="qm-node qm-node--pickup">
+                      <circle class="qm-pulse" r="9" />
+                      <circle class="qm-node-ring" r="6.5" />
+                      <circle class="qm-node-core" r="3" />
+                    </g>
+                    <text class="qm-label qm-label--pickup" y="26" text-anchor="middle" data-i18n="quotePage.map.pickup">Pickup</text>
+                  </g>
+                  <!-- Destination node -->
+                  <g class="qm-node-wrap qm-node-wrap--dest" transform="translate(350 84)">
+                    <g class="qm-node qm-node--dest">
+                      <circle class="qm-dest-ring" r="6.5" />
+                      <circle class="qm-dest-core" r="2.6" />
+                    </g>
+                    <text class="qm-label qm-label--dest" y="28" text-anchor="middle" data-i18n="quotePage.map.destination">Destination</text>
+                  </g>
+                  <!-- Vehicle marker (offset-path glide is enabled by script.js) -->
+                  <g class="qm-marker" transform="translate(110 258)">
+                    <circle class="qm-marker-halo" r="8" />
+                    <circle class="qm-marker-ring" r="5" />
+                    <circle class="qm-marker-dot" r="3" />
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <ol class="qm-steps">
+              <li class="qm-step" data-step="route">
+                <span class="qm-step-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="3" /><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /><circle cx="18" cy="5" r="3" /></svg>
+                </span>
+                <span class="qm-step-label" data-i18n="quotePage.map.route">Route confirmed</span>
+                <span class="qm-step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7" /></svg></span>
+              </li>
+              <li class="qm-step" data-step="vehicle">
+                <span class="qm-step-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 6c-.2-.6-.8-1-1.4-1H7c-.6 0-1.2.4-1.4 1L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /></svg>
+                </span>
+                <span class="qm-step-label" data-i18n="quotePage.map.vehicle">Vehicle matched</span>
+                <span class="qm-step-meta" data-qm-vehicle></span>
+                <span class="qm-step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7" /></svg></span>
+              </li>
+              <li class="qm-step" data-step="schedule">
+                <span class="qm-step-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18" /></svg>
+                </span>
+                <span class="qm-step-label" data-i18n="quotePage.map.schedule">Pickup scheduled</span>
+                <span class="qm-step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7" /></svg></span>
+              </li>
+              <li class="qm-step" data-step="quote">
+                <span class="qm-step-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" /></svg>
+                </span>
+                <span class="qm-step-label" data-i18n="quotePage.map.quote">Quote details complete</span>
+                <span class="qm-step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7" /></svg></span>
+              </li>
+            </ol>
+            <p class="qm-foot" data-i18n="quotePage.map.whatsapp">Ride X replies with your quote on WhatsApp.</p>
+          </div>
+
+          <div class="info-card">
+          <div class="card-top">
+            <span class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <circle cx="6" cy="19" r="3" />
+                <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+                <circle cx="18" cy="5" r="3" />
+              </svg>
+            </span>
+            <span class="card-index">RX</span>
+          </div>
+          <h2 data-i18n="quotePage.need.title">What we'll need</h2>
+          <ul class="need-list">
+            <li>
+              <span class="mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+              </span>
+              <span data-i18n="quotePage.need.pickup">Pickup location</span>
+            </li>
+            <li>
+              <span class="mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 20h16" /><path d="m6 16 6-12 6 12" /><path d="M8.5 11h7" /></svg>
+              </span>
+              <span data-i18n="quotePage.need.destination">Destination</span>
+            </li>
+            <li>
+              <span class="mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18" /></svg>
+              </span>
+              <span data-i18n="quotePage.need.datetime">Date and time</span>
+            </li>
+            <li>
+              <span class="mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 6c-.2-.6-.8-1-1.4-1H7c-.6 0-1.2.4-1.4 1L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /></svg>
+              </span>
+              <span data-i18n="quotePage.need.service">Service type</span>
+            </li>
+            <li>
+              <span class="mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9" /><path d="M16 3.1a4 4 0 0 1 0 7.8" /></svg>
+              </span>
+              <span data-i18n="quotePage.need.passengers">Passenger count</span>
+            </li>
+            <li>
+              <span class="mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" /></svg>
+              </span>
+              <span data-i18n="quotePage.need.notes">Additional notes</span>
+            </li>
+          </ul>
+          <p data-i18n="quotePage.need.copy">The more accurate the details, the more accurate the quote. For airport trips, include your flight time.</p>
+          </div>
+        </aside>
+
+        <section class="quote-form-card" id="quote-form" aria-labelledby="form-title">
+          <p class="eyebrow" data-i18n="quotePage.form.eyebrow">Quote request</p>
+          <h2 id="form-title" data-i18n="quotePage.form.title">Tell us the trip details.</h2>
+          <p class="form-note" data-i18n="quotePage.response">We usually reply the same day during working hours — on WhatsApp first, then by phone if needed.</p>
+          <form class="quote-form" novalidate>
+            <label class="spam-check" aria-hidden="true">
+              Leave this field empty
+              <input name="website" type="text" autocomplete="off" tabindex="-1" data-spam-check="true" />
+            </label>
+            <div class="form-grid">
+              <label class="field">
+                <span><span data-i18n="quotePage.form.name">Full Name</span> <b aria-hidden="true">*</b></span>
+                <input id="fullName" name="fullName" type="text" autocomplete="name" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.phone">Phone Number</span> <b aria-hidden="true">*</b></span>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.whatsapp">WhatsApp Number</span></span>
+                <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" />
+                <span class="field-hint" data-i18n="quotePage.form.whatsapp.hint">Optional — leave empty if it's the same as your phone number.</span>
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.service">Service Type</span> <b aria-hidden="true">*</b></span>
+                <select id="serviceType" name="serviceType" required>
+                  <option value="" data-i18n="quotePage.form.service.placeholder">Select a service</option>
+                  <option value="Airport Transfer" data-i18n="quotePage.form.service.airport">Airport Transfer</option>
+                  <option value="Family Transportation" data-i18n="quotePage.form.service.family">Family Transportation</option>
+                  <option value="Corporate Transport" data-i18n="quotePage.form.service.corporate">Corporate Transport</option>
+                  <option value="Scheduled Ride" data-i18n="quotePage.form.service.scheduled">Scheduled Ride</option>
+                  <option value="Other" data-i18n="quotePage.form.service.other">Other / Not sure</option>
+                </select>
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.pickup">Pickup Location</span> <b aria-hidden="true">*</b></span>
+                <input id="pickup" name="pickup" type="text" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.destination">Destination</span> <b aria-hidden="true">*</b></span>
+                <input id="destination" name="destination" type="text" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.date">Date</span> <b aria-hidden="true">*</b></span>
+                <input id="date" name="date" type="date" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.time">Time</span> <b aria-hidden="true">*</b></span>
+                <input id="time" name="time" type="time" required />
+              </label>
+              <label class="field">
+                <span><span data-i18n="quotePage.form.passengers">Number of Passengers</span> <b aria-hidden="true">*</b></span>
+                <input id="passengers" name="passengers" type="number" min="1" inputmode="numeric" required />
+              </label>
+              <label class="field field-wide">
+                <span data-i18n="quotePage.form.notes">Additional Notes</span>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+                <span class="field-hint" data-i18n="quotePage.form.notes.hint">Flight number, luggage, child seats, multiple stops — anything that affects the trip.</span>
+              </label>
+            </div>
+            <p class="form-status" id="formStatus" aria-live="polite"></p>
+            <button class="button button-quote submit-button" type="submit" data-i18n="quotePage.form.submit">Request Quote</button>
+            <p class="form-privacy">
+              <span data-i18n="quotePage.privacy">Your details are used only to prepare and respond to your request.</span>
+              <a href="../privacy/index.html" data-i18n="footer.privacy">Privacy Policy</a>
+            </p>
+          </form>
+        </section>
+      </section>
+
+      <section class="trust-grid quote-response-process" aria-labelledby="trust-title">
+        <p class="eyebrow" data-i18n="quotePage.trust.eyebrow">How Ride X responds</p>
+        <h2 id="trust-title" class="visually-hidden">Ride X quote request trust signals</h2>
+        <div class="quote-response-route" aria-hidden="true">
+          <span class="qrr-line"></span>
+          <span class="qrr-node qrr-node--one"></span>
+          <span class="qrr-node qrr-node--two"></span>
+          <span class="qrr-node qrr-node--three"></span>
+        </div>
+        <div class="quote-response-steps">
+          <article class="quote-response-card">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M12 6v6l4 2" /><circle cx="12" cy="12" r="10" /></svg>
+            </span>
+            <h3 data-i18n="quotePage.trust.fast.title">Same-Day Review</h3>
+            <p data-i18n="quotePage.trust.fast.copy">Requests are usually answered the same day during working hours.</p>
+          </article>
+          <article class="quote-response-card">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg>
+            </span>
+            <h3 data-i18n="quotePage.trust.saudi.title">Jeddah-Based Support</h3>
+            <p data-i18n="quotePage.trust.saudi.copy">Local coordination, local timing, and communication that fits how Jeddah moves.</p>
+          </article>
+          <article class="quote-response-card">
+            <span class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z" /></svg>
+            </span>
+            <h3 data-i18n="quotePage.trust.whatsapp.title">WhatsApp-First</h3>
+            <p data-i18n="quotePage.trust.whatsapp.copy">The quote and all follow-up can happen directly on WhatsApp.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="final-quote-cta" id="contact" aria-labelledby="quick-title">
+        <div>
+          <p class="eyebrow" data-i18n="quotePage.final.eyebrow">Direct contact</p>
+          <h2 id="quick-title" data-i18n="quotePage.final.title">Need a ride arranged quickly?</h2>
+          <p data-i18n="quotePage.final.copy">
+            If you already know your requirements, WhatsApp is often the fastest way to start the conversation.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="quotePage.final.whatsapp">Chat on WhatsApp</a>
+          <a class="button button-quote" href="../contact/index.html" data-i18n="quotePage.final.contact">Contact Ride X</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html" aria-label="Ride X home">
+            <span class="brand-mark"><img src="../assets/logo.png" alt="Ride X logo" /></span>
+            <span>Ride X</span>
+          </a>
+          <p data-i18n="footer.tagline">Private transport coordination in Jeddah — airport transfers, family rides, corporate transport, and scheduled trips.</p>
+          <p class="footer-area" data-i18n="footer.area">Service area: Jeddah, Saudi Arabia</p>
+        </div>
+        <nav class="footer-col" aria-label="Footer services">
+          <h3 data-i18n="footer.col.services">Services</h3>
+          <a href="../services/index.html" data-i18n="footer.svc.airport">Airport Transfers</a>
+          <a href="../services/index.html" data-i18n="footer.svc.family">Family Transportation</a>
+          <a href="../services/index.html" data-i18n="footer.svc.corporate">Corporate Transport</a>
+          <a href="../services/index.html" data-i18n="footer.svc.scheduled">Scheduled Rides</a>
+        </nav>
+        <nav class="footer-col" aria-label="Footer company">
+          <h3 data-i18n="footer.col.company">Company</h3>
+          <a href="../about/index.html" data-i18n="footer.about">About</a>
+          <a href="../contact/index.html" data-i18n="footer.contact">Contact</a>
+          <a href="index.html" data-i18n="footer.quote">Request a Quote</a>
+        </nav>
+        <div class="footer-col">
+          <h3 data-i18n="footer.col.contact">Contact</h3>
+          <a href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="footer.whatsapp">WhatsApp</a>
+          <a href="tel:+966547433452" dir="ltr">+966 54 743 3452</a>
+          <!-- REPLACE-ME: set the real business email address once the domain is live -->
+          <a href="mailto:contact@ridex.sa" dir="ltr">contact@ridex.sa</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-year>2026</span> <span data-i18n="footer.rights">Ride X. All rights reserved.</span></p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="../privacy/index.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="../terms/index.html" data-i18n="footer.terms">Terms of Service</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="../supabase-config.js"></script>
+    <script src="../script.js"></script>
+  </body>
+</html>
