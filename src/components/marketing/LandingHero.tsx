@@ -228,11 +228,11 @@ function ProductPreviewStage({
   const hoverGlow = useMotionValue(0);
   const glareX = useMotionValue(50);
   const glareY = useMotionValue(50);
-  const interactiveRotateX = useSpring(pointerRotateX, SPRINGS.hover);
-  const interactiveRotateY = useSpring(pointerRotateY, SPRINGS.hover);
+  const interactiveRotateX = useSpring(pointerRotateX, SPRINGS.tilt);
+  const interactiveRotateY = useSpring(pointerRotateY, SPRINGS.tilt);
   const interactiveGlow = useSpring(hoverGlow, SPRINGS.hover);
-  const interactiveGlareX = useSpring(glareX, SPRINGS.hover);
-  const interactiveGlareY = useSpring(glareY, SPRINGS.hover);
+  const interactiveGlareX = useSpring(glareX, SPRINGS.tilt);
+  const interactiveGlareY = useSpring(glareY, SPRINGS.tilt);
   const borderAlpha = useTransform(interactiveGlow, [0, 1], [0.08, 0.26]);
   const shadowAlpha = useTransform(interactiveGlow, [0, 1], [0, 0.16]);
   const glareAlpha = useTransform(interactiveGlow, [0, 1], [0, 0.13]);
@@ -299,8 +299,8 @@ function ProductPreviewStage({
     latestPointer.current = {
       glareX: (normalizedX + 1) * 50,
       glareY: (normalizedY + 1) * 50,
-      rotateX: normalizedY * -4,
-      rotateY: normalizedX * 4,
+      rotateX: normalizedY * 7,
+      rotateY: normalizedX * -7,
     };
 
     hoverGlow.set(1);
@@ -342,6 +342,7 @@ function ProductPreviewStage({
                 rotateX: scrollRotateX,
                 scale: scrollScale,
                 y: scrollY,
+                transformStyle: "preserve-3d",
               }
         }
       >
