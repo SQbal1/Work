@@ -119,7 +119,7 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
     },
   ];
 
-  function handleSave() {
+  async function handleSave() {
     if (!customerId) {
       toast.error("Select a customer first");
       return;
@@ -140,14 +140,18 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
       paidDate: status === "paid" ? existing?.paidDate ?? todayISO() : null,
     };
 
-    if (editing && existing) {
-      updateInvoice(existing.id, payload);
-      toast.success("Invoice updated");
-      router.push(`/invoices/${existing.id}`);
-    } else {
-      const created = addInvoice(payload);
-      toast.success("Invoice saved");
-      router.push(`/invoices/${created.id}`);
+    try {
+      if (editing && existing) {
+        await updateInvoice(existing.id, payload);
+        toast.success("Invoice updated");
+        router.push(`/invoices/${existing.id}`);
+      } else {
+        const created = await addInvoice(payload);
+        toast.success("Invoice saved");
+        router.push(`/invoices/${created.id}`);
+      }
+    } catch {
+      // store already surfaced an error toast
     }
   }
 

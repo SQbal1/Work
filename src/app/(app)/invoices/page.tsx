@@ -172,8 +172,8 @@ export default function InvoicesPage() {
                           <IconAction
                             label="Duplicate"
                             icon={<Copy className="h-4 w-4" />}
-                            onClick={() => {
-                              const dup = duplicateInvoice(inv.id);
+                            onClick={async () => {
+                              const dup = await duplicateInvoice(inv.id);
                               if (dup) toast.success(`Duplicated as ${dup.number}`);
                             }}
                           />

@@ -8,22 +8,56 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { Input } from "@/components/ui/Input";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
+import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
   const toast = useToast();
   const [form, setForm] = useState({ name: "", company: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
 
   function set(key: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    toast.success("Account created (demo)");
-    window.setTimeout(() => router.push("/onboarding"), 400);
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: { data: { full_name: form.name, company_name: form.company } },
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (!data.session) {
+      // Email confirmation is required before a session exists.
+      setCheckEmail(true);
+      return;
+    }
+    toast.success("Account created");
+    router.push("/onboarding");
+    router.refresh();
+  }
+
+  if (checkEmail) {
+    return (
+      <AuthShell title="Check your email" subtitle={`We sent a confirmation link to ${form.email}.`}>
+        <p className="text-sm text-fog">
+          Click the link in that email to activate your account, then come back and sign in.
+        </p>
+        <div className="mt-4">
+          <Link href="/login" className={buttonStyles("secondary", "md", "w-full")}>
+            Back to sign in
+          </Link>
+        </div>
+      </AuthShell>
+    );
   }
 
   return (

@@ -26,7 +26,7 @@ export function AuthShell({
         </div>
         {footer ? <div className="mt-6 text-center text-sm text-fog">{footer}</div> : null}
         <p className="mt-6 text-center text-xs text-fog">
-          Prototype demo — no real authentication. Your data stays in this browser.
+          MVP prototype — not yet a finished commercial product.
         </p>
       </div>
     </div>

@@ -12,28 +12,31 @@ import type {
   Customer,
   Database,
   Invoice,
-  InvoiceLineItem,
   Product,
   Settings,
 } from "@/types";
-import { loadDatabase, saveDatabase } from "./storage";
-import { createEmptyDatabase, createSeedDatabase } from "@/data/seed";
-import { uid } from "./id";
-import { addDaysISO, todayISO } from "./format";
+import type { NewCustomer, NewInvoice, NewProduct } from "./data/adapter";
+import { localAdapter } from "./data/localAdapter";
+import { supabaseAdapter } from "./data/supabaseAdapter";
+import { createEmptyDatabase } from "@/data/seed";
+import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/lib/toast";
+import { todayISO } from "@/lib/format";
 
 /**
- * The single client-side data store for the whole app. It loads from
- * localStorage on mount, seeds demo data on first run, and persists every
- * change. Components read state and call the mutators — no Redux, no extra
- * libraries. To move to a real backend, swap the bodies here for API calls.
+ * The single client-side data store for the whole app. On mount it checks
+ * for a Supabase session: signed-in users get the `supabaseAdapter` (real
+ * Postgres, RLS-scoped to their workspace), everyone else gets the
+ * `localAdapter` (today's localStorage demo, unchanged). Components only see
+ * this context — they never talk to an adapter or Supabase directly.
  */
-
-type NewCustomer = Omit<Customer, "id" | "createdAt">;
-type NewProduct = Omit<Product, "id" | "createdAt">;
-type NewInvoice = Omit<Invoice, "id" | "number" | "createdAt" | "updatedAt">;
 
 interface StoreValue {
   ready: boolean;
+  /** True once there's an authenticated session (Supabase-backed, not local demo). */
+  usingSupabase: boolean;
+  /** False once signed in with no workspace yet — onboarding needs to create one. */
+  hasWorkspace: boolean;
   onboarded: boolean;
   company: Company;
   settings: Settings;
@@ -41,58 +44,85 @@ interface StoreValue {
   products: Product[];
   invoices: Invoice[];
 
+  // Workspace
+  createWorkspace: (name: string) => Promise<void>;
+
   // Customers
-  addCustomer: (data: NewCustomer) => Customer;
-  updateCustomer: (id: string, data: Partial<NewCustomer>) => void;
-  deleteCustomer: (id: string) => void;
+  addCustomer: (data: NewCustomer) => Promise<Customer>;
+  updateCustomer: (id: string, data: Partial<NewCustomer>) => Promise<void>;
+  deleteCustomer: (id: string) => Promise<void>;
   getCustomer: (id: string | null) => Customer | undefined;
 
   // Products
-  addProduct: (data: NewProduct) => Product;
-  updateProduct: (id: string, data: Partial<NewProduct>) => void;
-  deleteProduct: (id: string) => void;
+  addProduct: (data: NewProduct) => Promise<Product>;
+  updateProduct: (id: string, data: Partial<NewProduct>) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
   getProduct: (id: string | null) => Product | undefined;
 
   // Invoices
   peekInvoiceNumber: () => string;
-  addInvoice: (data: NewInvoice) => Invoice;
-  updateInvoice: (id: string, data: Partial<Omit<Invoice, "id">>) => void;
-  deleteInvoice: (id: string) => void;
+  addInvoice: (data: NewInvoice) => Promise<Invoice>;
+  updateInvoice: (id: string, data: Partial<Omit<Invoice, "id">>) => Promise<void>;
+  deleteInvoice: (id: string) => Promise<void>;
   getInvoice: (id: string | null) => Invoice | undefined;
-  markInvoicePaid: (id: string) => void;
-  duplicateInvoice: (id: string) => Invoice | undefined;
+  markInvoicePaid: (id: string) => Promise<void>;
+  duplicateInvoice: (id: string) => Promise<Invoice | undefined>;
 
   // Company & settings
-  updateCompany: (data: Partial<Company>) => void;
-  updateSettings: (data: Partial<Settings>) => void;
+  updateCompany: (data: Partial<Company>) => Promise<void>;
+  updateSettings: (data: Partial<Settings>) => Promise<void>;
 
-  // Workspace
-  setOnboarded: (value: boolean) => void;
-  resetDemoData: () => void;
-  clearAllData: () => void;
+  // Workspace state
+  setOnboarded: (value: boolean) => Promise<void>;
+  /** Local demo mode only — throws for signed-in workspaces (see Settings gating). */
+  resetDemoData: () => Promise<void>;
+  clearAllData: () => Promise<void>;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
 
 export function DataProvider({ children }: { children: ReactNode }) {
+  const toast = useToast();
   // Stable empty state so server + first client render match (no hydration mismatch).
   const [db, setDb] = useState<Database>(() => createEmptyDatabase());
   const [ready, setReady] = useState(false);
+  const [usingSupabase, setUsingSupabase] = useState(false);
+  const [hasWorkspace, setHasWorkspace] = useState(true);
+  const [adapter, setAdapter] = useState(localAdapter);
 
-  // Load (or seed) once on mount.
+  // Pick an adapter based on session, then load (or seed) once on mount.
   useEffect(() => {
-    const existing = loadDatabase();
-    setDb(existing ?? createSeedDatabase());
-    setReady(true);
+    let cancelled = false;
+    async function init() {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const chosen = session ? supabaseAdapter : localAdapter;
+      if (cancelled) return;
+      setAdapter(chosen);
+      setUsingSupabase(!!session);
+
+      const loaded = await chosen.load();
+      if (cancelled) return;
+      setHasWorkspace(loaded !== null);
+      setDb(loaded ?? createEmptyDatabase());
+      setReady(true);
+    }
+    init();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Persist on every change once we're past the initial load.
-  useEffect(() => {
-    if (ready) saveDatabase(db);
-  }, [db, ready]);
+  function reportError(err: unknown) {
+    toast.error(err instanceof Error ? err.message : "Something went wrong");
+  }
 
   const value: StoreValue = {
     ready,
+    usingSupabase,
+    hasWorkspace,
     onboarded: db.onboarded,
     company: db.company,
     settings: db.settings,
@@ -100,37 +130,79 @@ export function DataProvider({ children }: { children: ReactNode }) {
     products: db.products,
     invoices: db.invoices,
 
-    addCustomer(data) {
-      const customer: Customer = { ...data, id: uid("cus_"), createdAt: new Date().toISOString() };
-      setDb((prev) => ({ ...prev, customers: [customer, ...prev.customers] }));
-      return customer;
+    async createWorkspace(name) {
+      try {
+        await adapter.createWorkspace(name);
+        const loaded = await adapter.load();
+        setDb(loaded ?? createEmptyDatabase());
+        setHasWorkspace(true);
+      } catch (err) {
+        reportError(err);
+        throw err;
+      }
     },
-    updateCustomer(id, data) {
-      setDb((prev) => ({
-        ...prev,
-        customers: prev.customers.map((c) => (c.id === id ? { ...c, ...data } : c)),
-      }));
+
+    async addCustomer(data) {
+      try {
+        const customer = await adapter.addCustomer(data);
+        setDb((prev) => ({ ...prev, customers: [customer, ...prev.customers] }));
+        return customer;
+      } catch (err) {
+        reportError(err);
+        throw err;
+      }
     },
-    deleteCustomer(id) {
-      setDb((prev) => ({ ...prev, customers: prev.customers.filter((c) => c.id !== id) }));
+    async updateCustomer(id, data) {
+      try {
+        await adapter.updateCustomer(id, data);
+        setDb((prev) => ({
+          ...prev,
+          customers: prev.customers.map((c) => (c.id === id ? { ...c, ...data } : c)),
+        }));
+      } catch (err) {
+        reportError(err);
+      }
+    },
+    async deleteCustomer(id) {
+      try {
+        await adapter.deleteCustomer(id);
+        setDb((prev) => ({ ...prev, customers: prev.customers.filter((c) => c.id !== id) }));
+      } catch (err) {
+        reportError(err);
+      }
     },
     getCustomer(id) {
       return id ? db.customers.find((c) => c.id === id) : undefined;
     },
 
-    addProduct(data) {
-      const product: Product = { ...data, id: uid("prd_"), createdAt: new Date().toISOString() };
-      setDb((prev) => ({ ...prev, products: [product, ...prev.products] }));
-      return product;
+    async addProduct(data) {
+      try {
+        const product = await adapter.addProduct(data);
+        setDb((prev) => ({ ...prev, products: [product, ...prev.products] }));
+        return product;
+      } catch (err) {
+        reportError(err);
+        throw err;
+      }
     },
-    updateProduct(id, data) {
-      setDb((prev) => ({
-        ...prev,
-        products: prev.products.map((p) => (p.id === id ? { ...p, ...data } : p)),
-      }));
+    async updateProduct(id, data) {
+      try {
+        await adapter.updateProduct(id, data);
+        setDb((prev) => ({
+          ...prev,
+          products: prev.products.map((p) => (p.id === id ? { ...p, ...data } : p)),
+        }));
+      } catch (err) {
+        reportError(err);
+      }
     },
-    deleteProduct(id) {
-      setDb((prev) => ({ ...prev, products: prev.products.filter((p) => p.id !== id) }));
+    async deleteProduct(id) {
+      try {
+        await adapter.deleteProduct(id);
+        setDb((prev) => ({ ...prev, products: prev.products.filter((p) => p.id !== id) }));
+      } catch (err) {
+        reportError(err);
+      }
     },
     getProduct(id) {
       return id ? db.products.find((p) => p.id === id) : undefined;
@@ -139,88 +211,119 @@ export function DataProvider({ children }: { children: ReactNode }) {
     peekInvoiceNumber() {
       return `${db.settings.invoicePrefix}${db.settings.nextInvoiceNumber}`;
     },
-    addInvoice(data) {
-      const now = new Date().toISOString();
-      let created!: Invoice;
-      setDb((prev) => {
-        const number = `${prev.settings.invoicePrefix}${prev.settings.nextInvoiceNumber}`;
-        created = { ...data, id: uid("inv_"), number, createdAt: now, updatedAt: now };
-        return {
+    async addInvoice(data) {
+      try {
+        const invoice = await adapter.addInvoice(data);
+        setDb((prev) => ({
           ...prev,
-          invoices: [created, ...prev.invoices],
+          invoices: [invoice, ...prev.invoices],
           settings: { ...prev.settings, nextInvoiceNumber: prev.settings.nextInvoiceNumber + 1 },
-        };
-      });
-      return created;
+        }));
+        return invoice;
+      } catch (err) {
+        reportError(err);
+        throw err;
+      }
     },
-    updateInvoice(id, data) {
-      setDb((prev) => ({
-        ...prev,
-        invoices: prev.invoices.map((inv) =>
-          inv.id === id ? { ...inv, ...data, updatedAt: new Date().toISOString() } : inv,
-        ),
-      }));
+    async updateInvoice(id, data) {
+      try {
+        await adapter.updateInvoice(id, data);
+        setDb((prev) => ({
+          ...prev,
+          invoices: prev.invoices.map((inv) =>
+            inv.id === id ? { ...inv, ...data, updatedAt: new Date().toISOString() } : inv,
+          ),
+        }));
+      } catch (err) {
+        reportError(err);
+        throw err;
+      }
     },
-    deleteInvoice(id) {
-      setDb((prev) => ({ ...prev, invoices: prev.invoices.filter((inv) => inv.id !== id) }));
+    async deleteInvoice(id) {
+      try {
+        await adapter.deleteInvoice(id);
+        setDb((prev) => ({ ...prev, invoices: prev.invoices.filter((inv) => inv.id !== id) }));
+      } catch (err) {
+        reportError(err);
+      }
     },
     getInvoice(id) {
       return id ? db.invoices.find((inv) => inv.id === id) : undefined;
     },
-    markInvoicePaid(id) {
-      setDb((prev) => ({
-        ...prev,
-        invoices: prev.invoices.map((inv) =>
-          inv.id === id
-            ? { ...inv, status: "paid", paidDate: todayISO(), updatedAt: new Date().toISOString() }
-            : inv,
-        ),
-      }));
+    async markInvoicePaid(id) {
+      try {
+        await adapter.markInvoicePaid(id);
+        setDb((prev) => ({
+          ...prev,
+          invoices: prev.invoices.map((inv) =>
+            inv.id === id
+              ? { ...inv, status: "paid", paidDate: todayISO(), updatedAt: new Date().toISOString() }
+              : inv,
+          ),
+        }));
+      } catch (err) {
+        reportError(err);
+      }
     },
-    duplicateInvoice(id) {
-      const source = db.invoices.find((inv) => inv.id === id);
-      if (!source) return undefined;
-      const now = new Date().toISOString();
-      let created!: Invoice;
-      setDb((prev) => {
-        const number = `${prev.settings.invoicePrefix}${prev.settings.nextInvoiceNumber}`;
-        const items: InvoiceLineItem[] = source.items.map((it) => ({ ...it, id: uid("li_") }));
-        created = {
-          ...source,
-          id: uid("inv_"),
-          number,
-          status: "draft",
-          issueDate: todayISO(),
-          dueDate: addDaysISO(todayISO(), prev.settings.defaultDueDays),
-          paidDate: null,
-          items,
-          createdAt: now,
-          updatedAt: now,
-        };
-        return {
+    async duplicateInvoice(id) {
+      try {
+        const created = await adapter.duplicateInvoice(id);
+        if (!created) return undefined;
+        setDb((prev) => ({
           ...prev,
           invoices: [created, ...prev.invoices],
           settings: { ...prev.settings, nextInvoiceNumber: prev.settings.nextInvoiceNumber + 1 },
-        };
-      });
-      return created;
+        }));
+        return created;
+      } catch (err) {
+        reportError(err);
+        return undefined;
+      }
     },
 
-    updateCompany(data) {
-      setDb((prev) => ({ ...prev, company: { ...prev.company, ...data } }));
+    async updateCompany(data) {
+      try {
+        await adapter.updateCompany(data);
+        setDb((prev) => ({ ...prev, company: { ...prev.company, ...data } }));
+      } catch (err) {
+        reportError(err);
+      }
     },
-    updateSettings(data) {
-      setDb((prev) => ({ ...prev, settings: { ...prev.settings, ...data } }));
+    async updateSettings(data) {
+      try {
+        await adapter.updateSettings(data);
+        setDb((prev) => ({ ...prev, settings: { ...prev.settings, ...data } }));
+      } catch (err) {
+        reportError(err);
+      }
     },
 
-    setOnboarded(value) {
-      setDb((prev) => ({ ...prev, onboarded: value }));
+    async setOnboarded(value) {
+      try {
+        await adapter.setOnboarded(value);
+        setDb((prev) => ({ ...prev, onboarded: value }));
+      } catch (err) {
+        reportError(err);
+      }
     },
-    resetDemoData() {
-      setDb(createSeedDatabase());
+    async resetDemoData() {
+      try {
+        await adapter.resetDemoData();
+        const loaded = await adapter.load();
+        setDb(loaded ?? createEmptyDatabase());
+      } catch (err) {
+        reportError(err);
+      }
     },
-    clearAllData() {
-      setDb(createEmptyDatabase());
+    async clearAllData() {
+      try {
+        await adapter.clearAllData();
+        const loaded = await adapter.load();
+        setHasWorkspace(loaded !== null);
+        setDb(loaded ?? createEmptyDatabase());
+      } catch (err) {
+        reportError(err);
+      }
     },
   };
 

@@ -33,7 +33,16 @@ const STEPS = [
 export default function OnboardingPage() {
   const router = useRouter();
   const toast = useToast();
-  const { company, updateCompany, addCustomer, addProduct, setOnboarded } = useStore();
+  const {
+    ready,
+    company,
+    hasWorkspace,
+    createWorkspace,
+    updateCompany,
+    addCustomer,
+    addProduct,
+    setOnboarded,
+  } = useStore();
 
   const [step, setStep] = useState(1);
   const [businessType, setBusinessType] = useState<BusinessTypeId>(company.businessType);
@@ -50,10 +59,13 @@ export default function OnboardingPage() {
 
   const canNext = step !== 2 || companyForm.name.trim() !== "";
 
-  function persistAll() {
-    updateCompany({ ...companyForm, businessType });
+  async function persistAll() {
+    if (!hasWorkspace) {
+      await createWorkspace(companyForm.name.trim() || "My Workspace");
+    }
+    await updateCompany({ ...companyForm, businessType });
     if (customerForm.name.trim()) {
-      addCustomer({
+      await addCustomer({
         name: customerForm.name.trim(),
         company: customerForm.company.trim(),
         email: customerForm.email.trim(),
@@ -64,7 +76,7 @@ export default function OnboardingPage() {
       });
     }
     if (productForm.name.trim() && productForm.price) {
-      addProduct({
+      await addProduct({
         name: productForm.name.trim(),
         description: "",
         unitPrice: parseFloat(productForm.price) || 0,
@@ -72,13 +84,18 @@ export default function OnboardingPage() {
         active: true,
       });
     }
-    setOnboarded(true);
+    await setOnboarded(true);
   }
 
-  function finish(destination: string) {
-    persistAll();
-    toast.success("Setup complete — welcome aboard!");
-    router.push(destination);
+  async function finish(destination: string) {
+    if (!ready) return;
+    try {
+      await persistAll();
+      toast.success("Setup complete — welcome aboard!");
+      router.push(destination);
+    } catch {
+      // store already surfaced an error toast
+    }
   }
 
   return (
@@ -245,13 +262,21 @@ export default function OnboardingPage() {
                   <SummaryItem label={productForm.name ? `Service: ${productForm.name}` : "Service — skipped (add later)"} />
                 </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <Button className="flex-1" onClick={() => finish("/invoices/new")}>
+                  <Button className="flex-1" disabled={!ready} onClick={() => finish("/invoices/new")}>
                     <FileText className="h-4 w-4" /> Create my first invoice
                   </Button>
-                  <Button variant="secondary" className="flex-1" onClick={() => finish("/dashboard")}>
+                  <Button
+                    variant="secondary"
+                    className="flex-1"
+                    disabled={!ready}
+                    onClick={() => finish("/dashboard")}
+                  >
                     Go to dashboard
                   </Button>
                 </div>
+                {!ready ? (
+                  <p className="mt-3 text-center text-xs text-fog">Loading your workspace…</p>
+                ) : null}
               </StepShell>
             ) : null}
           </CardBody>
@@ -282,7 +307,8 @@ export default function OnboardingPage() {
           <div className="mt-6 text-center">
             <button
               onClick={() => finish("/dashboard")}
-              className="text-sm font-medium text-fog hover:text-cloud"
+              disabled={!ready}
+              className="text-sm font-medium text-fog hover:text-cloud disabled:opacity-50"
             >
               Skip setup and go to dashboard
             </button>

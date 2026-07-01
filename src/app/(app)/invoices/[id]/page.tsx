@@ -161,8 +161,8 @@ export default function InvoicePreviewPage() {
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
-                  onClick={() => {
-                    const dup = duplicateInvoice(invoice.id);
+                  onClick={async () => {
+                    const dup = await duplicateInvoice(invoice.id);
                     if (dup) {
                       toast.success(`Duplicated as ${dup.number}`);
                       router.push(`/invoices/${dup.id}`);

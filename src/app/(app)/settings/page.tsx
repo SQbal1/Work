@@ -26,7 +26,8 @@ import { todayISO } from "@/lib/format";
 export default function SettingsPage() {
   const router = useRouter();
   const toast = useToast();
-  const { company, settings, customers, products, invoices, resetDemoData, clearAllData } = useStore();
+  const { company, settings, customers, products, invoices, usingSupabase, resetDemoData, clearAllData } =
+    useStore();
   const [confirm, setConfirm] = useState<null | "reset" | "clear">(null);
 
   function exportData() {
@@ -107,7 +108,14 @@ export default function SettingsPage() {
 
       {/* Data & export */}
       <Card>
-        <CardHeader title="Data & export" subtitle="Your data is stored locally in this browser." />
+        <CardHeader
+          title="Data & export"
+          subtitle={
+            usingSupabase
+              ? "Your data is stored in your workspace."
+              : "Your data is stored locally in this browser."
+          }
+        />
         <CardBody className="space-y-3">
           <DataRow
             title="Export data"
@@ -118,15 +126,17 @@ export default function SettingsPage() {
               </Button>
             }
           />
-          <DataRow
-            title="Restore demo data"
-            description="Reset to the sample workspace."
-            action={
-              <Button variant="secondary" size="sm" onClick={() => setConfirm("reset")}>
-                <RotateCcw className="h-4 w-4" /> Restore
-              </Button>
-            }
-          />
+          {!usingSupabase ? (
+            <DataRow
+              title="Restore demo data"
+              description="Reset to the sample workspace."
+              action={
+                <Button variant="secondary" size="sm" onClick={() => setConfirm("reset")}>
+                  <RotateCcw className="h-4 w-4" /> Restore
+                </Button>
+              }
+            />
+          ) : null}
           <DataRow
             title="Clear all data"
             description="Delete customers, products, and invoices."
