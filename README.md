@@ -15,8 +15,14 @@ commercial product and makes **no claim of official ZATCA compliance**. Complian
 - **TypeScript** (simple, readable types)
 - **Tailwind CSS** for styling (no UI kit dependency)
 - **lucide-react** for icons
-- **localStorage** for persistence (no backend, no paid APIs, no real auth/payments)
+- **Supabase** (Postgres + Auth) for signed-in workspaces — real accounts, RLS-scoped
+  multi-tenant data, no payments yet
+- **localStorage** as a local demo mode for anonymous visitors ("Skip — explore the demo") —
+  no signup required, nothing sent anywhere
 - Lightweight **React Context** for state — no Redux/Zustand
+
+See [CLAUDE.md](CLAUDE.md) for the full architecture (schema, RLS, auth flow, the
+local/Supabase adapter split).
 
 ## Run locally
 
@@ -24,10 +30,17 @@ Requires Node 18.17+ (tested on Node 24).
 
 ```bash
 npm install      # install dependencies
+cp .env.example .env.local   # fill in NEXT_PUBLIC_SUPABASE_URL / _ANON_KEY (required — see below)
 npm run dev      # start dev server → http://localhost:3000
 npm run build    # production build
 npm start        # serve the production build
 ```
+
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` must be set even for local dev —
+the store checks for a Supabase session on every page load regardless of whether you sign in.
+Point them at your own Supabase project and apply the SQL files in `supabase/migrations/` (in
+order) to get the schema. Anonymous visitors still get the local demo either way; only real
+sign-in requires a working project.
 
 On first run the app **seeds realistic demo data** (a consulting firm, customers, services, and
 invoices) so every screen looks alive. Reset or clear it anytime from **Settings → Data & export**.
@@ -41,7 +54,7 @@ invoices) so every screen looks alive. Reset or clear it anytime from **Settings
 | Route | Screen |
 | --- | --- |
 | `/` | Marketing landing page (hero, mock dashboard, pain points, how it works, features, who it's for, pricing, FAQ, CTA, footer) |
-| `/login`, `/signup` | Prototype auth (no real authentication — routes into the app/onboarding) |
+| `/login`, `/signup` | Real Supabase Auth (email/password) — "Skip — explore the demo" still routes anonymous visitors straight into the app with local data, no account needed |
 | `/onboarding` | 5‑step setup wizard (business type → company → customer → service → first invoice) |
 | `/dashboard` | Stats (total/paid/unpaid/overdue), monthly revenue chart, quick actions, recent invoices |
 | `/customers` | Customer list + add / view / edit / delete (search) |
@@ -85,10 +98,12 @@ interface is intentionally flat so it maps cleanly to a future DB table. Money m
 - **`src/data/seed.ts`** — the demo workspace.
 - **`src/config/nav.ts`** — sidebar navigation.
 
-### 🔌 Add a real backend later
-All persistence flows through **one seam**: `src/lib/storage.ts` (`loadDatabase` / `saveDatabase`)
-and the mutators in **`src/lib/store.tsx`**. Swap those bodies for API/database calls (e.g. Supabase,
-Postgres) and the UI keeps working unchanged. The `Database` type already mirrors a normalized schema.
+### 🔌 Backend & auth
+Signed-in users get a real Supabase-backed workspace (Postgres + Auth, RLS-scoped per tenant);
+anonymous visitors still get the original localStorage demo. `src/lib/store.tsx` picks between
+the two via a `DataAdapter` (`src/lib/data/{local,supabase}Adapter.ts`) based on whether there's
+a session — components never know which one is active. Full architecture, schema, and RLS
+details live in [CLAUDE.md](CLAUDE.md).
 
 ### 📜 Add real ZATCA / PDF / WhatsApp / Email later
 These are deliberately stubbed for the MVP:
@@ -98,7 +113,7 @@ These are deliberately stubbed for the MVP:
 - **ZATCA** — the **`CompletenessChecklist`** (`src/components/invoices/CompletenessChecklist.tsx`) and
   the **Settings → VAT & ZATCA** card are guidance/placeholders. Real e‑invoice XML, QR codes, and the
   ZATCA Integration phase belong here. **A final compliance review is required before production use.**
-- **Auth & payments** — `/login` and `/signup` are mock forms; no payment gateway is integrated.
+- **Payments** — no payment gateway is integrated. (Auth is real — see above — only billing isn't.)
 
 ---
 
@@ -108,8 +123,8 @@ These are deliberately stubbed for the MVP:
 src/
 ├── app/                  # routes (App Router)
 │   ├── (app)/            # authenticated app (shared AppShell layout)
-│   ├── login, signup     # prototype auth
-│   ├── onboarding        # setup wizard
+│   ├── login, signup     # real Supabase Auth
+│   ├── onboarding        # setup wizard (creates the workspace on first run)
 │   ├── layout.tsx        # root layout + providers
 │   └── page.tsx          # marketing landing page
 ├── components/
@@ -118,11 +133,20 @@ src/
 │   └── {marketing,auth,dashboard,customers,products,invoices,settings}/
 ├── config/               # brand + nav
 ├── data/                 # business types, constants, marketing copy, seed
-├── lib/                  # storage, store, calc, status, metrics, format, toast, cn, id
-└── types/                # the data model
+├── lib/
+│   ├── store.tsx         # the store components use — picks local vs Supabase
+│   ├── storage.ts        # localStorage persistence (local demo mode)
+│   ├── data/              # DataAdapter interface + local/supabase implementations
+│   ├── actions/           # Supabase Server Actions (one file per resource)
+│   ├── supabase/          # browser/server Supabase client factories
+│   └── calc, status, metrics, format, toast, cn, id  # small pure helpers
+├── middleware.ts          # session refresh + workspace-onboarding redirect
+└── types/                # the app's data model + generated Supabase types
+
+supabase/migrations/       # the schema, in order — apply to a fresh project to reproduce it
 ```
 
 ---
 
-_Placeholder is a prototype foundation. Do not use it for real legal/tax billing without a proper
-compliance review and a production backend._
+_Placeholder is a prototype foundation with a real backend, but still makes no claim of ZATCA
+compliance. Do not use it for real legal/tax billing without a proper compliance review._

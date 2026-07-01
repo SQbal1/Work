@@ -1,22 +1,29 @@
 # Deploy checklist
 
 Short, practical steps to take Placeholder from local to a live host (Netlify or Vercel).
-The app is a static Next.js 14 marketing site — no server/database to provision.
+The marketing pages are static, but signed-in workspaces are backed by a real Supabase project
+(Postgres + Auth) — see [CLAUDE.md](../CLAUDE.md) for the architecture.
 
 ---
 
 ## 1. Environment variables
 
-All four are `NEXT_PUBLIC_*`, which means they are **inlined at build time** — they must be
+All are `NEXT_PUBLIC_*`, which means they are **inlined at build time** — they must be
 set in the **host's build environment**, not only in `.env.local`. Changing one later requires a
 fresh build/redeploy to take effect.
 
 | Variable | Set to | If you leave it unset |
 | --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL (Project Settings → API) | **The app throws on load, for every visitor** — the store checks for a session on every page regardless of sign-in state |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon/publishable key (same page) | Same as above — the app won't render at all |
 | `NEXT_PUBLIC_SITE_URL` | The real deployed origin, e.g. `https://placeholder.sa` (no trailing slash) | SEO canonical URLs, Open Graph image, `robots.txt`, and `sitemap.xml` all point at the `placeholder.sa` default instead of your real domain |
 | `NEXT_PUBLIC_POSTHOG_KEY` | PostHog **EU** project key (Project Settings → Project API key, starts with `phc_`) | Analytics never initializes, the cookieless analytics notice never shows, and the conversion funnel stays empty |
 | `NEXT_PUBLIC_POSTHOG_HOST` | Leave as `/ingest` (the first-party reverse proxy) | Defaults to `/ingest` anyway — only change to `https://eu.i.posthog.com` if you want to skip the proxy |
 | `NEXT_PUBLIC_FORMSPREE_ID` | Your Formspree form id — only the `<id>` part of `https://formspree.io/f/<id>` | The pilot form shows a local success message but **does not actually send** the lead anywhere |
+
+Before deploying, make sure the Supabase project's migrations are applied — run the SQL files in
+`supabase/migrations/` in order (via the Supabase SQL editor, CLI, or MCP tooling), or point at
+the same project you already ran them against locally.
 
 > The PostHog reverse proxy (`/ingest/*` → `eu.i.posthog.com`) is already configured in
 > `next.config.mjs` and works on both Netlify and Vercel — nothing to set up there.
@@ -39,7 +46,7 @@ fresh build/redeploy to take effect.
 
 ---
 
-## 3. Post-deploy smoke test (5 checks)
+## 3. Post-deploy smoke test (6 checks)
 
 1. **Analytics live** — open the site, view page source, confirm the PostHog key is present;
    the cookieless analytics notice should appear bottom-right.
@@ -51,6 +58,9 @@ fresh build/redeploy to take effect.
    `NEXT_PUBLIC_SITE_URL`, not `placeholder.sa`. Check the OG image at `/opengraph-image`.
 5. **Routes work** — click through Features / Demo / Pricing / Contact (instant client-side nav),
    and hit a bogus URL to confirm the branded 404 renders.
+6. **Real signup/login works** — sign up with a real email, confirm it via the email Supabase
+   sends (see the caveat below), log in, and confirm onboarding creates a workspace. Also click
+   "Skip — explore the demo" on `/login` and confirm anonymous access still works with no account.
 
 ---
 
@@ -58,6 +68,11 @@ fresh build/redeploy to take effect.
 
 These are fine as-is for internal testing with Ali, but revisit before real customers land:
 
+- **Supabase's built-in email sender is dev-only and rate-limited** (a handful of emails/hour) —
+  fine for internal testing, but before real users sign up either wire real SMTP in Supabase Auth
+  settings or disable email confirmation there (weaker, but removes the friction for demos).
+- **Enable "Leaked password protection"** in Supabase Auth settings (checks against
+  HaveIBeenPwned) — currently off, a one-toggle fix.
 - **Swap the contact details** in `src/config/brand.ts` — `supportEmail` and the two
   `whatsappContacts` are currently personal lines (Salem / Ali). Move to a business email /
   WhatsApp number for a public launch.
