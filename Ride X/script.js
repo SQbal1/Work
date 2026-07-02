@@ -20,6 +20,13 @@ const translations = {
     "stats.response.label": "Direct booking coordination",
     "stats.model.value": "Fixed quote",
     "stats.model.label": "Confirmed before every trip",
+    "hero.card.kicker": "Trip preparation",
+    "hero.card.pickup": "Pickup",
+    "hero.card.pickupValue": "King Abdulaziz Int’l Airport",
+    "hero.card.destination": "Destination",
+    "hero.card.destinationValue": "Hotel on Jeddah Corniche",
+    "hero.card.vehicle": "Family SUV · 5 seats",
+    "hero.card.status": "Fixed quote confirmed",
     "services.eyebrow": "What we do",
     "services.title": "Transport services built around Jeddah schedules.",
     "services.airport.title": "Airport Transfers",
@@ -31,6 +38,22 @@ const translations = {
     "services.corporate.copy": "Professional movement for employees, executives, meetings, and business visitors.",
     "services.scheduled.title": "Scheduled Rides",
     "services.scheduled.copy": "Book ahead for planned trips, regular routes, events, and group movement.",
+    "services.airport.from": "JED Airport",
+    "services.airport.to": "Hotel / home",
+    "services.airport.tag1": "Flight-timed pickup",
+    "services.airport.tag2": "Luggage space",
+    "services.family.from": "Home",
+    "services.family.to": "Across Jeddah",
+    "services.family.tag1": "Family-first comfort",
+    "services.family.tag2": "Door-to-door",
+    "services.corporate.from": "Office",
+    "services.corporate.to": "Business stops",
+    "services.corporate.tag1": "Business-ready",
+    "services.corporate.tag2": "Scheduled timing",
+    "services.scheduled.from": "Any pickup",
+    "services.scheduled.to": "Planned route",
+    "services.scheduled.tag1": "Book in advance",
+    "services.scheduled.tag2": "Multi-stop ready",
     "howit.eyebrow": "How it works",
     "howit.title": "From request to ride in four clear steps.",
     "howit.step1.title": "Send your request",
@@ -41,6 +64,7 @@ const translations = {
     "howit.step3.copy": "Approve the quote and confirm timing. Nothing is booked until you agree.",
     "howit.step4.title": "Ride with confidence",
     "howit.step4.copy": "Vehicle and driver details are shared before pickup, so you know exactly what to expect.",
+    "howit.note": "Nothing is booked until you approve the quote — coordination stays on WhatsApp from request to pickup.",
     "why.eyebrow": "Why Ride X",
     "why.title": "Organized transport, agreed clearly before the trip starts.",
     "why.copy":
@@ -51,18 +75,24 @@ const translations = {
     "why.whatsapp.copy": "Booking and follow-up happen the way Jeddah customers already coordinate: directly on WhatsApp.",
     "why.scale.title": "Details confirmed first",
     "why.scale.copy": "Your price, pickup time, and vehicle details are agreed before the trip — no surprises on the day.",
+    "why.chips.family": "Family-focused service",
+    "why.chips.airport": "Airport-ready timing",
+    "why.chips.bilingual": "Arabic & English support",
+    "why.flow.start": "First message",
+    "why.flow.mid": "Fixed quote",
+    "why.flow.end": "Pickup confirmed",
     "fleet.eyebrow": "Vehicle options",
     "fleet.title": "Choose the vehicle profile that fits the trip.",
     "fleet.intro":
       "Start with the right category, then Ride X confirms the exact vehicle around your passengers, luggage, route, and timing.",
     "fleet.sedan.title": "Sedan",
-    "fleet.sedan.kicker": "Default selection",
+    "fleet.sedan.kicker": "City rides",
     "fleet.sedan.headline": "Executive sedan for focused city rides.",
     "fleet.sedan.copy": "Standard rides for one to three passengers with light luggage.",
     "fleet.sedan.passengers": "1-3",
     "fleet.sedan.luggage": "Light",
     "fleet.suv.title": "SUV",
-    "fleet.suv.kicker": "More space",
+    "fleet.suv.kicker": "Our signature ride",
     "fleet.suv.headline": "Premium SUV for families and airport arrivals.",
     "fleet.suv.copy": "Extra space and comfort for families, guests, and airport luggage.",
     "fleet.suv.passengers": "1-5",
@@ -78,9 +108,19 @@ const translations = {
     "fleet.quote": "Request this vehicle type",
     "fleet.note":
       "Tell us your passenger count and luggage — the exact vehicle is matched to your trip and confirmed with your quote.",
+    "area.eyebrow": "Service network",
     "area.title": "Serving Jeddah first.",
     "area.copy":
       "Ride X operates across Jeddah — including King Abdulaziz International Airport, hotels, residential districts, and business areas. Trips beyond Jeddah can be requested through the quote form and are confirmed based on availability.",
+    "area.node.airport": "JED Airport",
+    "area.node.hotel": "Hotels",
+    "area.node.home": "Homes",
+    "area.node.business": "Business",
+    "area.node.beyond": "Beyond Jeddah",
+    "area.legend.airport": "Airport transfers",
+    "area.legend.hotel": "Hotel pickups",
+    "area.legend.home": "Residential districts",
+    "area.legend.business": "Business areas",
     "faq.eyebrow": "Common questions",
     "faq.title": "Answers before you ask.",
     "faq.q1": "How quickly will I get a response?",
@@ -101,6 +141,9 @@ const translations = {
     "faq.q6": "Can I book in advance?",
     "faq.a6":
       "Yes, and it is recommended. Advance booking gives the most flexibility for timing and vehicle choice, especially for airport transfers and group trips.",
+    "faq.assist.title": "Quicker to just ask?",
+    "faq.assist.copy": "Send your trip details on WhatsApp — answers usually land the same day during working hours.",
+    "faq.assist.cta": "Ask on WhatsApp",
     "whatsapp.eyebrow": "Direct contact",
     "whatsapp.title": "Need a ride arranged quickly?",
     "whatsapp.copy":
@@ -111,10 +154,16 @@ const translations = {
     "quote.copy":
       "Share the passenger count, timing, route, and any business requirements. You confirm only after you approve the quote.",
     "quote.button": "Open Quote Form",
+    "quote.field.pickup": "Pickup location",
+    "quote.field.destination": "Destination",
+    "quote.field.when": "Date & time",
+    "quote.field.passengers": "Passengers",
     "servicesPage.hero.eyebrow": "SERVICES",
     "servicesPage.hero.title": "Transport services for how Jeddah actually moves.",
     "servicesPage.hero.copy":
       "Airport transfers, family transportation, corporate transport, and scheduled rides — each arranged with a clear quote and confirmed details before the trip.",
+    "servicesPage.hero.chip1": "Airport-to-hotel runs, quoted first",
+    "servicesPage.hero.chip2": "Family SUV ready",
     "servicesPage.cta": "Request a Quote",
     "servicesPage.useCases": "Example use cases",
     "servicesPage.airport.title": "Airport Transfers",
@@ -255,6 +304,15 @@ const translations = {
     "contactPage.hero.title": "Reach Ride X directly.",
     "contactPage.hero.copy":
       "For transport requests, quotes, or corporate coordination in Jeddah — contact Ride X through WhatsApp, phone, or email.",
+    "contactPage.ops.kicker": "Coordination desk",
+    "contactPage.ops.step1": "Request received",
+    "contactPage.ops.step1.meta": "WhatsApp, phone, or email",
+    "contactPage.ops.step2": "Details confirmed",
+    "contactPage.ops.step2.meta": "Route, timing, vehicle, and price",
+    "contactPage.ops.step3": "Ride assigned",
+    "contactPage.ops.step3.meta": "Driver details shared before pickup",
+    "contactPage.ops.chipReply": "Same-day replies in working hours",
+    "contactPage.ops.chipLang": "Arabic & English",
     "contactPage.whatsapp.title": "WhatsApp",
     "contactPage.whatsapp.copy": "Fastest way to start a transport request and get a same-day reply.",
     "contactPage.whatsapp.button": "Chat on WhatsApp",
@@ -370,9 +428,9 @@ const translations = {
     "quotePage.final.contact": "Contact Ride X",
     "legal.privacy.eyebrow": "LEGAL",
     "legal.privacy.title": "Privacy Policy",
-    "legal.privacy.updated": "Last updated: June 2026 — this policy will be reviewed before the official launch.",
+    "legal.privacy.updated": "Last updated: June 2026.",
     "legal.privacy.intro":
-      "Ride X respects your privacy. This policy explains what personal information is collected through this website, why it is collected, and how it is handled.",
+      "Ride X (\"we\") respects your privacy and handles personal data in line with Saudi Arabia's Personal Data Protection Law (PDPL). This policy explains what personal information is collected through this website, why it is collected, and how it is handled. Ride X is the party responsible for this data.",
     "legal.privacy.s1.title": "Information we collect",
     "legal.privacy.s1.copy":
       "When you submit a quote request or contact message, we collect the information you provide: your name, phone number, WhatsApp number, email address, trip details (pickup, destination, date, time, passenger count), and any notes you include.",
@@ -390,15 +448,15 @@ const translations = {
       "Request details are kept only as long as needed for service and record-keeping purposes. You can ask for your information to be corrected or deleted at any time.",
     "legal.privacy.s6.title": "Your rights",
     "legal.privacy.s6.copy":
-      "You may request a copy of the information we hold about you, ask for corrections, or ask for deletion. Contact us through any channel on the contact page and we will respond.",
+      "You may request a copy of the information we hold about you, ask for corrections, or ask for deletion. Contact us through any channel on the contact page and we will respond. You also have the right to raise a concern with the competent authority (SDAIA) if you believe your data has been mishandled.",
     "legal.privacy.s7.title": "Contact",
     "legal.privacy.s7.copy":
       "For any privacy question or request, contact Ride X by WhatsApp, phone, or email — all options are listed on the contact page.",
     "legal.terms.eyebrow": "LEGAL",
     "legal.terms.title": "Terms of Service",
-    "legal.terms.updated": "Last updated: June 2026 — these terms will be reviewed before the official launch.",
+    "legal.terms.updated": "Last updated: June 2026.",
     "legal.terms.intro":
-      "These terms apply when you request or use Ride X transport services through this website, WhatsApp, phone, or email. By submitting a request, you agree to the terms below.",
+      "These terms apply when you request or use Ride X transport services through this website, WhatsApp, phone, or email. By submitting a request, you agree to the terms below. These terms are governed by the laws of the Kingdom of Saudi Arabia.",
     "legal.terms.s1.title": "The service",
     "legal.terms.s1.copy":
       "Ride X coordinates private transport in Jeddah, Saudi Arabia — including airport transfers, family transportation, corporate transport, and scheduled rides. Service availability may vary by date, time, and location.",
@@ -465,6 +523,13 @@ const translations = {
     "stats.response.label": "تنسيق حجز مباشر",
     "stats.model.value": "سعر ثابت",
     "stats.model.label": "يتأكد قبل كل مشوار",
+    "hero.card.kicker": "تجهيز الرحلة",
+    "hero.card.pickup": "نقطة الانطلاق",
+    "hero.card.pickupValue": "مطار الملك عبدالعزيز الدولي",
+    "hero.card.destination": "الوجهة",
+    "hero.card.destinationValue": "فندق على كورنيش جدة",
+    "hero.card.vehicle": "دفع رباعي عائلي · 5 مقاعد",
+    "hero.card.status": "سعر ثابت مؤكد",
     "services.eyebrow": "خدماتنا",
     "services.title": "خدمات نقل مبنية على جداول جدة الحقيقية.",
     "services.airport.title": "توصيل المطار",
@@ -475,6 +540,22 @@ const translations = {
     "services.corporate.copy": "تنقلات احترافية للموظفين، التنفيذيين، الاجتماعات، وزوار الأعمال.",
     "services.scheduled.title": "مشاوير مجدولة",
     "services.scheduled.copy": "احجز مقدماً للرحلات المخططة، المسارات المنتظمة، الفعاليات، وتنقل المجموعات.",
+    "services.airport.from": "مطار جدة JED",
+    "services.airport.to": "فندق أو بيت",
+    "services.airport.tag1": "استقبال على وقت الرحلة",
+    "services.airport.tag2": "مساحة للشنط",
+    "services.family.from": "من البيت",
+    "services.family.to": "داخل جدة",
+    "services.family.tag1": "راحة العائلة أولاً",
+    "services.family.tag2": "من الباب للباب",
+    "services.corporate.from": "من المكتب",
+    "services.corporate.to": "وجهات العمل",
+    "services.corporate.tag1": "جاهز للأعمال",
+    "services.corporate.tag2": "توقيت منضبط",
+    "services.scheduled.from": "أي نقطة انطلاق",
+    "services.scheduled.to": "مسار مخطط",
+    "services.scheduled.tag1": "حجز مسبق",
+    "services.scheduled.tag2": "جاهز لعدة محطات",
     "howit.eyebrow": "كيف نشتغل",
     "howit.title": "من الطلب إلى المشوار في أربع خطوات واضحة.",
     "howit.step1.title": "أرسل طلبك",
@@ -485,6 +566,7 @@ const translations = {
     "howit.step3.copy": "اعتمد التسعيرة وأكّد التوقيت. ما في حجز إلا بعد موافقتك.",
     "howit.step4.title": "اركب وأنت مطمئن",
     "howit.step4.copy": "تفاصيل السيارة والسائق توصلك قبل الموعد، عشان تعرف إيش تتوقع بالضبط.",
+    "howit.note": "ما في حجز إلا بعد ما تعتمد التسعيرة — والتنسيق كله على الواتساب من الطلب إلى الموعد.",
     "why.eyebrow": "ليش Ride X",
     "why.title": "نقل منظم، يُتفق عليه بوضوح قبل ما يبدأ المشوار.",
     "why.copy":
@@ -495,17 +577,23 @@ const translations = {
     "why.whatsapp.copy": "الحجز والمتابعة بنفس الطريقة اللي أهل جدة يتواصلوا فيها أصلاً: مباشرة على الواتساب.",
     "why.scale.title": "التفاصيل تتأكد أولاً",
     "why.scale.copy": "السعر، وقت الانطلاق، وتفاصيل السيارة تُتفق قبل المشوار — بدون مفاجآت يوم الموعد.",
+    "why.chips.family": "خدمة تركّز على العائلة",
+    "why.chips.airport": "توقيت مضبوط للمطار",
+    "why.chips.bilingual": "تواصل بالعربي والإنجليزي",
+    "why.flow.start": "أول رسالة",
+    "why.flow.mid": "سعر ثابت",
+    "why.flow.end": "موعد مؤكد",
     "fleet.eyebrow": "خيارات السيارات",
     "fleet.title": "اختر فئة السيارة المناسبة للمشوار.",
     "fleet.intro": "ابدأ بالفئة الأقرب لاحتياجك، وبعدها Ride X يؤكد السيارة المناسبة حسب الركاب، الشنط، المسار، والتوقيت.",
     "fleet.sedan.title": "سيدان",
-    "fleet.sedan.kicker": "الخيار الافتراضي",
+    "fleet.sedan.kicker": "لمشاوير المدينة",
     "fleet.sedan.headline": "سيدان تنفيذية للمشاوير المركزة داخل المدينة.",
     "fleet.sedan.copy": "مشاوير عادية من راكب إلى ثلاثة ركاب مع أغراض خفيفة.",
     "fleet.sedan.passengers": "1-3",
     "fleet.sedan.luggage": "خفيفة",
     "fleet.suv.title": "دفع رباعي (SUV)",
-    "fleet.suv.kicker": "مساحة أكبر",
+    "fleet.suv.kicker": "خيارنا الأول",
     "fleet.suv.headline": "دفع رباعي مريح للعوائل واستقبال المطار.",
     "fleet.suv.copy": "مساحة وراحة أكبر للعوائل، الضيوف، وشنط المطار.",
     "fleet.suv.passengers": "1-5",
@@ -520,9 +608,19 @@ const translations = {
     "fleet.spec.luggage": "الشنط",
     "fleet.quote": "اطلب هذه الفئة",
     "fleet.note": "قل لنا عدد الركاب والشنط — السيارة المناسبة تنحدد حسب مشوارك وتتأكد مع التسعيرة.",
+    "area.eyebrow": "شبكة الخدمة",
     "area.title": "نخدم جدة أولاً.",
     "area.copy":
       "Ride X يشتغل في كل أنحاء جدة — بما فيها مطار الملك عبدالعزيز الدولي، الفنادق، الأحياء السكنية، ومناطق الأعمال. المشاوير خارج جدة تقدر تطلبها عبر نموذج التسعيرة وتتأكد حسب التوفر.",
+    "area.node.airport": "مطار جدة",
+    "area.node.hotel": "الفنادق",
+    "area.node.home": "الأحياء",
+    "area.node.business": "الأعمال",
+    "area.node.beyond": "خارج جدة",
+    "area.legend.airport": "توصيل المطار",
+    "area.legend.hotel": "استقبال الفنادق",
+    "area.legend.home": "الأحياء السكنية",
+    "area.legend.business": "مناطق الأعمال",
     "faq.eyebrow": "أسئلة شائعة",
     "faq.title": "إجابات قبل ما تسأل.",
     "faq.q1": "متى يوصلني الرد؟",
@@ -537,6 +635,9 @@ const translations = {
     "faq.a5": "التسعيرة على أساس المسار، التوقيت، ونوع السيارة. توصلك بسعر واضح قبل أي تأكيد — والسعر اللي توافق عليه هو اللي تدفعه.",
     "faq.q6": "أقدر أحجز مقدماً؟",
     "faq.a6": "نعم، وننصح فيه. الحجز المسبق يعطيك مرونة أكبر في التوقيت واختيار السيارة، خصوصاً لتوصيل المطار ورحلات المجموعات.",
+    "faq.assist.title": "أسرع لك تسأل مباشرة؟",
+    "faq.assist.copy": "أرسل تفاصيل مشوارك على الواتساب — والرد عادة يوصلك بنفس اليوم خلال ساعات العمل.",
+    "faq.assist.cta": "اسأل على الواتساب",
     "whatsapp.eyebrow": "تواصل مباشر",
     "whatsapp.title": "تحتاج ترتيب مشوار بسرعة؟",
     "whatsapp.copy": "أرسل نقطة الانطلاق، الوجهة، التاريخ، ونوع الخدمة على الواتساب. Ride X يرد عليك بالخطوة العملية التالية.",
@@ -545,10 +646,16 @@ const translations = {
     "quote.title": "خذ سعر واضح قبل ما يبدأ المشوار.",
     "quote.copy": "شارك عدد الركاب، التوقيت، المسار، وأي متطلبات عمل. ما يتأكد شي إلا بعد ما توافق على التسعيرة.",
     "quote.button": "افتح نموذج التسعيرة",
+    "quote.field.pickup": "نقطة الانطلاق",
+    "quote.field.destination": "الوجهة",
+    "quote.field.when": "التاريخ والوقت",
+    "quote.field.passengers": "عدد الركاب",
     "servicesPage.hero.eyebrow": "الخدمات",
     "servicesPage.hero.title": "خدمات نقل على طريقة جدة الحقيقية في التنقل.",
     "servicesPage.hero.copy":
       "توصيل المطار، نقل العائلة، نقل الشركات، والمشاوير المجدولة — كل خدمة بتسعيرة واضحة وتفاصيل مؤكدة قبل المشوار.",
+    "servicesPage.hero.chip1": "مشاوير المطار للفندق، بسعر مؤكد أولاً",
+    "servicesPage.hero.chip2": "دفع رباعي عائلي جاهز",
     "servicesPage.cta": "اطلب تسعيرة",
     "servicesPage.useCases": "أمثلة الاستخدام",
     "servicesPage.airport.title": "توصيل المطار",
@@ -685,6 +792,15 @@ const translations = {
     "contactPage.hero.title": "تواصل مع Ride X مباشرة.",
     "contactPage.hero.copy":
       "لطلبات النقل، التسعيرات، أو تنسيق أعمال في جدة — تواصل مع Ride X عبر الواتساب، الجوال، أو الإيميل.",
+    "contactPage.ops.kicker": "مكتب التنسيق",
+    "contactPage.ops.step1": "طلبك وصل",
+    "contactPage.ops.step1.meta": "واتساب، جوال، أو إيميل",
+    "contactPage.ops.step2": "التفاصيل تتأكد",
+    "contactPage.ops.step2.meta": "المسار، التوقيت، السيارة، والسعر",
+    "contactPage.ops.step3": "المشوار يتجهز",
+    "contactPage.ops.step3.meta": "تفاصيل السائق توصلك قبل الموعد",
+    "contactPage.ops.chipReply": "رد بنفس اليوم خلال ساعات العمل",
+    "contactPage.ops.chipLang": "عربي وإنجليزي",
     "contactPage.whatsapp.title": "واتساب",
     "contactPage.whatsapp.copy": "أسرع طريقة تبدأ فيها طلب نقل وتاخذ رد بنفس اليوم.",
     "contactPage.whatsapp.button": "كلمنا واتساب",
@@ -799,9 +915,9 @@ const translations = {
     "quotePage.final.contact": "تواصل مع Ride X",
     "legal.privacy.eyebrow": "قانوني",
     "legal.privacy.title": "سياسة الخصوصية",
-    "legal.privacy.updated": "آخر تحديث: يونيو 2026 — هذه السياسة ستُراجع قبل الإطلاق الرسمي.",
+    "legal.privacy.updated": "آخر تحديث: يونيو 2026.",
     "legal.privacy.intro":
-      "Ride X يحترم خصوصيتك. هذه السياسة توضح المعلومات الشخصية اللي نجمعها عبر هذا الموقع، ليش نجمعها، وكيف نتعامل معها.",
+      "في Ride X نحترم خصوصيتك ونتعامل مع بياناتك الشخصية وفق نظام حماية البيانات الشخصية (PDPL) في المملكة العربية السعودية. هذه السياسة توضح المعلومات الشخصية اللي نجمعها عبر هذا الموقع، ليش نجمعها، وكيف نتعامل معها. وRide X هي الجهة المسؤولة عن هذه البيانات.",
     "legal.privacy.s1.title": "المعلومات اللي نجمعها",
     "legal.privacy.s1.copy":
       "عند إرسال طلب تسعيرة أو رسالة تواصل، نجمع المعلومات اللي تقدمها: اسمك، رقم جوالك، رقم واتسابك، بريدك الإلكتروني، تفاصيل المشوار (الانطلاق، الوجهة، التاريخ، الوقت، عدد الركاب)، وأي ملاحظات تضيفها.",
@@ -819,15 +935,15 @@ const translations = {
       "تفاصيل الطلبات تُحفظ فقط للمدة اللازمة للخدمة والسجلات. تقدر تطلب تصحيح معلوماتك أو حذفها في أي وقت.",
     "legal.privacy.s6.title": "حقوقك",
     "legal.privacy.s6.copy":
-      "يحق لك طلب نسخة من المعلومات المحفوظة عنك، طلب تصحيحها، أو طلب حذفها. تواصل معنا عبر أي قناة في صفحة التواصل وراح نرد عليك.",
+      "يحق لك طلب نسخة من المعلومات المحفوظة عنك، طلب تصحيحها، أو طلب حذفها. تواصل معنا عبر أي قناة في صفحة التواصل وراح نرد عليك. ولك الحق كذلك ترفع شكوى للجهة المختصة (الهيئة السعودية للبيانات والذكاء الاصطناعي - سدايا) إذا شفت إن بياناتك ما تمت معالجتها بالشكل الصحيح.",
     "legal.privacy.s7.title": "التواصل",
     "legal.privacy.s7.copy":
       "لأي سؤال أو طلب يخص الخصوصية، تواصل مع Ride X عبر الواتساب، الجوال، أو الإيميل — كل الخيارات موجودة في صفحة التواصل.",
     "legal.terms.eyebrow": "قانوني",
     "legal.terms.title": "شروط الخدمة",
-    "legal.terms.updated": "آخر تحديث: يونيو 2026 — هذه الشروط ستُراجع قبل الإطلاق الرسمي.",
+    "legal.terms.updated": "آخر تحديث: يونيو 2026.",
     "legal.terms.intro":
-      "هذه الشروط تنطبق عند طلب أو استخدام خدمات النقل من Ride X عبر هذا الموقع، الواتساب، الجوال، أو الإيميل. بإرسال طلبك، أنت توافق على الشروط أدناه.",
+      "هذه الشروط تنطبق عند طلب أو استخدام خدمات النقل من Ride X عبر هذا الموقع، الواتساب، الجوال، أو الإيميل. بإرسال طلبك، أنت توافق على الشروط أدناه. وتخضع هذه الشروط لأنظمة المملكة العربية السعودية.",
     "legal.terms.s1.title": "الخدمة",
     "legal.terms.s1.copy":
       "Ride X ينسق نقل خاص في جدة، السعودية — يشمل توصيل المطار، نقل العائلة، نقل الشركات، والمشاوير المجدولة. توفر الخدمة قد يختلف حسب التاريخ، الوقت، والموقع.",
@@ -1400,7 +1516,9 @@ if (contactForm) {
   const photos = Array.from(document.querySelectorAll("[data-vehicle-photo]"));
   const quoteLink = document.querySelector(".vehicle-quote");
   const vehicles = ["sedan", "suv", "van"];
-  let activeVehicle = "sedan";
+  /* SUV leads: Ride X's family-first positioning starts from the Family SUV
+     profile; sedan and van are the alternatives. Markup order matches. */
+  let activeVehicle = "suv";
 
   if (!showcase || !tabs.length) return;
 
@@ -1692,6 +1810,9 @@ if (contactForm) {
       ".trust-grid article",
       ".fleet-note",
       ".service-area-card",
+      ".route-network",
+      ".journey-note",
+      ".faq-assist",
       ".faq-section > .eyebrow",
       ".faq-section > h2",
       ".faq-list details",
@@ -1775,4 +1896,550 @@ if (contactForm) {
 
     servicesObserver.observe(servicesSection);
   }
+})();
+
+/* --------------------------------------------------------------------------
+   Claude Code: premium motion layer — vanilla adaptations of React Bits.
+   Blur-in hero headline · cursor spotlight on service cards (pointer devices)
+   · click spark on the primary CTAs. The Aurora glow and shiny wordmark are
+   pure CSS. Everything degrades to plain, fully-readable content without JS
+   and is skipped entirely for visitors who prefer reduced motion.
+   -------------------------------------------------------------------------- */
+
+(() => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* 1 — Blur Text: split the hero headline into per-word spans that resolve
+     out of a blur in reading order. The site's language toggle rewrites
+     h1.textContent (wiping the spans), so we re-split whenever <html lang>
+     flips — mirroring the existing MutationObserver-on-<html> pattern used
+     for numerals and the quote map. */
+  const headline = document.querySelector(".hero h1");
+  if (headline && !reduceMotion.matches) {
+    const splitHeadline = () => {
+      const text = headline.textContent.trim();
+      if (!text) return;
+      headline.classList.add("blur-text");
+      headline.textContent = "";
+      const fragment = document.createDocumentFragment();
+      text.split(/(\s+)/).forEach((chunk) => {
+        if (chunk === "") return;
+        if (/^\s+$/.test(chunk)) {
+          fragment.appendChild(document.createTextNode(chunk));
+          return;
+        }
+        const word = document.createElement("span");
+        word.className = "bt-word";
+        word.textContent = chunk;
+        fragment.appendChild(word);
+      });
+      headline.appendChild(fragment);
+      headline.querySelectorAll(".bt-word").forEach((word, index) => {
+        word.style.setProperty("--bt-delay", `${150 + index * 80}ms`);
+      });
+    };
+
+    splitHeadline();
+
+    let lastLang = document.documentElement.lang;
+    new MutationObserver(() => {
+      if (document.documentElement.lang === lastLang) return;
+      lastLang = document.documentElement.lang;
+      // applyLanguage has already reset textContent to the plain string.
+      splitHeadline();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  }
+
+  /* 2 — Spotlight Card: feed each card a cursor position in card-local pixels.
+     Pointer-device only (touch gets the CSS sheen sweep instead), and the
+     update is rAF-throttled so a flood of pointermove events can't thrash. */
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    document.querySelectorAll(".service-card").forEach((card) => {
+      let frame = 0;
+      card.addEventListener(
+        "pointermove",
+        (event) => {
+          if (frame) return;
+          frame = requestAnimationFrame(() => {
+            frame = 0;
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+            card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+          });
+        },
+        { passive: true }
+      );
+    });
+  }
+
+  /* 3 — Click spark: a short radial burst from the pressed CTA. One delegated
+     listener covers every current and future button; the burst element is
+     removed once its animation has finished, so nothing accumulates. */
+  if (!reduceMotion.matches) {
+    const SPARK_COUNT = 8;
+    document.addEventListener("pointerdown", (event) => {
+      const button = event.target.closest(".button-quote, .button-primary, .nav-quote");
+      if (!button) return;
+
+      const redToned = button.classList.contains("button-quote") || button.classList.contains("nav-quote");
+      const palette = redToned
+        ? ["#ffffff", "#ffd7da", "#d3232e"]
+        : ["#ffffff", "#cdddff", "#2a529b"];
+
+      const burst = document.createElement("span");
+      burst.className = "spark-burst";
+
+      for (let i = 0; i < SPARK_COUNT; i += 1) {
+        const spark = document.createElement("span");
+        spark.className = "spark";
+        const angle = (Math.PI * 2 * i) / SPARK_COUNT + Math.random() * 0.45;
+        const distance = 22 + Math.random() * 18;
+        spark.style.setProperty("--sx", `${event.clientX}px`);
+        spark.style.setProperty("--sy", `${event.clientY}px`);
+        spark.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+        spark.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+        spark.style.background = palette[i % palette.length];
+        burst.appendChild(spark);
+      }
+
+      document.body.appendChild(burst);
+      window.setTimeout(() => burst.remove(), 620);
+    });
+  }
+})();
+
+/* --------------------------------------------------------------------------
+   Claude Code: Aurora hero background — the real React Bits effect.
+   This is the reactbits.dev/backgrounds/aurora shader ported to plain WebGL2
+   (no React, no OGL dependency). A single full-screen triangle runs a simplex-
+   noise fragment shader whose ribbon drifts over uTime, giving the genuine
+   flowing aurora motion that CSS gradients can't reproduce.
+
+   Performance: one triangle, one shader, GPU-composited; device-pixel-ratio is
+   capped, and the render loop pauses whenever the hero scrolls out of view.
+   Reduced-motion paints a single static frame and never starts the loop.
+   Brand palette and intensity (colorStops / amplitude / blend / speed) live in
+   the CONFIG block below so they are easy to retune.
+   -------------------------------------------------------------------------- */
+
+(() => {
+  const container = document.querySelector(".hero-aurora");
+  if (!container) return;
+
+  // ---- Tunables (brand-aligned; kept restrained, not neon) ----------------
+  const CONFIG = {
+    colorStops: ["#16305f", "#3a78e0", "#b01c25"], // navy → azure → brand red
+    amplitude: 1.0,
+    blend: 0.42,
+    speed: 0.85,
+  };
+
+  const VERT = `#version 300 es
+in vec2 position;
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+}
+`;
+
+  // Fragment shader: verbatim from React Bits' Aurora (GLSL ES 3.00).
+  const FRAG = `#version 300 es
+precision highp float;
+
+uniform float uTime;
+uniform float uAmplitude;
+uniform vec3 uColorStops[3];
+uniform vec2 uResolution;
+uniform float uBlend;
+
+out vec4 fragColor;
+
+vec3 permute(vec3 x) {
+  return mod(((x * 34.0) + 1.0) * x, 289.0);
+}
+
+float snoise(vec2 v){
+  const vec4 C = vec4(
+      0.211324865405187, 0.366025403784439,
+      -0.577350269189626, 0.024390243902439
+  );
+  vec2 i  = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+
+  vec3 p = permute(
+      permute(i.y + vec3(0.0, i1.y, 1.0))
+    + i.x + vec3(0.0, i1.x, 1.0)
+  );
+
+  vec3 m = max(
+      0.5 - vec3(
+          dot(x0, x0),
+          dot(x12.xy, x12.xy),
+          dot(x12.zw, x12.zw)
+      ),
+      0.0
+  );
+  m = m * m;
+  m = m * m;
+
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+struct ColorStop {
+  vec3 color;
+  float position;
+};
+
+#define COLOR_RAMP(colors, factor, finalColor) {              \
+  int index = 0;                                            \
+  for (int i = 0; i < 2; i++) {                               \
+     ColorStop currentColor = colors[i];                    \
+     bool isInBetween = currentColor.position <= factor;    \
+     index = int(mix(float(index), float(i), float(isInBetween))); \
+  }                                                         \
+  ColorStop currentColor = colors[index];                   \
+  ColorStop nextColor = colors[index + 1];                  \
+  float range = nextColor.position - currentColor.position; \
+  float lerpFactor = (factor - currentColor.position) / range; \
+  finalColor = mix(currentColor.color, nextColor.color, lerpFactor); \
+}
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / uResolution;
+
+  ColorStop colors[3];
+  colors[0] = ColorStop(uColorStops[0], 0.0);
+  colors[1] = ColorStop(uColorStops[1], 0.5);
+  colors[2] = ColorStop(uColorStops[2], 1.0);
+
+  vec3 rampColor;
+  COLOR_RAMP(colors, uv.x, rampColor);
+
+  float height = snoise(vec2(uv.x * 2.0 + uTime * 0.1, uTime * 0.25)) * 0.5 * uAmplitude;
+  height = exp(height);
+  height = (uv.y * 2.0 - height + 0.2);
+  float intensity = 0.6 * height;
+
+  float midPoint = 0.20;
+  float auroraAlpha = smoothstep(midPoint - uBlend * 0.5, midPoint + uBlend * 0.5, intensity);
+
+  vec3 auroraColor = intensity * rampColor;
+
+  fragColor = vec4(auroraColor * auroraAlpha, auroraAlpha);
+}
+`;
+
+  const canvas = document.createElement("canvas");
+  const gl = canvas.getContext("webgl2", {
+    alpha: true,
+    premultipliedAlpha: true,
+    antialias: true,
+  });
+
+  // No WebGL2 → graceful static brand wash (CSS .aurora-fallback).
+  if (!gl) {
+    container.classList.add("aurora-fallback");
+    return;
+  }
+
+  gl.clearColor(0, 0, 0, 0);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+  const compile = (type, source) => {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error("Aurora shader error:", gl.getShaderInfoLog(shader));
+    }
+    return shader;
+  };
+
+  const program = gl.createProgram();
+  gl.attachShader(program, compile(gl.VERTEX_SHADER, VERT));
+  gl.attachShader(program, compile(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error("Aurora link error:", gl.getProgramInfoLog(program));
+    container.classList.add("aurora-fallback");
+    return;
+  }
+  gl.useProgram(program);
+
+  // Full-screen triangle (clip-space), matching OGL's Triangle geometry.
+  const positionLoc = gl.getAttribLocation(program, "position");
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(positionLoc);
+  gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+  const uTime = gl.getUniformLocation(program, "uTime");
+  const uAmplitude = gl.getUniformLocation(program, "uAmplitude");
+  const uResolution = gl.getUniformLocation(program, "uResolution");
+  const uBlend = gl.getUniformLocation(program, "uBlend");
+  const uColorStops = gl.getUniformLocation(program, "uColorStops[0]");
+
+  const hexToRGB = (hex) => {
+    const value = parseInt(hex.slice(1), 16);
+    return [((value >> 16) & 255) / 255, ((value >> 8) & 255) / 255, (value & 255) / 255];
+  };
+  const stops = new Float32Array(CONFIG.colorStops.flatMap(hexToRGB));
+
+  // Set the constants once.
+  gl.uniform1f(uAmplitude, CONFIG.amplitude);
+  gl.uniform1f(uBlend, CONFIG.blend);
+  gl.uniform3fv(uColorStops, stops);
+
+  /* The aurora is soft, low-frequency color — extra resolution is invisible.
+     On compact screens the shader was pushing ~1M fragments/frame; capping
+     DPR lower there roughly halves GPU work with no visible difference. */
+  const compactScreen = window.matchMedia("(max-width: 760px)").matches;
+  const dpr = Math.min(window.devicePixelRatio || 1, compactScreen ? 1.1 : 1.75);
+  const resize = () => {
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    if (!width || !height) return;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(uResolution, canvas.width, canvas.height);
+  };
+
+  container.appendChild(canvas);
+  resize();
+  window.addEventListener("resize", resize, { passive: true });
+
+  const renderFrame = (timeMs) => {
+    // uTime cadence matches React Bits: time(=ms*0.01) * speed * 0.1.
+    gl.uniform1f(uTime, timeMs * 0.01 * CONFIG.speed * 0.1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reduceMotion.matches) {
+    renderFrame(2000); // a single, settled static frame
+    return;
+  }
+
+  let rafId = 0;
+  let running = false;
+  const loop = (timeMs) => {
+    renderFrame(timeMs);
+    rafId = requestAnimationFrame(loop);
+  };
+  const start = () => {
+    if (running) return;
+    running = true;
+    rafId = requestAnimationFrame(loop);
+  };
+  const stop = () => {
+    running = false;
+    cancelAnimationFrame(rafId);
+  };
+
+  // Only animate while the hero is on screen — no GPU work once scrolled past.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => (entry.isIntersecting ? start() : stop()));
+      },
+      { threshold: 0 }
+    ).observe(container);
+  } else {
+    start();
+  }
+})();
+
+
+/* --------------------------------------------------------------------------
+   Claude Code: mobile experience layer — haptics, swipe gestures, quote bar.
+   Touch-first polish gated to coarse pointers; desktop is untouched.
+
+     1. Haptics: crisp ticks on the moments that matter (primary CTAs,
+        vehicle tabs, deck navigation) and a double-tick on a successful
+        form submission. Android Chrome vibrates; iOS silently ignores.
+     2. Swipe: the home vehicle photos and the Services deck respond to
+        horizontal swipes by driving the existing controls, so counters,
+        ARIA state, and RTL direction all keep working for free.
+     3. Quote bar: a slim fixed action bar slides up once the visitor
+        scrolls past the hero on compact screens and steps aside near the
+        footer (where the page has its own CTAs). While it is up, the
+        floating WhatsApp bubble hides so the two never stack.
+   -------------------------------------------------------------------------- */
+
+(() => {
+  "use strict";
+
+  const coarsePointer =
+    window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
+
+  /* ---- 1. Haptic ticks --------------------------------------------------- */
+  const canVibrate = coarsePointer && "vibrate" in navigator;
+  const tick = (pattern) => {
+    if (!canVibrate) return;
+    try {
+      navigator.vibrate(pattern);
+    } catch {
+      /* some browsers throw before a user gesture — feedback is optional */
+    }
+  };
+
+  if (canVibrate) {
+    document.addEventListener(
+      "pointerdown",
+      (event) => {
+        if (event.pointerType !== "touch") return;
+        if (event.target.closest(".button, .vehicle-tab, .deck-arrow, .deck-tab, .whatsapp-float")) {
+          tick(10);
+        }
+      },
+      { passive: true }
+    );
+
+    // Success double-tick: setStatus() stamps data-state on the status node.
+    document.querySelectorAll(".form-status").forEach((node) => {
+      new MutationObserver(() => {
+        if (node.dataset.state === "success") tick([12, 70, 12]);
+      }).observe(node, { attributes: true, attributeFilter: ["data-state"] });
+    });
+  }
+
+  /* ---- 2. Swipe gestures -------------------------------------------------- */
+  // touch-action: pan-y (set in CSS) keeps vertical scrolling native while
+  // horizontal moves stay ours, so pointerup still fires for the gesture.
+  const addSwipe = (element, onSwipe) => {
+    if (!element) return;
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
+    let tracking = false;
+
+    element.addEventListener(
+      "pointerdown",
+      (event) => {
+        if (event.pointerType !== "touch") return;
+        tracking = true;
+        startX = event.clientX;
+        startY = event.clientY;
+        startTime = Date.now();
+      },
+      { passive: true }
+    );
+
+    element.addEventListener(
+      "pointerup",
+      (event) => {
+        if (!tracking) return;
+        tracking = false;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        const quick = Date.now() - startTime < 650;
+        if (quick && Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          onSwipe(dx < 0 ? "left" : "right");
+        }
+      },
+      { passive: true }
+    );
+
+    element.addEventListener("pointercancel", () => (tracking = false), { passive: true });
+  };
+
+  if (coarsePointer) {
+    // Home vehicle showcase: swipe the photo stage between profiles.
+    const gallery = document.querySelector(".vehicle-gallery");
+    if (gallery) {
+      addSwipe(gallery, (direction) => {
+        const tabs = Array.from(document.querySelectorAll(".vehicle-tab"));
+        const current = tabs.findIndex((tab) => tab.classList.contains("is-active"));
+        if (current === -1) return;
+        const rtl = document.documentElement.dir === "rtl";
+        // Swiping toward the reading direction advances; away goes back.
+        const forward = rtl ? direction === "right" : direction === "left";
+        const next = current + (forward ? 1 : -1);
+        if (next < 0 || next >= tabs.length) return;
+        tabs[next].click();
+        tick(8);
+      });
+    }
+
+    // Services deck: swipe between the four service slides via the arrows,
+    // which already handle wrap-around, the counter, and ARIA state.
+    const deckStage = document.querySelector(".deck-stage");
+    if (deckStage) {
+      addSwipe(deckStage, (direction) => {
+        const rtl = document.documentElement.dir === "rtl";
+        const forward = rtl ? direction === "right" : direction === "left";
+        const arrow = document.querySelector(forward ? ".deck-next" : ".deck-prev");
+        if (!arrow) return;
+        arrow.click();
+        tick(8);
+      });
+    }
+  }
+
+  /* ---- 3. Mobile quote bar ------------------------------------------------ */
+  const quoteBar = document.querySelector(".mobile-quote-bar");
+  if (!quoteBar) return;
+
+  const compact = window.matchMedia("(max-width: 759px)");
+  const footer = document.querySelector(".site-footer");
+  // The bar earns its place only after the visitor has read the hero.
+  const hero = document.querySelector(".hero, .services-hero, .quote-hero");
+
+  let pastHero = false;
+  let nearFooter = false;
+  let wasVisible = false;
+
+  const sync = () => {
+    const show = compact.matches && pastHero && !nearFooter;
+    if (show === wasVisible) return;
+    wasVisible = show;
+    quoteBar.classList.toggle("is-visible", show);
+    document.body.classList.toggle("has-quote-bar", show);
+    if (show) tick(6);
+  };
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      ticking = false;
+      const threshold = (hero ? hero.offsetHeight : 480) - 72;
+      pastHero = window.scrollY > threshold;
+      sync();
+    });
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  compact.addEventListener?.("change", onScroll);
+
+  if (footer && "IntersectionObserver" in window) {
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          nearFooter = entry.isIntersecting;
+          sync();
+        });
+      },
+      { rootMargin: "90px 0px 0px 0px" }
+    ).observe(footer);
+  }
+
+  onScroll();
 })();

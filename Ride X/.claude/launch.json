@@ -4,8 +4,9 @@
     {
       "name": "ride-x",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", ".", "--listen", "3333", "--no-clipboard"],
-      "port": 3333
+      "runtimeArgs": ["serve", "."],
+      "port": 3333,
+      "autoPort": true
     }
   ]
 }

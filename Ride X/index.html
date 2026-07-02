@@ -18,7 +18,7 @@
     <meta property="og:title" content="Ride X | Private Transport &amp; Airport Transfers in Jeddah" />
     <meta property="og:description" content="Airport transfers, family transportation, corporate transport, and scheduled rides in Jeddah. Request a quote and confirm every detail before your trip." />
     <meta property="og:url" content="https://ridex.sa/" />
-    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.png" />
+    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <script>
       (() => {
@@ -42,6 +42,14 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      imagesrcset="assets/ride-x-hero-sm.webp 900w, assets/ride-x-hero.webp 1769w"
+      imagesizes="100vw"
+      fetchpriority="high"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -77,9 +85,39 @@
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
         <picture class="hero-media">
-          <img src="assets/ride-x-hero.png" alt="Black executive SUV on a modern Saudi boulevard at dusk" />
+          <source type="image/webp" srcset="assets/ride-x-hero-sm.webp 900w, assets/ride-x-hero.webp 1769w" sizes="100vw" />
+          <img src="assets/ride-x-hero.jpg" width="1769" height="889" fetchpriority="high" decoding="async" alt="Black executive SUV on a modern Saudi boulevard at dusk" />
         </picture>
         <div class="hero-shade"></div>
+        <div class="hero-aurora" aria-hidden="true"></div>
+        <!-- Claude Code: hero route ribbon — the site's route language on the first screen -->
+        <svg class="hero-route" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="heroRouteStroke" gradientUnits="userSpaceOnUse" x1="90" y1="505" x2="906" y2="176">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.5" />
+              <stop offset="1" stop-color="#d3232e" stop-opacity="0.95" />
+            </linearGradient>
+          </defs>
+          <path class="hro-casing" d="M90 505 C 250 470, 360 420, 470 330 S 660 205, 906 176" />
+          <path class="hro-line" d="M90 505 C 250 470, 360 420, 470 330 S 660 205, 906 176" pathLength="1" />
+          <g class="hro-node hro-node--start" transform="translate(90 505)">
+            <circle class="hro-ring" r="9" />
+            <circle class="hro-core" r="3.4" />
+          </g>
+          <g class="hro-node hro-node--mid" transform="translate(470 330)">
+            <circle class="hro-way" r="3" />
+          </g>
+          <g class="hro-node hro-node--end" transform="translate(906 176)">
+            <circle class="hro-pulse" r="12" />
+            <circle class="hro-ring" r="8" />
+            <circle class="hro-core" r="3" />
+          </g>
+          <g class="hro-marker">
+            <circle class="hro-marker-halo" r="9" />
+            <circle class="hro-marker-dot" r="3.6" />
+          </g>
+        </svg>
         <div class="hero-content">
           <p class="eyebrow" data-i18n="hero.eyebrow">Private transport in Jeddah, Saudi Arabia</p>
           <h1 id="hero-title" data-i18n="hero.title">Reliable rides for families, visitors, and businesses in Jeddah.</h1>
@@ -107,6 +145,33 @@
             </div>
           </dl>
         </div>
+        <aside class="hero-trip-card" aria-hidden="true">
+          <p class="htc-head">
+            <span class="htc-dot"></span>
+            <span data-i18n="hero.card.kicker">Trip preparation</span>
+          </p>
+          <div class="htc-route">
+            <span class="htc-rail">
+              <i class="htc-node htc-node-a"></i>
+              <i class="htc-rail-line"></i>
+              <i class="htc-node htc-node-b"></i>
+            </span>
+            <div class="htc-stops">
+              <div class="htc-stop">
+                <span class="htc-stop-label" data-i18n="hero.card.pickup">Pickup</span>
+                <span class="htc-stop-value" data-i18n="hero.card.pickupValue">King Abdulaziz Int&#8217;l Airport</span>
+              </div>
+              <div class="htc-stop">
+                <span class="htc-stop-label" data-i18n="hero.card.destination">Destination</span>
+                <span class="htc-stop-value" data-i18n="hero.card.destinationValue">Hotel on Jeddah Corniche</span>
+              </div>
+            </div>
+          </div>
+          <div class="htc-meta">
+            <span class="htc-chip" data-i18n="hero.card.vehicle">Family SUV &#183; 5 seats</span>
+            <span class="htc-chip htc-chip-status" data-i18n="hero.card.status">Fixed quote confirmed</span>
+          </div>
+        </aside>
         <a class="hero-scroll-cue" href="#services" aria-label="Scroll to services">
           <span></span>
         </a>
@@ -127,8 +192,17 @@
               </span>
               <span class="card-index">01</span>
             </div>
+            <p class="trip-route">
+              <span class="trip-stop trip-stop--from" data-i18n="services.airport.from">JED Airport</span>
+              <span class="trip-leg" aria-hidden="true"></span>
+              <span class="trip-stop trip-stop--to" data-i18n="services.airport.to">Hotel / home</span>
+            </p>
             <h3 data-i18n="services.airport.title">Airport Transfers</h3>
             <p data-i18n="services.airport.copy">Arrivals, departures, and hotel transfers timed around your flight at King Abdulaziz International Airport.</p>
+            <ul class="trip-tags" role="list">
+              <li data-i18n="services.airport.tag1">Flight-timed pickup</li>
+              <li data-i18n="services.airport.tag2">Luggage space</li>
+            </ul>
           </article>
           <article class="service-card">
             <div class="card-top">
@@ -142,8 +216,17 @@
               </span>
               <span class="card-index">02</span>
             </div>
+            <p class="trip-route">
+              <span class="trip-stop trip-stop--from" data-i18n="services.family.from">Home</span>
+              <span class="trip-leg" aria-hidden="true"></span>
+              <span class="trip-stop trip-stop--to" data-i18n="services.family.to">Across Jeddah</span>
+            </p>
             <h3 data-i18n="services.family.title">Family Transportation</h3>
             <p data-i18n="services.family.copy">Comfortable, dependable rides for family trips, appointments, and guests — handled with care.</p>
+            <ul class="trip-tags" role="list">
+              <li data-i18n="services.family.tag1">Family-first comfort</li>
+              <li data-i18n="services.family.tag2">Door-to-door</li>
+            </ul>
           </article>
           <article class="service-card">
             <div class="card-top">
@@ -160,8 +243,17 @@
               </span>
               <span class="card-index">03</span>
             </div>
+            <p class="trip-route">
+              <span class="trip-stop trip-stop--from" data-i18n="services.corporate.from">Office</span>
+              <span class="trip-leg" aria-hidden="true"></span>
+              <span class="trip-stop trip-stop--to" data-i18n="services.corporate.to">Business stops</span>
+            </p>
             <h3 data-i18n="services.corporate.title">Corporate Transport</h3>
             <p data-i18n="services.corporate.copy">Professional movement for employees, executives, meetings, and business visitors.</p>
+            <ul class="trip-tags" role="list">
+              <li data-i18n="services.corporate.tag1">Business-ready</li>
+              <li data-i18n="services.corporate.tag2">Scheduled timing</li>
+            </ul>
           </article>
           <article class="service-card">
             <div class="card-top">
@@ -175,8 +267,17 @@
               </span>
               <span class="card-index">04</span>
             </div>
+            <p class="trip-route">
+              <span class="trip-stop trip-stop--from" data-i18n="services.scheduled.from">Any pickup</span>
+              <span class="trip-leg" aria-hidden="true"></span>
+              <span class="trip-stop trip-stop--to" data-i18n="services.scheduled.to">Planned route</span>
+            </p>
             <h3 data-i18n="services.scheduled.title">Scheduled Rides</h3>
             <p data-i18n="services.scheduled.copy">Book ahead for planned trips, regular routes, events, and group movement.</p>
+            <ul class="trip-tags" role="list">
+              <li data-i18n="services.scheduled.tag1">Book in advance</li>
+              <li data-i18n="services.scheduled.tag2">Multi-stop ready</li>
+            </ul>
           </article>
         </div>
       </section>
@@ -191,29 +292,14 @@
           </p>
 
           <div class="vehicle-tabs" role="tablist" aria-label="Vehicle options">
-            <button class="vehicle-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="vehicle-sedan" data-vehicle="sedan" data-i18n="fleet.sedan.title">Sedan</button>
-            <button class="vehicle-tab" type="button" role="tab" aria-selected="false" aria-controls="vehicle-suv" data-vehicle="suv" data-i18n="fleet.suv.title">SUV</button>
+            <button class="vehicle-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="vehicle-suv" data-vehicle="suv" data-i18n="fleet.suv.title">SUV</button>
+            <button class="vehicle-tab" type="button" role="tab" aria-selected="false" aria-controls="vehicle-sedan" data-vehicle="sedan" data-i18n="fleet.sedan.title">Sedan</button>
             <button class="vehicle-tab" type="button" role="tab" aria-selected="false" aria-controls="vehicle-van" data-vehicle="van" data-i18n="fleet.van.title">Van &amp; Group</button>
           </div>
 
           <div class="vehicle-details">
-            <article class="vehicle-panel is-active" id="vehicle-sedan" role="tabpanel" data-vehicle-panel="sedan">
-              <p class="vehicle-kicker" data-i18n="fleet.sedan.kicker">Default selection</p>
-              <h3 data-i18n="fleet.sedan.headline">Executive sedan for focused city rides.</h3>
-              <p data-i18n="fleet.sedan.copy">Standard rides for one to three passengers with light luggage.</p>
-              <dl class="vehicle-specs">
-                <div>
-                  <dt data-i18n="fleet.spec.passengers">Passengers</dt>
-                  <dd data-i18n="fleet.sedan.passengers">1-3</dd>
-                </div>
-                <div>
-                  <dt data-i18n="fleet.spec.luggage">Luggage</dt>
-                  <dd data-i18n="fleet.sedan.luggage">Light</dd>
-                </div>
-              </dl>
-            </article>
-            <article class="vehicle-panel" id="vehicle-suv" role="tabpanel" data-vehicle-panel="suv" hidden>
-              <p class="vehicle-kicker" data-i18n="fleet.suv.kicker">More space</p>
+            <article class="vehicle-panel is-active" id="vehicle-suv" role="tabpanel" data-vehicle-panel="suv">
+              <p class="vehicle-kicker" data-i18n="fleet.suv.kicker">Our signature ride</p>
               <h3 data-i18n="fleet.suv.headline">Premium SUV for families and airport arrivals.</h3>
               <p data-i18n="fleet.suv.copy">Extra space and comfort for families, guests, and airport luggage.</p>
               <dl class="vehicle-specs">
@@ -224,6 +310,21 @@
                 <div>
                   <dt data-i18n="fleet.spec.luggage">Luggage</dt>
                   <dd data-i18n="fleet.suv.luggage">Medium</dd>
+                </div>
+              </dl>
+            </article>
+            <article class="vehicle-panel" id="vehicle-sedan" role="tabpanel" data-vehicle-panel="sedan" hidden>
+              <p class="vehicle-kicker" data-i18n="fleet.sedan.kicker">City rides</p>
+              <h3 data-i18n="fleet.sedan.headline">Executive sedan for focused city rides.</h3>
+              <p data-i18n="fleet.sedan.copy">Standard rides for one to three passengers with light luggage.</p>
+              <dl class="vehicle-specs">
+                <div>
+                  <dt data-i18n="fleet.spec.passengers">Passengers</dt>
+                  <dd data-i18n="fleet.sedan.passengers">1-3</dd>
+                </div>
+                <div>
+                  <dt data-i18n="fleet.spec.luggage">Luggage</dt>
+                  <dd data-i18n="fleet.sedan.luggage">Light</dd>
                 </div>
               </dl>
             </article>
@@ -252,16 +353,16 @@
 
         <div class="vehicle-stage" aria-label="Ride X vehicle photography">
           <div class="vehicle-gallery">
-            <figure class="vehicle-photo is-active" data-vehicle-photo="sedan">
-              <picture>
-                <source type="image/webp" srcset="assets/fleet/sedan-sm.webp 760w, assets/fleet/sedan.webp 1400w" sizes="(max-width: 980px) 92vw, 46vw" />
-                <img src="assets/fleet/sedan.jpg" width="1400" height="1750" loading="lazy" decoding="async" alt="Executive black Mercedes sedan, the chauffeur-driven car Ride X uses for focused city rides." />
-              </picture>
-            </figure>
-            <figure class="vehicle-photo" data-vehicle-photo="suv" aria-hidden="true">
+            <figure class="vehicle-photo is-active" data-vehicle-photo="suv">
               <picture>
                 <source type="image/webp" srcset="assets/fleet/suv-sm.webp 760w, assets/fleet/suv.webp 1400w" sizes="(max-width: 980px) 92vw, 46vw" />
                 <img src="assets/fleet/suv.jpg" width="1400" height="2489" loading="lazy" decoding="async" alt="Premium black SUV Ride X uses for family trips and airport arrivals with luggage." />
+              </picture>
+            </figure>
+            <figure class="vehicle-photo" data-vehicle-photo="sedan" aria-hidden="true">
+              <picture>
+                <source type="image/webp" srcset="assets/fleet/sedan-sm.webp 760w, assets/fleet/sedan.webp 1400w" sizes="(max-width: 980px) 92vw, 46vw" />
+                <img src="assets/fleet/sedan.jpg" width="1400" height="1750" loading="lazy" decoding="async" alt="Executive black Mercedes sedan, the chauffeur-driven car Ride X uses for focused city rides." />
               </picture>
             </figure>
             <figure class="vehicle-photo" data-vehicle-photo="van" aria-hidden="true">
@@ -275,7 +376,9 @@
         </div>
       </section>
 
-      <section class="timeline-section how-section" aria-labelledby="howit-title">
+      <!-- Claude Code: journey ops panel — the four steps ride one navy module,
+           connected by the scroll-drawn route line, instead of floating cards. -->
+      <section class="timeline-section how-section journey-module" aria-labelledby="howit-title">
         <p class="eyebrow" data-i18n="howit.eyebrow">How it works</p>
         <h2 id="howit-title" data-i18n="howit.title">From request to ride in four clear steps.</h2>
         <div class="timeline-list">
@@ -299,6 +402,9 @@
             <h3 data-i18n="howit.step4.title">Ride with confidence</h3>
             <p data-i18n="howit.step4.copy">Vehicle and driver details are shared before pickup, so you know exactly what to expect.</p>
           </article>
+          <div class="journey-note">
+            <p data-i18n="howit.note">Nothing is booked until you approve the quote — coordination stays on WhatsApp from request to pickup.</p>
+          </div>
         </div>
       </section>
 
@@ -310,6 +416,18 @@
             Ride X is built for customers who want transport to feel organized and dependable from the
             first message: understand the service, send your details, and receive a clear quote before
             anything is confirmed.
+          </p>
+          <ul class="why-chips" role="list">
+            <li data-i18n="why.chips.family">Family-focused service</li>
+            <li data-i18n="why.chips.airport">Airport-ready timing</li>
+            <li data-i18n="why.chips.bilingual">Arabic &amp; English support</li>
+          </ul>
+          <p class="why-flow" aria-label="Ride X booking flow">
+            <span data-i18n="why.flow.start">First message</span>
+            <span aria-hidden="true"></span>
+            <span data-i18n="why.flow.mid">Fixed quote</span>
+            <span aria-hidden="true"></span>
+            <span data-i18n="why.flow.end">Pickup confirmed</span>
           </p>
         </div>
         <div class="why-list">
@@ -345,11 +463,12 @@
         </div>
       </section>
 
-      <section class="service-area-card" aria-labelledby="area-title">
-        <span class="value-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
-        </span>
-        <div>
+      <!-- Claude Code: Jeddah route network — the signature service-area statement.
+           One premium map: JED airport, hotels, homes, and business districts joined
+           by drawn routes, with planned trips continuing beyond Jeddah. -->
+      <section class="route-network" aria-labelledby="area-title">
+        <div class="rn-head">
+          <p class="eyebrow" data-i18n="area.eyebrow">Service network</p>
           <h2 id="area-title" data-i18n="area.title">Serving Jeddah first.</h2>
           <p data-i18n="area.copy">
             Ride X operates across Jeddah — including King Abdulaziz International Airport, hotels,
@@ -357,11 +476,175 @@
             quote form and are confirmed based on availability.
           </p>
         </div>
+
+        <div class="rn-stage">
+          <svg class="rn-map" viewBox="0 0 1080 440" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="rnRoute1" gradientUnits="userSpaceOnUse" x1="190" y1="118" x2="330" y2="303">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="0.75" />
+                <stop offset="1" stop-color="#d3232e" stop-opacity="0.95" />
+              </linearGradient>
+              <linearGradient id="rnRoute2" gradientUnits="userSpaceOnUse" x1="206" y1="100" x2="634" y2="162">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="0.7" />
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0.35" />
+              </linearGradient>
+            </defs>
+            <!-- Red Sea / corniche, kept west — geography does not flip in RTL -->
+            <g class="rn-waves">
+              <path d="M74 -10 C 58 70, 84 160, 68 250 C 56 310, 76 390, 62 450" />
+              <path d="M44 -10 C 28 70, 54 160, 38 250 C 26 310, 46 390, 32 450" />
+              <path d="M102 -10 C 86 70, 112 160, 96 250 C 84 310, 104 390, 90 450" />
+            </g>
+            <!-- Faint city grid -->
+            <g class="rn-grid">
+              <line x1="130" y1="60" x2="1080" y2="60" />
+              <line x1="130" y1="160" x2="1080" y2="160" />
+              <line x1="130" y1="256" x2="1080" y2="256" />
+              <line x1="130" y1="352" x2="1080" y2="352" />
+              <line x1="300" y1="0" x2="300" y2="440" />
+              <line x1="470" y1="0" x2="470" y2="440" />
+              <line x1="640" y1="0" x2="640" y2="440" />
+              <line x1="810" y1="0" x2="810" y2="440" />
+              <line x1="980" y1="0" x2="980" y2="440" />
+              <line x1="240" y1="440" x2="560" y2="0" />
+            </g>
+            <!-- Routes -->
+            <path class="rn-casing" d="M190 118 L190 240 Q190 256 206 256 L314 256 Q330 256 330 272 L330 303" />
+            <path class="rn-casing" d="M206 100 L618 100 Q634 100 634 116 L634 162" />
+            <path class="rn-casing" d="M634 198 L634 268 Q634 284 650 284 L862 284" />
+            <path class="rn-route rn-route--one" d="M190 118 L190 240 Q190 256 206 256 L314 256 Q330 256 330 272 L330 303" pathLength="1" />
+            <path class="rn-route rn-route--two" d="M206 100 L618 100 Q634 100 634 116 L634 162" pathLength="1" />
+            <path class="rn-route rn-route--three" d="M634 198 L634 268 Q634 284 650 284 L862 284" pathLength="1" />
+            <path class="rn-route rn-route--beyond" d="M898 284 L1000 284 Q1016 284 1016 268 L1016 240" pathLength="1" />
+            <circle class="rn-way rn-way--one" cx="190" cy="192" r="3" />
+            <circle class="rn-way rn-way--one" cx="262" cy="256" r="3" />
+            <circle class="rn-way rn-way--two" cx="430" cy="100" r="3" />
+            <circle class="rn-way rn-way--three" cx="634" cy="240" r="3" />
+            <circle class="rn-way rn-way--three" cx="762" cy="284" r="3" />
+            <!-- JED airport -->
+            <g class="rn-node rn-node--air" transform="translate(190 100)">
+              <circle class="rn-air-pulse" r="24" />
+              <circle class="rn-air-pad" r="17" />
+              <path class="rn-air-plane" transform="translate(-10.2 -9.8) scale(0.85)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5Z" />
+              <text class="rn-label" y="44" text-anchor="middle" data-i18n="area.node.airport">JED Airport</text>
+            </g>
+            <!-- Hotels (corniche) -->
+            <g class="rn-node rn-node--hotel" transform="translate(330 315)">
+              <circle class="rn-stop-pulse" r="18" />
+              <circle class="rn-ring rn-ring--hot" r="11" />
+              <circle class="rn-core rn-core--hot" r="4.5" />
+              <text class="rn-label" y="36" text-anchor="middle" data-i18n="area.node.hotel">Hotels</text>
+            </g>
+            <!-- Homes (residential) -->
+            <g class="rn-node rn-node--home" transform="translate(634 180)">
+              <circle class="rn-ring" r="11" />
+              <circle class="rn-core" r="4.5" />
+              <text class="rn-label" y="36" text-anchor="middle" data-i18n="area.node.home">Homes</text>
+            </g>
+            <!-- Business districts -->
+            <g class="rn-node rn-node--biz" transform="translate(880 284)">
+              <circle class="rn-ring" r="11" />
+              <circle class="rn-core" r="4.5" />
+              <text class="rn-label" y="36" text-anchor="middle" data-i18n="area.node.business">Business</text>
+            </g>
+            <!-- Beyond Jeddah (on request) -->
+            <g class="rn-node rn-node--beyond" transform="translate(1016 222)">
+              <circle class="rn-ring rn-ring--open" r="10" />
+              <text class="rn-label rn-label--dim" y="-22" text-anchor="middle" data-i18n="area.node.beyond">Beyond Jeddah</text>
+            </g>
+            <!-- Marker gliding the flagship airport-to-hotel route -->
+            <g class="rn-marker">
+              <circle class="rn-marker-halo" r="10" />
+              <circle class="rn-marker-dot" r="4" />
+            </g>
+          </svg>
+
+          <!-- Claude Code: phone-native vertical network — same stops, metro-line spine.
+               Shown under 760px in place of the wide map. -->
+          <svg class="rn-map rn-map--mobile" viewBox="0 0 375 560" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="rnmRoute1" gradientUnits="userSpaceOnUse" x1="64" y1="74" x2="64" y2="202">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="0.75" />
+                <stop offset="1" stop-color="#d3232e" stop-opacity="0.95" />
+              </linearGradient>
+              <linearGradient id="rnmRoute2" gradientUnits="userSpaceOnUse" x1="64" y1="220" x2="80" y2="314">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="0.7" />
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0.35" />
+              </linearGradient>
+            </defs>
+            <g class="rn-waves">
+              <path d="M22 -10 C 10 80, 32 180, 20 280 C 12 360, 30 470, 18 570" />
+              <path d="M8 -10 C -4 80, 18 180, 6 280 C -2 360, 16 470, 4 570" />
+            </g>
+            <g class="rn-grid">
+              <line x1="40" y1="140" x2="375" y2="140" />
+              <line x1="40" y1="280" x2="375" y2="280" />
+              <line x1="40" y1="420" x2="375" y2="420" />
+              <line x1="190" y1="0" x2="190" y2="560" />
+              <line x1="305" y1="0" x2="305" y2="560" />
+            </g>
+            <path class="rn-casing" d="M64 74 L64 184" />
+            <path class="rn-casing" d="M64 220 L64 246 Q64 262 80 262 L80 296" />
+            <path class="rn-casing" d="M80 332 L80 358 Q80 374 96 374 L96 408" />
+            <path class="rn-route rn-route--one rnm-one" d="M64 74 L64 184" pathLength="1" />
+            <path class="rn-route rn-route--two rnm-two" d="M64 220 L64 246 Q64 262 80 262 L80 296" pathLength="1" />
+            <path class="rn-route rn-route--three" d="M80 332 L80 358 Q80 374 96 374 L96 408" pathLength="1" />
+            <path class="rn-route rn-route--beyond" d="M96 444 L96 496" pathLength="1" />
+            <circle class="rn-way rn-way--one" cx="64" cy="132" r="3" />
+            <circle class="rn-way rn-way--two" cx="80" cy="282" r="3" />
+            <circle class="rn-way rn-way--three" cx="96" cy="394" r="3" />
+            <g class="rn-node rn-node--air" transform="translate(64 56)">
+              <circle class="rn-air-pulse" r="22" />
+              <circle class="rn-air-pad" r="16" />
+              <path class="rn-air-plane" transform="translate(-9.6 -9.2) scale(0.8)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5Z" />
+              <text class="rn-label" x="32" y="6" data-i18n="area.node.airport">JED Airport</text>
+            </g>
+            <g class="rn-node rn-node--hotel" transform="translate(64 202)">
+              <circle class="rn-stop-pulse" r="17" />
+              <circle class="rn-ring rn-ring--hot" r="11" />
+              <circle class="rn-core rn-core--hot" r="4.5" />
+              <text class="rn-label" x="28" y="6" data-i18n="area.node.hotel">Hotels</text>
+            </g>
+            <g class="rn-node rn-node--home" transform="translate(80 314)">
+              <circle class="rn-ring" r="11" />
+              <circle class="rn-core" r="4.5" />
+              <text class="rn-label" x="28" y="6" data-i18n="area.node.home">Homes</text>
+            </g>
+            <g class="rn-node rn-node--biz" transform="translate(96 426)">
+              <circle class="rn-ring" r="11" />
+              <circle class="rn-core" r="4.5" />
+              <text class="rn-label" x="28" y="6" data-i18n="area.node.business">Business</text>
+            </g>
+            <g class="rn-node rn-node--beyond" transform="translate(96 514)">
+              <circle class="rn-ring rn-ring--open" r="10" />
+              <text class="rn-label rn-label--dim" x="26" y="5" data-i18n="area.node.beyond">Beyond Jeddah</text>
+            </g>
+            <g class="rn-marker rnm-marker">
+              <circle class="rn-marker-halo" r="9" />
+              <circle class="rn-marker-dot" r="3.6" />
+            </g>
+          </svg>
+        </div>
+
+        <ul class="rn-legend" role="list">
+          <li data-i18n="area.legend.airport">Airport transfers</li>
+          <li data-i18n="area.legend.hotel">Hotel pickups</li>
+          <li data-i18n="area.legend.home">Residential districts</li>
+          <li data-i18n="area.legend.business">Business areas</li>
+        </ul>
       </section>
 
       <section class="faq-section" id="faq" aria-labelledby="faq-title">
-        <p class="eyebrow" data-i18n="faq.eyebrow">Common questions</p>
-        <h2 id="faq-title" data-i18n="faq.title">Answers before you ask.</h2>
+        <div class="faq-head">
+          <p class="eyebrow" data-i18n="faq.eyebrow">Common questions</p>
+          <h2 id="faq-title" data-i18n="faq.title">Answers before you ask.</h2>
+          <!-- Claude Code: FAQ assist — fills the sticky column with a real next step -->
+          <div class="faq-assist">
+            <p class="faq-assist-title" data-i18n="faq.assist.title">Quicker to just ask?</p>
+            <p class="faq-assist-copy" data-i18n="faq.assist.copy">Send your trip details on WhatsApp — answers usually land the same day during working hours.</p>
+            <a class="button button-primary faq-assist-cta" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="faq.assist.cta">Ask on WhatsApp</a>
+          </div>
+        </div>
         <div class="faq-list">
           <details>
             <summary data-i18n="faq.q1">How quickly will I get a response?</summary>
@@ -408,6 +691,13 @@
             Share the passenger count, timing, route, and any business requirements. You confirm only
             after you approve the quote.
           </p>
+          <!-- Claude Code: booking command panel — the four request fields, previewed as input slots -->
+          <ul class="quote-fields" role="list">
+            <li data-i18n="quote.field.pickup">Pickup location</li>
+            <li data-i18n="quote.field.destination">Destination</li>
+            <li data-i18n="quote.field.when">Date &amp; time</li>
+            <li data-i18n="quote.field.passengers">Passengers</li>
+          </ul>
           <a class="button button-quote" href="quote/index.html" data-i18n="quote.button">Open Quote Form</a>
         </article>
       </section>
@@ -441,7 +731,7 @@
           <a href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="footer.whatsapp">WhatsApp</a>
           <a href="tel:+966547433452" dir="ltr">+966 54 743 3452</a>
           <!-- REPLACE-ME: set the real business email address once the domain is live -->
-          <a href="mailto:contact@ridex.sa" dir="ltr">contact@ridex.sa</a>
+          <a href="mailto:mnainternationaloep@gmail.com" dir="ltr">mnainternationaloep@gmail.com</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -453,7 +743,28 @@
       </div>
     </footer>
 
+    <a
+      class="whatsapp-float"
+      href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah."
+      target="_blank"
+      rel="noopener"
+      aria-label="Chat with Ride X on WhatsApp"
+    >
+      <svg viewBox="0 0 512 512" width="60" height="60" aria-hidden="true" focusable="false"><circle cx="256" cy="256" r="256" fill="#0e1b33"/><g transform="translate(116,116) scale(11.67)"><path fill="#ffffff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></g></svg>
+    </a>
+
+
+    <!-- Claude Code: mobile quote bar — slim app-like action bar; script.js shows it
+         after the hero on compact screens and hides it near the footer. -->
+    <div class="mobile-quote-bar" aria-hidden="false">
+      <a class="button button-quote mqb-quote" href="quote/index.html" data-i18n="hero.quote">Request a Quote</a>
+      <a class="mqb-wa" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." aria-label="WhatsApp"></a>
+    </div>
     <script src="supabase-config.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+    <script src="animations.js" defer></script>
+    <script src="whatsapp-widget.js" async></script>
   </body>
 </html>
