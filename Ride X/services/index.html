@@ -18,7 +18,7 @@
     <meta property="og:title" content="Transport Services in Jeddah | Ride X" />
     <meta property="og:description" content="Airport transfers, family transportation, corporate transport, and scheduled rides in Jeddah — with clear quotes confirmed before every trip." />
     <meta property="og:url" content="https://ridex.sa/services/" />
-    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.png" />
+    <meta property="og:image" content="https://ridex.sa/assets/ride-x-hero.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <script>
       (() => {
@@ -85,7 +85,10 @@
           </p>
         </div>
 
-        <!-- Claude Code: services hero moving vehicle paths -->
+        <!-- Claude Code: services hero dispatch board — SUV leads the near lane
+             (Ride X's signature profile), sedan runs mid, van far. A faint city
+             grid, an airport origin pad, and live status chips make the lanes
+             read as routes being operated, not decorative cars. -->
         <div class="hero-fleet" aria-hidden="true">
           <svg class="hero-fleet-art" viewBox="0 0 600 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
             <defs>
@@ -96,6 +99,14 @@
                 <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
               </linearGradient>
             </defs>
+
+            <!-- Faint city blocks behind the lanes -->
+            <g class="hf-grid">
+              <line x1="84" y1="30" x2="84" y2="496" />
+              <line x1="232" y1="30" x2="232" y2="496" />
+              <line x1="382" y1="30" x2="382" y2="496" />
+              <line x1="528" y1="30" x2="528" y2="496" />
+            </g>
 
             <!-- Far lane — van (faint, slow) -->
             <g class="route-lane route-lane--van" transform="translate(0 150)">
@@ -115,35 +126,16 @@
               </g>
             </g>
 
-            <!-- Mid lane — SUV -->
-            <g class="route-lane route-lane--suv" transform="translate(0 290)">
+            <!-- Mid lane — sedan -->
+            <g class="route-lane route-lane--sedan" transform="translate(0 290)">
               <line class="route-line" x1="10" y1="0" x2="590" y2="0" />
               <circle class="route-node" cx="100" cy="0" r="3" />
               <circle class="route-node" cx="360" cy="0" r="3" />
-              <g class="route-car route-car--suv">
-                <g transform="translate(0 -51) scale(0.35)">
-                  <ellipse class="route-shadow" cx="222" cy="146" rx="204" ry="12" />
-                  <path class="fleet-body fleet-body--suv" d="M6 96 C6 70 14 60 40 58 L92 52 C108 20 140 10 180 10 L286 10 C326 12 348 26 360 56 L404 64 C430 68 440 80 440 104 L440 112 L380 112 A34 34 0 0 1 312 112 L150 112 A34 34 0 0 1 82 112 L6 112 Z" />
-                  <path class="fleet-glass" d="M116 50 C132 24 156 20 184 20 L284 20 C320 22 336 34 346 52 Z" />
-                  <circle class="fleet-tyre" cx="116" cy="112" r="34" />
-                  <circle class="fleet-rim" cx="116" cy="112" r="14" />
-                  <circle class="fleet-tyre" cx="346" cy="112" r="34" />
-                  <circle class="fleet-rim" cx="346" cy="112" r="14" />
-                </g>
-              </g>
-            </g>
-
-            <!-- Near lane — sedan (main vehicle: red sill + pulsing stop) -->
-            <g class="route-lane route-lane--sedan" transform="translate(0 430)">
-              <line class="route-line" x1="10" y1="0" x2="590" y2="0" />
-              <circle class="route-node" cx="120" cy="0" r="3" />
-              <circle class="route-pulse" cx="470" cy="0" r="4" />
               <g class="route-car route-car--sedan">
-                <g transform="translate(0 -57) scale(0.4)">
+                <g transform="translate(0 -50) scale(0.35)">
                   <ellipse class="route-shadow" cx="228" cy="144" rx="214" ry="13" />
                   <path class="fleet-body fleet-body--sedan" d="M6 98 C6 76 14 68 38 66 L98 58 C120 22 156 8 200 8 L270 8 C322 10 348 30 360 62 L416 70 C440 74 452 84 452 104 L452 110 L386 110 A33 33 0 0 1 320 110 L150 110 A33 33 0 0 1 84 110 L6 110 Z" />
-                  <path class="fleet-glass fleet-glass--front" d="M120 54 C140 28 168 18 200 18 L266 18 C310 20 332 36 342 58 Z" />
-                  <path class="route-accent" d="M40 96 L420 100" />
+                  <path class="fleet-glass" d="M120 54 C140 28 168 18 200 18 L266 18 C310 20 332 36 342 58 Z" />
                   <circle class="fleet-tyre" cx="117" cy="110" r="33" />
                   <circle class="fleet-rim" cx="117" cy="110" r="14" />
                   <circle class="fleet-tyre" cx="353" cy="110" r="33" />
@@ -151,7 +143,37 @@
                 </g>
               </g>
             </g>
+
+            <!-- Near lane — Family SUV (lead vehicle: red sill + airport pad + pulsing stop) -->
+            <g class="route-lane route-lane--suv" transform="translate(0 430)">
+              <line class="route-line" x1="10" y1="0" x2="590" y2="0" />
+              <g class="hf-air" transform="translate(120 0)">
+                <circle class="hf-air-pad" r="10" />
+                <path class="hf-air-plane" transform="translate(-6 -5.8) scale(0.5)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5Z" />
+              </g>
+              <circle class="route-pulse" cx="470" cy="0" r="4" />
+              <g class="route-car route-car--suv">
+                <g transform="translate(0 -61) scale(0.42)">
+                  <ellipse class="route-shadow" cx="222" cy="146" rx="204" ry="12" />
+                  <path class="fleet-body fleet-body--suv" d="M6 96 C6 70 14 60 40 58 L92 52 C108 20 140 10 180 10 L286 10 C326 12 348 26 360 56 L404 64 C430 68 440 80 440 104 L440 112 L380 112 A34 34 0 0 1 312 112 L150 112 A34 34 0 0 1 82 112 L6 112 Z" />
+                  <path class="fleet-glass fleet-glass--front" d="M116 50 C132 24 156 20 184 20 L284 20 C320 22 336 34 346 52 Z" />
+                  <path class="route-accent" d="M36 100 L404 103" />
+                  <circle class="fleet-tyre" cx="116" cy="112" r="34" />
+                  <circle class="fleet-rim" cx="116" cy="112" r="14" />
+                  <circle class="fleet-tyre" cx="346" cy="112" r="34" />
+                  <circle class="fleet-rim" cx="346" cy="112" r="14" />
+                </g>
+              </g>
+            </g>
           </svg>
+
+          <div class="hf-chip hf-chip--route">
+            <span class="hf-chip-dot"></span>
+            <span data-i18n="servicesPage.hero.chip1">Airport-to-hotel runs, quoted first</span>
+          </div>
+          <div class="hf-chip hf-chip--suv">
+            <span data-i18n="servicesPage.hero.chip2">Family SUV ready</span>
+          </div>
         </div>
       </section>
 
@@ -326,6 +348,8 @@
       <section class="services-why trust-grid" id="why" aria-labelledby="services-why-title">
         <p class="eyebrow" data-i18n="servicesPage.why.eyebrow">Why Ride X</p>
         <h2 id="services-why-title" class="visually-hidden">Why Ride X</h2>
+        <!-- Claude Code: trust rail — one connected operations panel, not three floating cards -->
+        <div class="trust-rail">
         <article>
           <span class="value-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" role="img"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z" /></svg>
@@ -347,6 +371,7 @@
           <h3 data-i18n="servicesPage.why.founder">Details Before Booking</h3>
           <p data-i18n="servicesPage.why.founder.copy">Price, timing, and vehicle confirmed before the trip — you approve everything first.</p>
         </article>
+        </div>
       </section>
 
       <section class="final-quote-cta" id="contact" aria-labelledby="services-final-title">
@@ -392,7 +417,7 @@
           <a href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." data-i18n="footer.whatsapp">WhatsApp</a>
           <a href="tel:+966547433452" dir="ltr">+966 54 743 3452</a>
           <!-- REPLACE-ME: set the real business email address once the domain is live -->
-          <a href="mailto:contact@ridex.sa" dir="ltr">contact@ridex.sa</a>
+          <a href="mailto:mnainternationaloep@gmail.com" dir="ltr">mnainternationaloep@gmail.com</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -404,7 +429,28 @@
       </div>
     </footer>
 
+    <a
+      class="whatsapp-float"
+      href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah."
+      target="_blank"
+      rel="noopener"
+      aria-label="Chat with Ride X on WhatsApp"
+    >
+      <svg viewBox="0 0 512 512" width="60" height="60" aria-hidden="true" focusable="false"><circle cx="256" cy="256" r="256" fill="#0e1b33"/><g transform="translate(116,116) scale(11.67)"><path fill="#ffffff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></g></svg>
+    </a>
+
+
+    <!-- Claude Code: mobile quote bar — slim app-like action bar; script.js shows it
+         after the hero on compact screens and hides it near the footer. -->
+    <div class="mobile-quote-bar" aria-hidden="false">
+      <a class="button button-quote mqb-quote" href="../quote/index.html" data-i18n="hero.quote">Request a Quote</a>
+      <a class="mqb-wa" href="https://wa.me/966569342309?text=Hello%20Ride%20X%2C%20I%27d%20like%20to%20arrange%20a%20ride%20in%20Jeddah." aria-label="WhatsApp"></a>
+    </div>
     <script src="../supabase-config.js"></script>
     <script src="../script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+    <script src="../animations.js" defer></script>
+    <script src="../whatsapp-widget.js" async></script>
   </body>
 </html>

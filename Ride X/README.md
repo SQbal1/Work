@@ -2,6 +2,8 @@
 
 Static marketing and lead-capture website for Ride X — private transport coordination in Jeddah, Saudi Arabia. Bilingual (English / Arabic with RTL), dark premium theme, no build step.
 
+Motion is layered: `script.js` owns the base CSS/IntersectionObserver reveals; `animations.js` adds scroll-linked choreography (scrubbed how-it-works line, showcase/about parallax, magnetic CTAs, mobile header auto-hide) on top of GSAP + ScrollTrigger loaded from the jsDelivr CDN with `defer`. If the CDN is unreachable the site silently falls back to the base animations, and `prefers-reduced-motion` disables the extras entirely.
+
 ## Run locally
 
 Open `index.html` directly in a browser, or run a small local server from this folder:

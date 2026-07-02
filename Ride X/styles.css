@@ -76,6 +76,39 @@
   --dur-base: 240ms;
   --dur-slow: 420ms;
   --dur-reveal: 720ms;
+
+  /* Claude Code: premium polish layer — layered surfaces, ambient depth, brand texture.
+     Used by the "Premium polish layer" block near the end of this file. These add
+     crafted depth and rhythm to large flat areas without introducing new hues, so the
+     restrained navy + red identity is preserved. */
+  --surface-2: #eceff7;                              /* deeper off-white for section rhythm */
+  --tint-navy: rgba(16, 35, 71, 0.045);             /* barely-there cool wash on light areas */
+  --tint-red: rgba(211, 35, 46, 0.05);
+  --motif-faint: rgba(16, 35, 71, 0.04);            /* brand X watermark on light surfaces */
+  --motif-on-dark: rgba(255, 255, 255, 0.05);       /* brand X watermark on navy bands */
+  --ambient-shadow: 0 24px 50px -30px rgba(14, 27, 51, 0.26);
+  --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --hairline-grad: linear-gradient(90deg, transparent, var(--line-strong) 20%, var(--line-strong) 80%, transparent);
+
+  /* Claude Code: semantic token aliases — one vocabulary for surfaces, text,
+     borders, and accent so components read from intent rather than raw hues.
+     Aliased onto the existing ramps: changing a brand value updates both. */
+  --bg: #ffffff;
+  --surface-elevated: var(--card);
+  --text-primary: var(--ink);
+  --text-secondary: var(--body-text);
+  --border: var(--line);
+  --border-strong: var(--line-strong);
+  --accent: var(--red);
+  --accent-hover: var(--red-dark);
+  --focus-ring: color-mix(in srgb, var(--navy-500) 55%, transparent);
+  --gradient-brand: linear-gradient(135deg, var(--navy-800), var(--navy-600));
+
+  /* On-dark glass recipe shared by the hero trip card, ghost buttons, and
+     showcase chrome so every translucent surface matches. */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 * {
@@ -136,7 +169,7 @@ p {
 }
 
 :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--navy-500) 55%, transparent);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -210,6 +243,23 @@ body[dir="rtl"] .eyebrow {
 
 .site-header.is-scrolled {
   box-shadow: 0 10px 30px rgba(10, 23, 48, 0.08);
+}
+
+/* Claude Code: compact-viewport header behavior — the bar slides away while
+   scrolling down and glides back on the first upward scroll, reclaiming
+   vertical space without a layout jump (transform only). animations.js adds
+   `has-settled` once the entrance animation is done so its fill-mode stops
+   pinning the transform, then drives `is-hidden`. Desktop keeps a fixed bar. */
+.site-header.has-settled {
+  animation: none;
+  transition: box-shadow var(--dur-base) var(--ease-standard),
+    background var(--dur-base) var(--ease-standard),
+    transform 340ms var(--ease-out);
+}
+
+.site-header.is-hidden {
+  transform: translateY(-102%);
+  box-shadow: none;
 }
 
 .brand {
@@ -410,7 +460,7 @@ button,
     box-shadow var(--dur-base) var(--ease-standard);
 }
 
-.button::after {
+.button::before {
   content: "";
   position: absolute;
   inset: -40% auto -40% -70%;
@@ -419,6 +469,7 @@ button,
   opacity: 0;
   transform: skewX(-18deg);
   transition: transform 620ms var(--ease-out), opacity 240ms ease;
+  pointer-events: none;
 }
 
 body[dir="rtl"] button,
@@ -430,9 +481,36 @@ body[dir="rtl"] .button {
   transform: translateY(-2px);
 }
 
-.button:hover::after {
+.button:hover::before {
   opacity: 1;
   transform: translateX(390%) skewX(-18deg);
+}
+
+/* Claude Code: the primary conversion button carries a directional arrow that
+   nudges forward on hover. Drawn as a masked pseudo-element (not markup), so
+   the language toggle's textContent swap can never wipe it; mirrored in RTL. */
+.button-quote::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-inline-start: 10px;
+  background: currentColor;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>') center / contain no-repeat;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+body[dir="rtl"] .button-quote::after {
+  transform: scaleX(-1);
+}
+
+.button-quote:hover::after {
+  transform: translateX(3px);
+}
+
+body[dir="rtl"] .button-quote:hover::after {
+  transform: scaleX(-1) translateX(3px);
 }
 
 /* Tactile press: a brief settle to baseline with a hair of scale-down, so the
@@ -480,7 +558,6 @@ body[dir="rtl"] .button {
 }
 
 /* On dark panels, the navy button becomes white */
-.hero .button-primary,
 .whatsapp-panel .button-primary,
 .final-quote-cta .button-primary {
   background: #ffffff;
@@ -488,11 +565,28 @@ body[dir="rtl"] .button {
   box-shadow: 0 12px 28px rgba(4, 10, 24, 0.3);
 }
 
-.hero .button-primary:hover,
 .whatsapp-panel .button-primary:hover,
 .final-quote-cta .button-primary:hover {
   background: var(--navy-50);
   color: var(--navy-900);
+}
+
+/* Claude Code: in the hero the WhatsApp action steps back to a glass ghost so
+   the red quote button is the one unmistakable primary. Same recipe as the
+   vehicle-showcase secondary, keeping every on-dark secondary consistent. */
+.hero .button-primary {
+  background: var(--glass-bg);
+  color: #ffffff;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.hero .button-primary:hover {
+  background: #ffffff;
+  color: var(--navy-900);
+  border-color: #ffffff;
 }
 
 /* ==========================================================================
@@ -559,6 +653,9 @@ body[dir="rtl"] .button {
 .hero-shade {
   z-index: 1;
   background:
+    /* Soft top-right vignette: sinks the glass-tower facade into shadow so the
+       SUV stays the focal point and stray panel reflections recede. */
+    radial-gradient(92% 96% at 100% 0%, rgba(6, 13, 29, 0.78) 0%, rgba(6, 13, 29, 0.5) 24%, rgba(8, 19, 41, 0.26) 48%, rgba(8, 19, 41, 0) 70%),
     linear-gradient(80deg, rgba(6, 13, 29, 0.96) 0%, rgba(8, 19, 41, 0.86) 38%, rgba(10, 23, 48, 0.42) 72%, rgba(10, 23, 48, 0.18) 100%),
     linear-gradient(0deg, rgba(6, 13, 29, 0.62) 0%, rgba(6, 13, 29, 0) 36%);
 }
@@ -757,6 +854,213 @@ body[dir="rtl"] .hero-stats div:nth-child(n + 2) {
 }
 
 /* ==========================================================================
+   Claude Code: hero trip card — a floating product surface over the photo.
+   Mirrors the quote page's trip-preparation motif so the first screen reads
+   as a mobility product, not a stock photograph. Purely decorative
+   (aria-hidden); shown only on wide viewports where it has room to breathe.
+   ========================================================================== */
+
+.hero-trip-card {
+  position: absolute;
+  z-index: 2;
+  inset-block-end: clamp(120px, 18vh, 170px);
+  inset-inline-end: max(var(--gutter), calc((100% - var(--max)) / 2));
+  display: none;
+  width: 296px;
+  padding: 18px 18px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05) 55%),
+    rgba(6, 13, 29, 0.55);
+  box-shadow:
+    0 24px 54px rgba(4, 10, 24, 0.44),
+    var(--glass-highlight);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation:
+    riseIn 760ms var(--ease-out) 460ms backwards,
+    heroCardFloat 7s ease-in-out 1.4s infinite;
+}
+
+@media (min-width: 1200px) {
+  .hero-trip-card {
+    display: block;
+  }
+}
+
+@keyframes heroCardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.htc-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--on-dark-soft);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+body[dir="rtl"] .htc-head {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.htc-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(211, 35, 46, 0.22);
+  animation: htcPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes htcPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(211, 35, 46, 0.26);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px rgba(211, 35, 46, 0.1);
+  }
+}
+
+.htc-route {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  column-gap: 12px;
+  margin-top: 16px;
+}
+
+/* Route rail: pickup ring → dashed leg → destination dot, drawn in CSS. */
+.htc-rail {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  grid-template-rows: 12px minmax(0, 1fr) 12px;
+  padding-block: 4px 6px;
+}
+
+.htc-node {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.htc-node-a {
+  border: 2.5px solid #ffffff;
+  background: transparent;
+}
+
+.htc-node-b {
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(211, 35, 46, 0.24);
+}
+
+.htc-rail-line {
+  width: 2px;
+  margin-block: 3px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0 4px,
+    transparent 4px 9px
+  );
+}
+
+.htc-stops {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.htc-stop {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.htc-stop-label {
+  color: var(--on-dark-dim);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.htc-stop-value {
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.htc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.htc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 3px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--on-dark-soft);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.htc-chip-status {
+  border-color: rgba(94, 208, 138, 0.34);
+  color: #a7e8c0;
+  background: rgba(52, 148, 90, 0.16);
+}
+
+/* Confirmation check, masked so the i18n text swap can never remove it. */
+.htc-chip-status::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  background: currentColor;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-trip-card {
+    animation: none;
+  }
+
+  .htc-dot {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
    Section scaffolding — full-bleed bands with contained content
    ========================================================================== */
 
@@ -911,7 +1215,7 @@ body[dir="rtl"] .service-card::before {
 
 .service-card h3,
 .why-list h3 {
-  margin: 30px 0 10px;
+  margin: 24px 0 9px;
   font-size: 1.16rem;
   font-weight: 700;
 }
@@ -1824,6 +2128,46 @@ body[dir="rtl"] .trip-dispatch-point {
   line-height: 1.75;
 }
 
+/* Claude Code: assurance chips — compact, checkable claims that fill the copy
+   column with substance instead of empty space. Each chip leads with a small
+   masked check so the row scans as verified points, not decorative tags. */
+.why-chips {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.why-chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 5px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--navy-700);
+  background: #ffffff;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-xs);
+}
+
+.why-chips li::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  background: var(--red);
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+}
+
 .why-list {
   display: grid;
   align-content: start;
@@ -2273,6 +2617,24 @@ body[dir="rtl"] .quote-response-process.reveal.is-visible .qrr-node {
     radial-gradient(130% 170% at 86% -30%, rgba(42, 82, 155, 0.5), transparent 58%),
     var(--navy-900);
   box-shadow: var(--shadow-lg);
+}
+
+/* Same faint brand-X line work as the service-area card, so the two navy
+   statement panels on the page read as one family. */
+.whatsapp-panel::after {
+  content: "";
+  position: absolute;
+  inset: -30% -4% -30% auto;
+  width: 46%;
+  background:
+    linear-gradient(62deg, transparent calc(50% - 1px), rgba(255, 255, 255, 0.08) 50%, transparent calc(50% + 1px)),
+    linear-gradient(-62deg, transparent calc(50% - 1px), rgba(255, 255, 255, 0.08) 50%, transparent calc(50% + 1px));
+  pointer-events: none;
+}
+
+.whatsapp-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .whatsapp-panel .eyebrow {
@@ -6110,6 +6472,408 @@ body[dir="rtl"] .footer-col {
 }
 
 /* ==========================================================================
+   Premium polish layer  (Claude Code)
+   Cross-cutting craft applied on top of the base components. Goal: take large
+   flat white areas and plain cards to a "premium chauffeur / boutique hotel"
+   finish — layered surfaces, ambient depth, hairline section dividers, and a
+   faint brand-X watermark — using only the existing navy + red identity.
+   Kept as one additive block so it is easy to find, tune, or revert.
+   ========================================================================== */
+
+/* --- Layered section surfaces -------------------------------------------------
+   Replace dead-flat #fff with a barely-there directional wash so light sections
+   read as crafted surface. Alternating tints give the page vertical rhythm. */
+.services-preview.section-band {
+  background:
+    radial-gradient(130% 90% at 100% -10%, var(--tint-navy), transparent 55%),
+    #ffffff;
+}
+
+.faq-section {
+  background:
+    radial-gradient(110% 80% at 0% 0%, var(--tint-navy), transparent 55%),
+    var(--surface);
+}
+
+.why-section {
+  background:
+    radial-gradient(90% 70% at 100% 0%, var(--tint-red), transparent 50%),
+    #ffffff;
+}
+
+/* --- Hairline section dividers -----------------------------------------------
+   A centered fading rule at the top edge articulates each transition between
+   light sections so color blocks feel ruled and intentional, not abrupt. */
+.services-preview.section-band::before,
+.why-section::before,
+.faq-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hairline-grad);
+  opacity: 0.9;
+}
+
+/* --- Brand-X watermark -------------------------------------------------------
+   The logo mark, oversized and very faint, anchors select sections with quiet
+   brand presence. Decorative only (no DOM, aria-hidden by nature). */
+.why-section .why-copy::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: -6px;
+  bottom: -8px;
+  width: clamp(140px, 16vw, 220px);
+  height: clamp(140px, 16vw, 220px);
+  background: url(assets/logo.png) center / contain no-repeat;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  /* The watermark exists to fill the desktop two-column whitespace. On stacked
+     mobile/tablet the copy is full-width, so it would sit behind the paragraph
+     text — hide it there and only show it in the sticky desktop layout below. */
+  display: none;
+}
+
+/* --- Card resting depth ------------------------------------------------------
+   Add a soft top highlight + long ambient shadow at rest (not just on hover) so
+   every card sits on the page with real weight. Hover rules already defined
+   earlier win on interaction. */
+.service-card,
+.why-list article,
+.trust-grid article,
+.faq-list details {
+  box-shadow: var(--card-highlight), var(--shadow-sm), var(--ambient-shadow);
+}
+
+/* --- Icon tiles: subtle gradient + ring -------------------------------------
+   Flat navy-50 squares become softly dimensional. The navy hover fill defined
+   earlier still takes over on interaction. */
+.service-icon,
+.value-icon {
+  background: linear-gradient(160deg, #ffffff, var(--navy-50));
+  box-shadow: inset 0 0 0 1px var(--line), var(--shadow-xs);
+}
+
+/* --- Service cards: numeral as a quiet background figure ---------------------
+   Promote the small "01" to an oversized, faint watermark numeral that warms to
+   red on hover — gives the grid a designed, editorial feel. */
+.service-card {
+  isolation: isolate;
+}
+
+.service-card .card-top {
+  position: relative;
+  z-index: 1;
+}
+
+.service-card .card-index {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 18px;
+  z-index: 0;
+  font-size: clamp(2.8rem, 4vw, 3.6rem);
+  line-height: 1;
+  color: var(--navy-900);
+  opacity: 0.06;
+  transition: opacity var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard);
+}
+
+.service-card:hover .card-index {
+  opacity: 0.12;
+  color: var(--red);
+}
+
+/* --- "Why Ride X": balance the layout ---------------------------------------
+   Pin the copy column so it travels with the taller card stack, removing the
+   dead whitespace that made the section feel unfinished. */
+.why-section {
+  align-items: start;
+}
+
+.why-copy {
+  position: relative;
+  align-self: start;
+}
+
+@media (min-width: 981px) {
+  .why-copy {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+  }
+
+  .why-section .why-copy::after {
+    display: block;
+  }
+
+  /* The assurance chips + watermark fill the column's lower half. */
+  .why-copy h2 {
+    position: relative;
+    z-index: 1;
+  }
+
+  .why-copy > p {
+    position: relative;
+    z-index: 1;
+  }
+
+  body[dir="rtl"] .why-section {
+    grid-template-columns: minmax(300px, 0.68fr) minmax(0, 0.92fr);
+  }
+}
+
+/* --- FAQ: editorial two-column layout ---------------------------------------
+   A sticky heading column on the inline-start, the accordion on the end. Fills
+   the width and reads like a considered help section rather than a stack. */
+@media (min-width: 861px) {
+  .faq-section {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    column-gap: clamp(40px, 6vw, 80px);
+    align-items: start;
+  }
+
+  .faq-head {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+  }
+
+  .faq-section .faq-list {
+    margin-top: 0;
+  }
+}
+
+.faq-head p.eyebrow {
+  margin-bottom: 14px;
+}
+
+/* Accordion refinement: a leading accent bar grows when a row opens. */
+.faq-list details {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.faq-list details::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.faq-list details[open]::before {
+  transform: scaleY(1);
+}
+
+/* --- Hero: living motion + brand presence -----------------------------------
+   Ken Burns drift on the media WRAPPER (a slow, infinite scale + pan) so the
+   first screen feels alive and cinematic. The <img> keeps its own entrance zoom
+   and JS scroll-parallax transform — animating the separate wrapper element
+   means the two never fight over the transform property. The original
+   directional hero-shade (and its RTL variant) is left intact for legibility.
+   Disabled under prefers-reduced-motion in the block below. */
+@keyframes heroDrift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(-1.6%, -1.4%, 0);
+  }
+}
+
+.hero-media {
+  animation: heroDrift 32s var(--ease-standard) infinite alternate;
+  will-change: transform;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: clamp(64px, 12vh, 120px);
+  inset-inline-end: clamp(24px, 6vw, 96px);
+  width: clamp(120px, 16vw, 240px);
+  height: clamp(120px, 16vw, 240px);
+  background: url(assets/logo.png) center / contain no-repeat;
+  opacity: 0.06;
+  filter: brightness(0) invert(1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --- Angled band dividers ----------------------------------------------------
+   A shallow diagonal cut on the full-bleed navy showcase turns the white↔navy
+   transitions into a designed edge instead of a flat horizontal seam. The slant
+   is gentle (≈1.5vw) for an executive feel; negative block margins pull the
+   neighbouring light sections up to seal the seams. The footer keeps its crisp
+   red top rule, so it is intentionally left flat. */
+.vehicle-showcase {
+  --band-slant: clamp(14px, 1.5vw, 30px);
+  margin-block: calc(var(--band-slant) * -1);
+  clip-path: polygon(
+    0 var(--band-slant),
+    100% 0,
+    100% calc(100% - var(--band-slant)),
+    0 100%
+  );
+}
+
+/* Mirror the diagonal for RTL so the cut leans with the reading direction. */
+body[dir="rtl"] .vehicle-showcase {
+  clip-path: polygon(
+    0 0,
+    100% var(--band-slant),
+    100% 100%,
+    0 calc(100% - var(--band-slant))
+  );
+}
+
+/* --- Mobile menu: full-height immersive drawer ------------------------------
+   Replaces the short white dropdown with a full-height navy drawer that fills
+   the screen below the sticky header. Large tap targets, links that stagger in,
+   a faint brand-X watermark, and the language control pinned to the base. Reads
+   as a deliberate, premium menu rather than a panel of links over bleeding page
+   content. The sticky header (logo + animated X close) stays on top. */
+@media (max-width: 900px) {
+  .nav-shell,
+  body[dir="rtl"] .nav-shell {
+    position: fixed;
+    /* The header's backdrop-filter makes it the containing block for fixed
+       descendants, so `bottom: 0` would resolve against the ~76px header rather
+       than the viewport. Anchor with top + an explicit height instead (dvh
+       accounts for mobile browser chrome). */
+    top: var(--header-h);
+    inset-inline: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100dvh - var(--header-h));
+    gap: 0;
+    padding: clamp(24px, 5vh, 46px) var(--gutter) calc(28px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    border-bottom: 0;
+    background: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-950) 100%);
+    box-shadow: 0 30px 60px rgba(4, 10, 24, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity 280ms var(--ease-out), transform 380ms var(--ease-premium-out),
+      visibility 0s linear 380ms;
+  }
+
+  .site-header.menu-open .nav-shell,
+  body[dir="rtl"] .site-header.menu-open .nav-shell {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  /* Faint brand mark anchored to the lower trailing corner. */
+  .nav-shell::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: -12%;
+    bottom: 5%;
+    width: min(64vw, 300px);
+    height: min(64vw, 300px);
+    background: url(assets/logo.png) center / contain no-repeat;
+    filter: brightness(0) invert(1);
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  .nav-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-links {
+    gap: 6px;
+  }
+
+  /* Large links that fade + rise in with a gentle stagger once the drawer opens. */
+  .nav-links a {
+    min-height: 60px;
+    padding-inline: 18px;
+    color: var(--on-dark);
+    font-family: var(--font-display);
+    font-size: 1.34rem;
+    font-weight: 600;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-premium-out),
+      background 200ms ease;
+  }
+
+  .site-header.menu-open .nav-links a {
+    opacity: 1;
+    transform: none;
+  }
+
+  .site-header.menu-open .nav-links a:nth-child(1) { transition-delay: 90ms; }
+  .site-header.menu-open .nav-links a:nth-child(2) { transition-delay: 140ms; }
+  .site-header.menu-open .nav-links a:nth-child(3) { transition-delay: 190ms; }
+  .site-header.menu-open .nav-links a:nth-child(4) { transition-delay: 240ms; }
+  .site-header.menu-open .nav-links a:nth-child(5) { transition-delay: 290ms; }
+
+  .nav-links a:not(.nav-quote):hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav-links a:not(.nav-quote)[aria-current="page"] {
+    color: var(--on-dark);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 3px 0 0 var(--red);
+  }
+
+  body[dir="rtl"] .nav-links a:not(.nav-quote)[aria-current="page"] {
+    box-shadow: inset -3px 0 0 var(--red);
+  }
+
+  /* Quote stays the red CTA — full width, centered, slightly larger. */
+  .nav-links .nav-quote {
+    min-height: 58px;
+    margin-top: 12px;
+    justify-content: center;
+    font-size: 1.12rem;
+    color: #ffffff;
+  }
+
+  /* Language control pinned to the base on a hairline divider, dressed for dark. */
+  .header-actions {
+    margin-top: auto;
+    padding-top: 22px;
+    border-top: 1px solid var(--on-dark-line);
+  }
+
+  .header-actions .control-button {
+    width: 100%;
+    min-height: 52px;
+    color: var(--on-dark);
+    border-color: var(--on-dark-line);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .header-actions .control-button:hover,
+  .header-actions .control-button:focus-visible {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.09);
+  }
+}
+
+/* ==========================================================================
    Reduced motion
    ========================================================================== */
 
@@ -6123,6 +6887,7 @@ body[dir="rtl"] .footer-col {
     animation-iteration-count: 1 !important;
   }
 
+  .hero-media,
   .hero-media img {
     animation: none;
   }
@@ -6156,5 +6921,2557 @@ body[dir="rtl"] .footer-col {
   .trip-prep-system.reveal .trip-prep-assurance {
     opacity: 1;
     translate: none;
+  }
+}
+
+/* ==========================================================================
+   Claude Code: premium motion layer
+   Vanilla, dependency-free adaptations of five React Bits effects the brand
+   approved (reactbits.dev). No React, no canvas/WebGL — every effect animates
+   only transform / opacity / background-position so it stays GPU-cheap and
+   never blocks scrolling. All of it sits on top of content that is fully
+   present without JavaScript, and the global reduced-motion block above
+   neutralizes the animations for users who ask for less motion (with explicit
+   fallbacks added at the end of this section).
+     1. Aurora        — drifting ambient glow behind the home hero
+     2. Blur Text     — hero headline resolves word-by-word out of a blur
+     3. Spotlight     — cursor-follow glow on service cards (pointer devices)
+        Star sheen    — scroll-triggered sheen sweep instead, on touch devices
+     4. Shiny wordmark— slow metallic sweep across the "Ride X" logotype
+     5. Click spark   — a short spark burst from primary CTAs on press
+   ========================================================================== */
+
+/* 1 — Aurora ---------------------------------------------------------------
+   The real React Bits Aurora: a WebGL2 fragment shader (ported to vanilla —
+   no React, no OGL) renders flowing simplex-noise ribbons that drift over
+   time. JS injects the <canvas> and runs the render loop; this just frames it,
+   blends it onto the dark photo with `screen`, and provides a static fallback
+   if WebGL2 is unavailable. Brand palette + intensity are set in script.js. */
+.hero-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* above .hero-shade, below .hero-content (z-index 2) */
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.78;
+  mix-blend-mode: screen;
+}
+
+/* The animated WebGL canvas (injected by JS) fills the hero. */
+.hero-aurora canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fallback when WebGL2 is unavailable (older browsers / GPU blocked): a calm
+   static brand wash so the hero is never empty. JS adds .aurora-fallback. */
+.hero-aurora.aurora-fallback {
+  background:
+    radial-gradient(58% 82% at 16% 16%, rgba(58, 120, 224, 0.45), transparent 60%),
+    radial-gradient(48% 70% at 42% 30%, rgba(211, 35, 46, 0.24), transparent 62%);
+}
+
+/* 2 — Blur Text ------------------------------------------------------------
+   JS splits the hero H1 into per-word spans (.bt-word) and stamps a staggered
+   --bt-delay on each. The .blur-text class suppresses the container's riseIn
+   so the words own the entrance: each rises a touch and sharpens out of blur.
+   Without JS the H1 keeps its normal riseIn entrance. */
+.hero h1.blur-text {
+  animation: none; /* overrides .hero-content > * riseIn — words animate instead */
+  opacity: 1;
+  transform: none;
+}
+
+.hero h1.blur-text .bt-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(0.3em);
+  animation: blurInWord 0.85s var(--ease-premium-out) var(--bt-delay, 0ms) both;
+}
+
+@keyframes blurInWord {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* 3 — Spotlight Card (pointer devices) -------------------------------------
+   A cursor-following radial glow rendered on ::after; JS feeds it --mx/--my
+   in card-local pixels (rAF-throttled). The card already clips overflow, so
+   the glow is masked to the rounded rectangle. Content is lifted above it. */
+@media (hover: hover) and (pointer: fine) {
+  .service-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .service-card::before {
+    z-index: 2; /* keep the red top rule crisp above the glow */
+  }
+
+  .service-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      240px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(42, 82, 155, 0.18),
+      rgba(211, 35, 46, 0.05) 42%,
+      transparent 64%
+    );
+    transition: opacity var(--dur-base) var(--ease-standard);
+  }
+
+  .service-card:hover::after {
+    opacity: 1;
+  }
+}
+
+/* 3b — Star sheen (touch devices) ------------------------------------------
+   Phones have no cursor, so the spotlight becomes a one-shot diagonal sheen
+   that sweeps across each card as it scrolls into view — tied to the existing
+   reveal system and its per-card --reveal-delay. It runs once (no looping),
+   so there is no battery cost after the cards have appeared. */
+@media (hover: none) {
+  .service-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 32%,
+      rgba(255, 255, 255, 0.12) 47%,
+      rgba(42, 82, 155, 0.1) 53%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+  }
+
+  .service-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .service-card.reveal.is-visible::after {
+    animation: cardSheen 1.1s var(--ease-out) var(--reveal-delay, 0ms) both;
+  }
+
+  body[dir="rtl"] .service-card.reveal.is-visible::after {
+    animation-name: cardSheenRTL;
+  }
+
+  @keyframes cardSheen {
+    0% {
+      transform: translateX(-120%);
+      opacity: 0;
+    }
+
+    18% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes cardSheenRTL {
+    0% {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+
+    18% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(-120%);
+      opacity: 0;
+    }
+  }
+}
+
+/* 4 — Shiny wordmark -------------------------------------------------------
+   A slow silver highlight sweeps across the "Ride X" logotype roughly once
+   every 7s with a long pause between passes — present, premium, not busy.
+   Guarded by @supports so browsers without background-clip:text keep solid
+   text instead of going invisible. The latin logotype is identical in AR. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .brand span:not(.brand-mark) {
+    background: linear-gradient(
+      110deg,
+      var(--ink) 0%,
+      var(--ink) 42%,
+      #7d96cf 50%,
+      var(--ink) 58%,
+      var(--ink) 100%
+    );
+    background-size: 220% 100%;
+    background-position: 200% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shinySweep 7s var(--ease-standard) 1.4s infinite;
+  }
+
+  /* The footer sits on a dark navy band, so its wordmark must be light. Same
+     sweeping highlight, inverted palette: soft white logotype with a pure-white
+     glint passing through. The animation from the base rule still applies. */
+  .site-footer .brand span:not(.brand-mark) {
+    background: linear-gradient(
+      110deg,
+      #e7edf9 0%,
+      #e7edf9 42%,
+      #ffffff 50%,
+      #e7edf9 58%,
+      #e7edf9 100%
+    );
+    background-size: 220% 100%;
+    background-position: 200% 0;
+    /* The `background` shorthand above resets background-clip to border-box,
+       which made the wordmark render as a filled white block — re-assert the
+       text clip after it so the gradient is masked to the letters again. */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @keyframes shinySweep {
+    0% {
+      background-position: 200% 0;
+    }
+
+    16% {
+      background-position: -120% 0;
+    }
+
+    100% {
+      background-position: -120% 0;
+    }
+  }
+}
+
+/* Nav logo flourish (desktop pointer only) -------------------------------
+   A quick light glint sweeps across the logo mark on hover, with a small
+   lift, so the brand feels responsive without any always-on motion in the
+   header. Touch devices keep the calm timed wordmark shine and skip this. */
+@media (hover: hover) and (pointer: fine) {
+  .brand:hover {
+    opacity: 1; /* override the global brand dim — the glint is the feedback */
+  }
+
+  .brand-mark {
+    position: relative;
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-standard);
+  }
+
+  .brand:hover .brand-mark {
+    transform: scale(1.06);
+    box-shadow: 0 6px 16px rgba(211, 35, 46, 0.22);
+  }
+
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.65) 50%, transparent 62%);
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+
+  .brand:hover .brand-mark::after {
+    animation: brandSheen 0.7s var(--ease-out);
+  }
+
+  @keyframes brandSheen {
+    0% {
+      transform: translateX(-150%);
+      opacity: 0;
+    }
+
+    25% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(150%);
+      opacity: 0;
+    }
+  }
+}
+
+/* 5 — Click spark ----------------------------------------------------------
+   JS appends a fixed-position burst of small dots at the press point on the
+   primary CTAs; each dot flies outward and fades, then the whole burst is
+   removed from the DOM. Pure transform/opacity, ~half a second, no layout. */
+.spark-burst {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.spark {
+  position: fixed;
+  top: var(--sy);
+  left: var(--sx);
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  opacity: 1;
+  animation: sparkFly 560ms var(--ease-out) forwards;
+}
+
+@keyframes sparkFly {
+  to {
+    transform: translate(var(--dx), var(--dy)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* Reduced-motion fallbacks for the effects above. The global block earlier in
+   this file already kills animation durations; these make the resting states
+   explicit so nothing is left mid-transition or invisible. The Aurora itself
+   handles reduced-motion in script.js — it paints a single static frame and
+   skips the render loop, so no CSS rule is needed for it here. */
+@media (prefers-reduced-motion: reduce) {
+  .hero h1.blur-text .bt-word {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none;
+  }
+
+  .service-card.reveal.is-visible::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .brand span:not(.brand-mark) {
+      animation: none;
+      background: none;
+      -webkit-text-fill-color: currentColor;
+    }
+  }
+}
+
+/* Floating WhatsApp button (all pages) */
+.whatsapp-float {
+  /* Fallback positioning if JS hasn't wrapped it yet (or is disabled) */
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+  display: inline-flex;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-float img,
+.whatsapp-float > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-float:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* Wrapper added by script.js: anchors the button bottom-right and hosts the dismiss control */
+.whatsapp-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+}
+
+/* Step aside while the mobile navigation drawer is open so the float never
+   covers the drawer's language control. body.nav-open is set by the toggle. */
+body.nav-open .whatsapp-widget,
+body.nav-open .whatsapp-float {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.whatsapp-widget .whatsapp-float {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  /* prevent the iOS long-press callout / text selection while dragging */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* Desktop hover dismiss (×) — sits above the button with a clear gap */
+.whatsapp-dismiss {
+  position: absolute;
+  right: 4px;
+  bottom: 72px;
+  width: 24px;
+  height: 24px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  line-height: 1;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.85);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+}
+
+.whatsapp-dismiss svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.whatsapp-widget.show-dismiss .whatsapp-dismiss {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.whatsapp-dismiss:hover {
+  background: var(--red);
+  color: #ffffff;
+  border-color: var(--red);
+}
+
+.whatsapp-dismiss:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* Instant custom tooltip (native title attribute has an unavoidable delay) */
+.whatsapp-dismiss::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 7px 10px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.whatsapp-dismiss:hover::after,
+.whatsapp-dismiss:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Removal animation (button hidden for the session — refresh restores it) */
+.whatsapp-widget.is-removed .whatsapp-float,
+.whatsapp-widget.is-removed .whatsapp-dismiss {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+
+/* Mobile: button follows the finger while dragging to the trash */
+.whatsapp-widget.is-dragging .whatsapp-float {
+  position: fixed;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%) scale(1.06);
+  transition: none;
+  z-index: 1400;
+  box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-widget.is-dragging .whatsapp-dismiss {
+  display: none;
+}
+
+/* Trash target shown center-screen during a long-press drag */
+.whatsapp-trash {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 84px;
+  height: 84px;
+  border-radius: 24px;
+  background: rgba(14, 27, 51, 0.92);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  z-index: 1300;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: var(--shadow-lg);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s, background 0.15s ease;
+}
+
+.whatsapp-trash.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.whatsapp-trash.is-armed {
+  background: var(--red);
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+.whatsapp-trash svg {
+  width: 38px;
+  height: 38px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .whatsapp-widget {
+    right: 16px;
+    bottom: 16px;
+  }
+  .whatsapp-float {
+    right: 16px;
+    bottom: 16px;
+    width: 54px;
+    height: 54px;
+  }
+  .whatsapp-dismiss {
+    bottom: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-float {
+    transition: none;
+  }
+  .whatsapp-float:hover,
+  .whatsapp-float:focus-visible {
+    transform: none;
+  }
+  .whatsapp-trash,
+  .whatsapp-dismiss {
+    transition: opacity 0.18s ease, visibility 0.18s;
+  }
+}
+
+/* ==========================================================================
+   Motion-layer support (Claude Code)
+   Hooks consumed by animations.js. All of these are inert without JS: the
+   base component styles above remain the complete experience.
+   ========================================================================== */
+
+/* Magnetic CTAs write --mag-x/--mag-y; the `translate` property composes with
+   the transform-based hover lift and press states instead of fighting them. */
+.button {
+  translate: var(--mag-x, 0px) var(--mag-y, 0px);
+}
+
+/* When GSAP drives the how-it-works connector, the one-shot reveal transition
+   steps aside and the line tracks scroll progress exactly. Mirrors the base
+   component's axis change: horizontal rail on wide layouts, vertical ≤640px. */
+.timeline-list.gsap-scrub::before {
+  transform: scaleX(var(--line-p, 0));
+  transition: none;
+}
+
+@media (max-width: 640px) {
+  .timeline-list.gsap-scrub::before {
+    transform: scaleY(var(--line-p, 0));
+  }
+}
+
+/* Step numerals warm to the brand red as the drawn line reaches them. */
+.timeline-list .card-index {
+  transition: background var(--dur-base) var(--ease-standard),
+    box-shadow var(--dur-base) var(--ease-standard);
+}
+
+.timeline-list article.is-reached .card-index {
+  background: var(--red);
+  box-shadow: 0 0 0 5px rgba(211, 35, 46, 0.12);
+}
+
+/* ==========================================================================
+   Ride X route identity system (Claude Code)
+   The signature visual language of the site: one journey vocabulary — pickup
+   ring, drawn route leg, red destination node — repeated at different scales:
+
+     1. Trip Type cards (home services): mini route rail + trip tags
+     2. Hero route ribbon: ambient route sweep across the first screen
+     3. Jeddah corridor strip (.service-area-card): JED → city route art
+     4. Contact coordination panel: request → confirm → ride flow
+     5. Booking command panel: the quote CTA reads as a product surface
+     6. Why-section route spine: promise cards sit along a drawn route
+
+   Everything is progressive enhancement. The resting state of every motif is
+   the COMPLETED route; only elements armed by the reveal system (.reveal,
+   added by script.js when motion is allowed) start undrawn. No-JS and
+   reduced-motion visitors always see the finished composition.
+   ========================================================================== */
+
+/* --- 1. Trip Type cards ---------------------------------------------------
+   Each home service card carries its own itinerary: a pickup ring, a dashed
+   leg that fills with the brand gradient as the card reveals, a red
+   destination node, and truthful trip tags. The card stops being "icon +
+   text" and starts being "a trip Ride X runs". */
+
+.trip-route {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 0;
+}
+
+.trip-stop {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--navy-700);
+  font-family: var(--font-display);
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  /* Stops may wrap between words but never mid-word (overrides the global
+     p { overflow-wrap: anywhere } — these are short labels, not prose). */
+  overflow-wrap: normal;
+}
+
+body[dir="rtl"] .trip-stop {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.trip-stop::before {
+  content: "";
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Pickup: hollow navy ring (the "you are here" mark used across the site). */
+.trip-stop--from::before {
+  border: 2.5px solid var(--navy-600);
+  background: transparent;
+}
+
+/* Destination: filled brand red with a soft halo once the leg has drawn. */
+.trip-stop--to::before {
+  border: 2.5px solid var(--red);
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(211, 35, 46, 0.13);
+  transition:
+    border-color 320ms var(--ease-standard),
+    background 320ms var(--ease-standard),
+    box-shadow 320ms var(--ease-standard);
+}
+
+.trip-leg {
+  position: relative;
+  flex: 1 1 22px;
+  min-width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(90deg, var(--line-strong) 0 4px, transparent 4px 9px);
+}
+
+/* The drawn overlay: navy → red, always flowing toward the destination. */
+.trip-leg::before,
+.trip-leg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-origin: left center;
+}
+
+body[dir="rtl"] .trip-leg::before,
+body[dir="rtl"] .trip-leg::after {
+  transform-origin: right center;
+}
+
+.trip-leg::before {
+  background: linear-gradient(90deg, var(--navy-500), var(--red));
+  transition: transform 680ms var(--ease-premium-out) calc(var(--reveal-delay, 0ms) + 300ms);
+}
+
+body[dir="rtl"] .trip-leg::before {
+  background: linear-gradient(-90deg, var(--navy-500), var(--red));
+}
+
+/* Hover completes the journey in solid brand red. */
+.trip-leg::after {
+  background: var(--red);
+  opacity: 0;
+  transition: opacity 220ms var(--ease-standard);
+}
+
+.service-card:hover .trip-leg::after {
+  opacity: 1;
+}
+
+/* Reveal-armed cards start with the route undrawn and the destination cold. */
+.service-card.reveal:not(.is-visible) .trip-leg::before,
+.service-card.reveal:not(.is-visible) .trip-leg::after {
+  transform: scaleX(0);
+}
+
+.service-card.reveal:not(.is-visible) .trip-stop--to::before {
+  border-color: var(--line-strong);
+  background: transparent;
+  box-shadow: 0 0 0 0 rgba(211, 35, 46, 0);
+}
+
+.service-card.reveal.is-visible .trip-stop--to::before {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 820ms);
+}
+
+.service-card .trip-route + h3 {
+  margin-top: 14px;
+}
+
+/* Trip tags: truthful, compact service facts. The red diamond is a road-sign
+   cue, rendered in CSS so the i18n text swap can never strip it. */
+.trip-tags {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trip-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--navy-700);
+  background: linear-gradient(160deg, #ffffff, var(--navy-50));
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.35;
+  transition: border-color var(--dur-base) var(--ease-standard);
+}
+
+.trip-tags li::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 1.5px;
+  background: var(--red);
+  rotate: 45deg;
+}
+
+.service-card:hover .trip-tags li {
+  border-color: var(--navy-100);
+}
+
+/* --- 2. Hero route ribbon ---------------------------------------------------
+   A quiet route sweep across the lower half of the home hero: casing road,
+   gradient route that draws itself after the headline, pickup ring, waypoint,
+   pulsing destination — and a light marker that glides the route on a loop
+   (offset-path, feature-gated). Decorative; sits between the photo shade and
+   the content. Hidden on compact viewports where the photo carries the hero. */
+
+.hero-route {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  z-index: 1;
+  width: min(66vw, 960px);
+  height: auto;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+body[dir="rtl"] .hero-route {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 899px) {
+  .hero-route {
+    display: none;
+  }
+}
+
+.hro-casing {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.09);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.hro-line {
+  fill: none;
+  stroke: url(#heroRouteStroke);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: hroDraw 2100ms var(--ease-premium-out) 750ms backwards;
+}
+
+@keyframes hroDraw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hro-node {
+  animation: hroNode 480ms var(--ease-out) both;
+}
+
+.hro-node--start {
+  animation-delay: 850ms;
+}
+
+.hro-node--mid {
+  animation-delay: 1750ms;
+}
+
+.hro-node--end {
+  animation-delay: 2550ms;
+}
+
+@keyframes hroNode {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.hro-ring {
+  fill: rgba(6, 13, 29, 0.4);
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+}
+
+.hro-core {
+  fill: #ffffff;
+}
+
+.hro-way {
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.hro-node--end .hro-ring {
+  stroke: rgba(211, 35, 46, 0.9);
+}
+
+.hro-node--end .hro-core {
+  fill: var(--red);
+}
+
+.hro-pulse {
+  fill: none;
+  stroke: rgba(211, 35, 46, 0.55);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hroPulse 3s ease-out 3s infinite;
+}
+
+@keyframes hroPulse {
+  0% {
+    transform: scale(0.45);
+    opacity: 1;
+  }
+
+  70%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+/* Marker glide along the same path — only where offset-path is supported. */
+.hro-marker {
+  opacity: 0;
+}
+
+@supports (offset-path: path("M0 0 L10 10")) {
+  .hro-marker {
+    offset-path: path("M90 505 C 250 470, 360 420, 470 330 S 660 205, 906 176");
+    offset-rotate: 0deg;
+    animation: hroGlide 9s var(--ease-standard) 3.4s infinite;
+  }
+}
+
+.hro-marker-halo {
+  fill: rgba(255, 255, 255, 0.16);
+}
+
+.hro-marker-dot {
+  fill: #ffffff;
+}
+
+@keyframes hroGlide {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+
+  7% {
+    opacity: 1;
+  }
+
+  48% {
+    offset-distance: 98%;
+    opacity: 1;
+  }
+
+  54% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hro-line,
+  .hro-node {
+    animation: none;
+    opacity: 1;
+  }
+
+  .hro-pulse,
+  .hro-marker {
+    display: none;
+  }
+}
+
+/* --- 3. Jeddah corridor strip -----------------------------------------------
+   The service-area statement band stops being "icon + paragraph on navy" and
+   gains the city itself: a faint road grid, the Red Sea corniche wave lines,
+   the JED airport pad, and a drawn route into town ending at a red stop.
+   Shared by home, contact, and about. Draws when the band reveals. */
+
+.service-area-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.service-area-card:has(.area-corridor)::after {
+  display: none;
+}
+
+.area-corridor {
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: clamp(320px, 46%, 520px);
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.9;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 22%);
+}
+
+body[dir="rtl"] .area-corridor {
+  -webkit-mask-image: linear-gradient(270deg, transparent 0, #000 22%);
+  mask-image: linear-gradient(270deg, transparent 0, #000 22%);
+}
+
+@media (max-width: 920px) {
+  .area-corridor {
+    display: none;
+  }
+}
+
+.ac-grid line {
+  stroke: rgba(255, 255, 255, 0.055);
+  stroke-width: 1;
+}
+
+.ac-waves path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.ac-waves path + path {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.ac-air-pad {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: rgba(255, 255, 255, 0.38);
+  stroke-width: 1.5;
+}
+
+.ac-air-plane {
+  fill: #ffffff;
+  opacity: 0.92;
+}
+
+.ac-air-code {
+  fill: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.ac-route-casing {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ac-route {
+  fill: none;
+  stroke: url(#acRouteStroke);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1300ms var(--ease-premium-out) 350ms;
+}
+
+.ac-way {
+  fill: rgba(255, 255, 255, 0.65);
+  transition: opacity 300ms var(--ease-standard) 900ms;
+}
+
+.ac-stop-ring {
+  fill: rgba(6, 13, 29, 0.35);
+  stroke: rgba(211, 35, 46, 0.9);
+  stroke-width: 2;
+}
+
+.ac-stop-core {
+  fill: var(--red);
+}
+
+.ac-stop {
+  transition: opacity 340ms var(--ease-standard) 1350ms;
+}
+
+.ac-air {
+  transition: opacity 340ms var(--ease-standard) 150ms;
+}
+
+/* Undrawn while the band's reveal is armed but not yet fired. */
+.service-area-card.reveal:not(.is-visible) .ac-route {
+  stroke-dashoffset: 1;
+  transition: none;
+}
+
+.service-area-card.reveal:not(.is-visible) .ac-way,
+.service-area-card.reveal:not(.is-visible) .ac-stop,
+.service-area-card.reveal:not(.is-visible) .ac-air {
+  opacity: 0;
+  transition: none;
+}
+
+.ac-air-pulse {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1.25;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hroPulse 3.4s ease-out 2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-air-pulse {
+    display: none;
+  }
+}
+
+/* --- 4. Contact coordination panel -------------------------------------------
+   The contact hero's empty side becomes the operations desk: a glass panel
+   where a request travels the same route every customer follows — received,
+   confirmed, assigned — with a rail that draws in on load and channel chips
+   that state the truthful service facts. Decorative (aria-hidden): the real
+   channels and forms live right below. */
+
+.contact-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.64fr);
+  gap: clamp(36px, 6vw, 84px);
+  align-items: center;
+  max-width: var(--max);
+  margin-inline: auto;
+}
+
+.contact-ops {
+  justify-self: end;
+  width: min(100%, 430px);
+  animation: riseIn 820ms var(--ease-out) 300ms backwards;
+}
+
+body[dir="rtl"] .contact-ops {
+  justify-self: start;
+}
+
+.cop-panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(20px, 2.4vw, 28px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(130% 120% at 86% -6%, rgba(42, 82, 155, 0.36), transparent 60%),
+    rgba(6, 13, 29, 0.62);
+  box-shadow:
+    0 26px 64px rgba(2, 8, 20, 0.34),
+    var(--glass-highlight);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.cop-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, transparent 80%, rgba(211, 35, 46, 0.1));
+  pointer-events: none;
+}
+
+.cop-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cop-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--on-dark-soft);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+body[dir="rtl"] .cop-head {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.cop-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(211, 35, 46, 0.22);
+  animation: htcPulse 2.4s ease-in-out infinite;
+}
+
+.cop-flow {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The rail: a dashed road behind the step nodes, drawn top→bottom on load. */
+.cop-flow::before {
+  content: "";
+  position: absolute;
+  inset-block: 16px 16px;
+  inset-inline-start: 15px;
+  width: 2px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0 4px, transparent 4px 9px);
+  transform-origin: top center;
+  animation: copRail 900ms var(--ease-premium-out) 620ms backwards;
+}
+
+@keyframes copRail {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.cop-flow li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  animation: riseIn 640ms var(--ease-out) backwards;
+}
+
+.cop-flow li:nth-child(1) {
+  animation-delay: 700ms;
+}
+
+.cop-flow li:nth-child(2) {
+  animation-delay: 900ms;
+}
+
+.cop-flow li:nth-child(3) {
+  animation-delay: 1100ms;
+}
+
+.cop-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: var(--navy-900);
+}
+
+/* Step glyphs (masked, i18n-proof): message → check → wheel. */
+.cop-node::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.cop-flow li:nth-child(1) .cop-node::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>') center / contain no-repeat;
+}
+
+.cop-flow li:nth-child(2) .cop-node::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+}
+
+.cop-flow li:nth-child(3) .cop-node::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 6c-.2-.6-.8-1-1.4-1H7c-.6 0-1.2.4-1.4 1L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 6c-.2-.6-.8-1-1.4-1H7c-.6 0-1.2.4-1.4 1L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>') center / contain no-repeat;
+}
+
+/* The first step is the live one: red ring + soft halo. */
+.cop-flow li:nth-child(1) .cop-node {
+  border-color: rgba(211, 35, 46, 0.85);
+  box-shadow: 0 0 0 4px rgba(211, 35, 46, 0.16);
+}
+
+.cop-text {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.cop-text strong {
+  color: var(--on-dark);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.cop-text span {
+  color: var(--on-dark-dim);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.cop-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  animation: riseIn 640ms var(--ease-out) 1250ms backwards;
+}
+
+.cop-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 3px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--on-dark-soft);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.73rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.cop-chip--live {
+  border-color: rgba(94, 208, 138, 0.34);
+  color: #a7e8c0;
+  background: rgba(52, 148, 90, 0.16);
+}
+
+.cop-chip--live::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  background: currentColor;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+}
+
+@media (max-width: 1020px) {
+  .contact-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .contact-ops,
+  body[dir="rtl"] .contact-ops {
+    justify-self: start;
+    width: min(100%, 460px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cop-dot {
+    animation: none;
+  }
+}
+
+/* --- 5. Booking command panel -------------------------------------------------
+   The quote CTA panel previews the actual request: four field slots (pickup,
+   destination, date & time, passengers) rendered as dashed input chips with
+   masked icons — the panel reads like the first screen of a booking product,
+   not a marketing block. */
+
+.quote-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 470px;
+  margin: -6px 0 26px;
+  padding: 0;
+  list-style: none;
+}
+
+.quote-fields li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding-block: 8px;
+  padding-inline: 42px 14px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+  color: var(--body-text);
+  background: var(--surface);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+  transition: border-color var(--dur-base) var(--ease-standard), background var(--dur-base) var(--ease-standard);
+}
+
+.quote-panel:hover .quote-fields li {
+  border-color: var(--navy-500);
+  background: #ffffff;
+}
+
+.quote-fields li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 14px;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  width: 17px;
+  height: 17px;
+  background: var(--navy-600);
+}
+
+.quote-fields li:nth-child(1)::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>') center / contain no-repeat;
+}
+
+.quote-fields li:nth-child(2)::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="m6 16 6-12 6 12"/><path d="M8.5 11h7"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="m6 16 6-12 6 12"/><path d="M8.5 11h7"/></svg>') center / contain no-repeat;
+}
+
+.quote-fields li:nth-child(3)::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>') center / contain no-repeat;
+}
+
+.quote-fields li:nth-child(4)::before {
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>') center / contain no-repeat;
+}
+
+@media (max-width: 560px) {
+  .quote-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- 6. Why-section route spine ------------------------------------------------
+   The three promise cards sit along a vertical route: dashed casing, a drawn
+   navy→red progress line (scrubbed by GSAP when available, complete
+   otherwise), and one node per card that lights as the card reveals. Desktop
+   only — on stacked layouts the cards carry themselves. */
+
+@media (min-width: 981px) {
+  .why-list {
+    position: relative;
+    padding-inline-start: 34px;
+  }
+
+  .why-list::before {
+    content: "";
+    position: absolute;
+    inset-block: 26px;
+    inset-inline-start: 10px;
+    width: 2px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(180deg, var(--line-strong) 0 4px, transparent 4px 9px);
+  }
+
+  .why-list::after {
+    content: "";
+    position: absolute;
+    inset-block: 26px;
+    inset-inline-start: 10px;
+    width: 2px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--navy-500), var(--red));
+    transform: scaleY(var(--why-p, 1));
+    transform-origin: top center;
+  }
+
+  .why-list.gsap-spine::after {
+    transform: scaleY(var(--why-p, 0));
+  }
+
+  .why-list article::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: -29px;
+    top: 30px;
+    box-sizing: border-box;
+    width: 12px;
+    height: 12px;
+    border: 2.5px solid var(--line-strong);
+    border-radius: 50%;
+    background: #ffffff;
+    transition:
+      border-color 320ms var(--ease-standard),
+      background 320ms var(--ease-standard),
+      box-shadow 320ms var(--ease-standard);
+  }
+
+  .why-list article.is-visible::before,
+  .why-list article:hover::before {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(211, 35, 46, 0.12);
+  }
+
+  .why-list article:hover::before {
+    background: var(--red);
+  }
+}
+
+/* ==========================================================================
+   Ride X composition pass (Claude Code)
+   Creative-director layer: denser, authored sections in place of floating
+   cards on blank ground. Adds the Jeddah route network band, the journey ops
+   panel, the services dispatch board, the trust rail, and the FAQ/why column
+   fillers. SUV leads the fleet everywhere. Same palette, same type.
+   ========================================================================== */
+
+/* --- Jeddah route network -----------------------------------------------------
+   The service-area statement grows into the site's signature map: JED airport,
+   hotels, homes, and business districts joined by drawn routes; planned trips
+   continue beyond Jeddah as a dashed leg. Geography (sea west) does not flip
+   in RTL — only the text around it does. */
+
+.route-network {
+  position: relative;
+  width: 100%;
+  padding-block: clamp(64px, 8vw, 104px) clamp(56px, 7vw, 88px);
+  padding-inline: max(var(--gutter), calc((100% - var(--max)) / 2));
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 150% at 88% -20%, rgba(42, 82, 155, 0.42), transparent 58%),
+    linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 100%);
+}
+
+.route-network::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--red);
+}
+
+.route-network .eyebrow {
+  color: var(--on-dark-soft);
+}
+
+.rn-head {
+  max-width: 780px;
+}
+
+.rn-head h2 {
+  color: var(--on-dark);
+}
+
+.rn-head p {
+  max-width: 660px;
+  margin: 18px 0 0;
+  color: var(--on-dark-soft);
+  line-height: 1.75;
+}
+
+.rn-stage {
+  margin-top: clamp(28px, 4vw, 46px);
+}
+
+.rn-map {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.rn-waves path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.11);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.rn-waves path + path {
+  stroke: rgba(255, 255, 255, 0.06);
+}
+
+.rn-grid line {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 1;
+}
+
+.rn-casing {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 6.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rn-route {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.rn-route--one {
+  stroke: url(#rnRoute1);
+  transition: stroke-dashoffset 1000ms var(--ease-premium-out) 250ms;
+}
+
+.rn-route--two {
+  stroke: url(#rnRoute2);
+  transition: stroke-dashoffset 950ms var(--ease-premium-out) 700ms;
+}
+
+.rn-route--three {
+  stroke: rgba(255, 255, 255, 0.42);
+  transition: stroke-dashoffset 900ms var(--ease-premium-out) 1150ms;
+}
+
+/* Planned trips beyond Jeddah: dashed and quieter — requested, not scheduled. */
+.rn-route--beyond {
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-dasharray: 0.05 0.045;
+  transition: opacity 600ms var(--ease-standard) 1650ms;
+}
+
+.rn-way {
+  fill: rgba(255, 255, 255, 0.62);
+}
+
+.rn-way--one {
+  transition: opacity 340ms var(--ease-standard) 850ms;
+}
+
+.rn-way--two {
+  transition: opacity 340ms var(--ease-standard) 1250ms;
+}
+
+.rn-way--three {
+  transition: opacity 340ms var(--ease-standard) 1650ms;
+}
+
+.rn-node {
+  transition: opacity 420ms var(--ease-standard);
+}
+
+.rn-node--air {
+  transition-delay: 100ms;
+}
+
+.rn-node--hotel {
+  transition-delay: 1150ms;
+}
+
+.rn-node--home {
+  transition-delay: 1500ms;
+}
+
+.rn-node--biz {
+  transition-delay: 1900ms;
+}
+
+.rn-node--beyond {
+  transition-delay: 2100ms;
+}
+
+/* Armed-but-unrevealed: routes undrawn, nodes dark. Resting state = complete. */
+.route-network.reveal:not(.is-visible) .rn-route {
+  stroke-dashoffset: 1;
+  transition: none;
+}
+
+.route-network.reveal:not(.is-visible) .rn-route--beyond {
+  stroke-dashoffset: 0;
+  opacity: 0;
+}
+
+.route-network.reveal:not(.is-visible) .rn-node,
+.route-network.reveal:not(.is-visible) .rn-way {
+  opacity: 0;
+  transition: none;
+}
+
+.rn-air-pad {
+  fill: rgba(255, 255, 255, 0.12);
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 1.6;
+}
+
+.rn-air-plane {
+  fill: #ffffff;
+}
+
+.rn-air-pulse {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1.25;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hroPulse 3.4s ease-out 1.8s infinite;
+}
+
+.rn-ring {
+  fill: rgba(6, 13, 29, 0.55);
+  stroke: rgba(255, 255, 255, 0.82);
+  stroke-width: 2;
+}
+
+.rn-core {
+  fill: #ffffff;
+}
+
+.rn-ring--hot {
+  stroke: rgba(211, 35, 46, 0.95);
+}
+
+.rn-core--hot {
+  fill: var(--red);
+}
+
+.rn-stop-pulse {
+  fill: none;
+  stroke: rgba(211, 35, 46, 0.5);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hroPulse 3s ease-out 2.6s infinite;
+}
+
+.rn-ring--open {
+  fill: transparent;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 2;
+  stroke-dasharray: 4 5;
+}
+
+.rn-label {
+  fill: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body[dir="rtl"] .rn-label {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.rn-label--dim {
+  fill: rgba(255, 255, 255, 0.48);
+  font-size: 14.5px;
+}
+
+/* Marker gliding the flagship JED→hotel route. */
+.rn-marker {
+  opacity: 0;
+}
+
+@supports (offset-path: path("M0 0 L10 10")) {
+  .rn-marker {
+    offset-path: path("M190 118 L190 240 Q190 256 206 256 L314 256 Q330 256 330 272 L330 303");
+    offset-rotate: 0deg;
+    animation: hroGlide 7.5s var(--ease-standard) 2.8s infinite;
+  }
+}
+
+.rn-marker-halo {
+  fill: rgba(255, 255, 255, 0.16);
+}
+
+.rn-marker-dot {
+  fill: #ffffff;
+}
+
+.rn-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: clamp(24px, 3.5vw, 38px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rn-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 32px;
+  padding: 4px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--on-dark-soft);
+  background: rgba(255, 255, 255, 0.07);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.rn-legend li::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 1.5px;
+  background: var(--red);
+  rotate: 45deg;
+}
+
+@media (max-width: 759px) {
+  /* Compact network: swap the wide map for the phone-native vertical
+     metro line; the 2-up legend keeps the truthful service facts below. */
+  .rn-map:not(.rn-map--mobile) {
+    display: none;
+  }
+
+  .rn-map--mobile {
+    display: block;
+    width: min(100%, 330px);
+  }
+
+  .rn-stage {
+    margin-top: 26px;
+  }
+
+  .rn-legend {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 30px;
+    padding-top: 24px;
+  }
+
+  .rn-legend::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    inset-inline: 2px;
+    height: 2px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.32) 0 5px, transparent 5px 10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rn-air-pulse,
+  .rn-stop-pulse,
+  .rn-marker {
+    display: none;
+  }
+}
+
+/* --- Journey ops panel (home How-It-Works) ------------------------------------
+   The four steps stop floating as separate white cards and ride one navy
+   module: hairline column dividers, ring numerals that light red as the
+   scrubbed route line reaches them, and an assurance footer. Scoped to
+   .journey-module so the About page's timeline layouts stay untouched. */
+
+.journey-module .timeline-list {
+  --jp-pad: clamp(26px, 3.4vw, 44px);
+  padding: var(--jp-pad);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 14% 6%, rgba(42, 82, 155, 0.2), transparent 34%),
+    linear-gradient(145deg, rgba(10, 23, 48, 0.99), rgba(16, 35, 71, 0.97));
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.journey-module .timeline-list::before {
+  top: calc(var(--jp-pad) + 22px);
+  inset-inline: calc(var(--jp-pad) + 22px);
+  background: linear-gradient(90deg, var(--red), rgba(255, 255, 255, 0.38));
+}
+
+.journey-module .timeline-list article {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.journey-module .timeline-list article:hover {
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+@media (min-width: 1021px) {
+  .journey-module .timeline-list article + article {
+    border-inline-start: 1px solid rgba(255, 255, 255, 0.09);
+    padding-inline-start: 22px;
+  }
+}
+
+.journey-module .timeline-list h3 {
+  color: var(--on-dark);
+}
+
+.journey-module .timeline-list p {
+  color: var(--on-dark-dim);
+}
+
+/* Ring numerals: quiet until the drawn line reaches them (existing
+   .is-reached rule paints them red — it must keep winning, so this stays at
+   lower specificity). */
+.journey-module .card-index {
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+.journey-module .journey-note {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.journey-module .journey-note p {
+  margin: 0;
+  color: var(--on-dark-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  max-width: 72ch;
+}
+
+.journey-module .journey-note::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  background: var(--red);
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>') center / contain no-repeat;
+}
+
+@media (max-width: 640px) {
+  .journey-module .timeline-list::before {
+    /* inset-block resolves to top/bottom, overriding the base 640px rule's
+       top: 0 / bottom: 0 — the line stops above the assurance footer. */
+    inset-block: calc(var(--jp-pad) + 8px) calc(var(--jp-pad) + 74px);
+    inset-inline-start: calc(var(--jp-pad) + 22px);
+    inset-inline-end: auto;
+  }
+
+  body[dir="rtl"] .journey-module .timeline-list::before {
+    inset-inline-start: auto;
+    inset-inline-end: calc(var(--jp-pad) + 22px);
+  }
+}
+
+/* --- Services hero dispatch board ---------------------------------------------
+   SUV takes the lead lane (full presence + red sill + destination pulse);
+   the sedan runs the mid lane. Grid blocks and the airport pad make the lanes
+   read as operated routes. Later-in-file overrides of the base lane styles. */
+
+.route-lane--suv {
+  opacity: 1;
+}
+
+.route-lane--sedan {
+  opacity: 0.78;
+}
+
+.fleet-body--suv {
+  fill: #264a7d;
+  stroke: rgba(255, 255, 255, 0.34);
+  stroke-width: 1.5;
+}
+
+.fleet-body--sedan {
+  fill: #1b3057;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1.3;
+}
+
+.route-car--suv {
+  --drive-dur: 18s;
+  --drive-delay: -15s;
+}
+
+.route-car--sedan {
+  --drive-dur: 21s;
+  --drive-delay: -10s;
+}
+
+.hf-grid line {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 1;
+}
+
+.hf-air-pad {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1.4;
+}
+
+.hf-air-plane {
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+/* Floating status chips over the board — glass, truthful, i18n-swappable. */
+.hf-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 5px 13px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  color: var(--on-dark-soft);
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.04) 55%),
+    rgba(6, 13, 29, 0.6);
+  box-shadow:
+    0 14px 30px rgba(2, 8, 20, 0.3),
+    var(--glass-highlight);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  animation: riseIn 700ms var(--ease-out) backwards;
+}
+
+.hf-chip--route {
+  top: 9%;
+  inset-inline-end: 0;
+  animation-delay: 480ms;
+}
+
+.hf-chip--suv {
+  bottom: 3%;
+  inset-inline-start: 2%;
+  animation-delay: 660ms;
+}
+
+.hf-chip-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(211, 35, 46, 0.2);
+  animation: htcPulse 2.4s ease-in-out infinite;
+}
+
+@media (max-width: 620px) {
+  .hf-chip {
+    font-size: 0.7rem;
+  }
+
+  .hf-chip--suv {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hf-chip-dot {
+    animation: none;
+  }
+}
+
+/* --- Trust rail -----------------------------------------------------------------
+   Contact / Services "why" facts become one connected operations panel: a
+   single surface with a navy→red top route and hairline column dividers,
+   replacing three floating cards. */
+
+.trust-grid .trust-rail {
+  grid-column: 1 / -1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: clamp(24px, 3vw, 36px) clamp(8px, 1vw, 14px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  box-shadow: var(--card-highlight), var(--shadow-sm), var(--ambient-shadow);
+  overflow: hidden;
+}
+
+.trust-rail::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy-500), var(--red));
+}
+
+body[dir="rtl"] .trust-rail::before {
+  background: linear-gradient(-90deg, var(--navy-500), var(--red));
+}
+
+.trust-rail article {
+  min-height: auto;
+  padding: 8px clamp(18px, 2.4vw, 30px);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.trust-rail article:hover {
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.trust-rail article + article {
+  border-inline-start: 1px solid var(--line);
+}
+
+@media (max-width: 1020px) {
+  .trust-grid .trust-rail {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+    padding-inline: clamp(18px, 3vw, 28px);
+  }
+
+  .trust-rail article + article {
+    border-inline-start: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+}
+
+/* --- FAQ assist ------------------------------------------------------------------
+   The sticky FAQ heading column carries a real next step instead of dead
+   space: a compact navy panel routing quick questions to WhatsApp. */
+
+.faq-assist {
+  position: relative;
+  margin-top: 30px;
+  padding: 22px 22px 24px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(130% 150% at 88% -20%, rgba(42, 82, 155, 0.5), transparent 60%),
+    var(--navy-900);
+  box-shadow: var(--shadow-md);
+}
+
+.faq-assist::before {
+  content: "";
+  position: absolute;
+  inset-block: 18px;
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--red);
+}
+
+.faq-assist-title {
+  margin: 0;
+  color: var(--on-dark);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.faq-assist-copy {
+  margin: 10px 0 18px;
+  color: var(--on-dark-soft);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.faq-assist .button-primary {
+  width: fit-content;
+  min-height: 44px;
+  background: #ffffff;
+  color: var(--navy-900);
+  font-size: 0.9rem;
+}
+
+.faq-assist .button-primary:hover {
+  background: var(--navy-50);
+  color: var(--navy-900);
+}
+
+/* --- Why-section flow strip -------------------------------------------------------
+   A compact route of the three moments that matter, closing the copy column:
+   first message → fixed quote → pickup confirmed. */
+
+.why-flow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 26px 0 0;
+  color: var(--navy-700);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.why-flow > span:not([aria-hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.why-flow > span:not([aria-hidden])::before {
+  content: "";
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 2.5px solid var(--navy-600);
+  border-radius: 50%;
+}
+
+.why-flow > span:last-child::before {
+  border-color: var(--red);
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(211, 35, 46, 0.13);
+}
+
+.why-flow > span[aria-hidden="true"] {
+  flex: 0 0 26px;
+  height: 2px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(90deg, var(--line-strong) 0 4px, transparent 4px 8px);
+}
+
+/* ==========================================================================
+   Mobile experience layer (Claude Code)
+   Touch-first finish: the vertical network mini-map, swipe affordances, the
+   sticky quote bar, and tap-target corrections. Desktop is unaffected.
+   ========================================================================== */
+
+/* The vertical mini-map only exists under 760px (swap lives in the
+   route-network media block above — which this file-later rule must not
+   override, hence the min-width scope). Its gradients are its own: the
+   desktop defs use userSpaceOnUse coordinates that don't apply here. */
+@media (min-width: 760px) {
+  .rn-map--mobile {
+    display: none;
+  }
+}
+
+.rn-map--mobile .rn-route--one {
+  stroke: url(#rnmRoute1);
+}
+
+.rn-map--mobile .rn-route--two {
+  stroke: url(#rnmRoute2);
+}
+
+.rn-map--mobile .rn-label {
+  font-size: 15.5px;
+}
+
+/* Mobile labels anchor at the node's right. In RTL, SVG text advances leftward
+   from its anchor, so “start” would pile the label onto the node — anchoring
+   the END at x places Arabic text to the right of the spine, same as English. */
+body[dir="rtl"] .rn-map--mobile .rn-label {
+  text-anchor: end;
+}
+
+/* Marker rides the JED→Hotels leg of the vertical spine. */
+@supports (offset-path: path("M0 0 L10 10")) {
+  .rnm-marker {
+    offset-path: path("M64 74 L64 184");
+    offset-rotate: 0deg;
+    animation: hroGlide 6s var(--ease-standard) 2.6s infinite;
+  }
+}
+
+/* --- Swipe affordance ---------------------------------------------------------
+   pan-y keeps vertical scrolling native while horizontal drags stay with our
+   pointer handlers (no pointercancel mid-gesture). */
+.vehicle-gallery,
+.deck-stage {
+  touch-action: pan-y;
+}
+
+/* --- Mobile quote bar -----------------------------------------------------------
+   Slim fixed action bar: primary quote CTA plus a round WhatsApp shortcut.
+   script.js shows it after the hero on compact screens and hides it near the
+   footer; while visible, the floating WhatsApp bubble steps aside. */
+
+.mobile-quote-bar {
+  position: fixed;
+  z-index: 45;
+  inset-inline: 0;
+  bottom: 0;
+  display: none;
+  gap: 10px;
+  align-items: center;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 55%),
+    rgba(6, 13, 29, 0.82);
+  box-shadow: 0 -14px 40px rgba(4, 10, 24, 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transform: translateY(110%);
+  transition: transform 380ms var(--ease-premium-out);
+}
+
+@media (max-width: 759px) {
+  .mobile-quote-bar {
+    display: flex;
+  }
+}
+
+.mobile-quote-bar.is-visible {
+  transform: translateY(0);
+}
+
+.mqb-quote {
+  flex: 1 1 auto;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.mqb-wa {
+  position: relative;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-out);
+}
+
+.mqb-wa:active {
+  transform: scale(0.94);
+}
+
+.mqb-wa::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>') center / contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>') center / contain no-repeat;
+}
+
+/* While the bar is up: clear space above it and retire the floating bubble
+   so the two WhatsApp entry points never stack. */
+body.has-quote-bar main {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+
+body.has-quote-bar .whatsapp-widget,
+body.has-quote-bar .whatsapp-float {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 220ms var(--ease-standard), visibility 0s linear 220ms;
+}
+
+/* --- Mobile tap targets -----------------------------------------------------------
+   Footer link rows measured 25px tall on phones — pad each row to a
+   comfortable ≥44px hit area without changing the visual rhythm. */
+@media (max-width: 900px) {
+  .footer-col {
+    gap: 2px;
+  }
+
+  .footer-col a {
+    padding-block: 10px;
+  }
+
+  .footer-legal {
+    gap: 8px 18px;
+  }
+
+  .footer-legal a {
+    display: inline-block;
+    padding-block: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-quote-bar {
+    transition: none;
+  }
+
+  .rnm-marker {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Story-arc beat 5 — service icons draw themselves in
+   Each service card's line-icon strokes on as the card reveals, reusing the
+   route-identity draw language (pathLength="1" + stroke-dashoffset). Armed
+   only in the JS reveal's pre-visible state, so no-JS / reduced-motion always
+   see finished icons (the same undrawn-state rule the route system follows).
+   ========================================================================== */
+.service-card.reveal:not(.is-visible) .service-icon svg > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.service-card.reveal.is-visible .service-icon svg > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 720ms var(--ease-out) calc(var(--reveal-delay, 0ms) + 180ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card .service-icon svg > * {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Story-arc beat 4 — how-it-works becomes a vertical numbered spine (desktop)
+   Promotes the proven ≤640 mobile vertical treatment up to desktop for the
+   home journey panel: the four steps stack, each numeral sits on a drawn
+   spine with its copy to the side, and the numerals fill in sequence as the
+   segments reach them. Scoped to .journey-module so About's timeline layouts
+   are untouched; the mobile spine (≤640, earlier in file) is left as-is.
+   ========================================================================== */
+@media (min-width: 641px) {
+  .journey-module .timeline-list {
+    --jgap: clamp(30px, 3.6vw, 52px);
+    grid-template-columns: 1fr;
+    gap: var(--jgap);
+  }
+
+  /* A vertical spine has no use for the old horizontal top-line. */
+  .journey-module .timeline-list::before {
+    content: none;
+  }
+
+  .journey-module .timeline-list article {
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: clamp(20px, 2.4vw, 34px);
+    align-items: start;
+  }
+
+  /* Drop the horizontal-layout divider between cards. */
+  .journey-module .timeline-list article + article {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+
+  .journey-module .timeline-list .card-index {
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    width: 56px;
+    height: 56px;
+    font-size: 1.35rem;
+  }
+
+  .journey-module .timeline-list h3 {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 6px 0 0;
+  }
+
+  .journey-module .timeline-list p {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 8px 0 0;
+    max-width: 52ch;
+  }
+
+  /* The spine segments: each step (bar the last) drops a connector to the
+     next numeral. Height = own height + the row gap, so it always lands on
+     the following numeral regardless of copy length — no total-height math,
+     no misalignment. inset-inline-start keeps it centred on the numeral in
+     both LTR and RTL. */
+  .journey-module .timeline-list article:not(:last-of-type)::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset-inline-start: 27px;
+    top: 28px;
+    width: 2px;
+    height: calc(100% + var(--jgap));
+    background: linear-gradient(180deg, var(--red), rgba(255, 255, 255, 0.26));
+    transform-origin: top center;
+  }
+
+  /* Undrawn-state pattern: the spine defaults to fully drawn, so no-JS and
+     reduced-motion visitors always see a finished journey. It is armed
+     (undrawn) only while GSAP is scrubbing (.gsap-scrub), then each segment
+     draws as its step is reached. */
+  .journey-module .timeline-list.gsap-scrub article:not(:last-of-type)::before {
+    transform: scaleY(0);
+    transition: transform 520ms var(--ease-out);
+  }
+
+  .journey-module .timeline-list.gsap-scrub article.is-reached:not(:last-of-type)::before {
+    transform: scaleY(1);
   }
 }
