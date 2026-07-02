@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 import { NAV_ITEMS } from "@/config/nav";
 import { Logo } from "@/components/Logo";
 import { buttonStyles } from "@/components/ui/Button";
@@ -71,15 +71,19 @@ export function Sidebar({
         <Link
           href="/settings"
           onClick={onNavigate}
-          className="flex items-center gap-3 rounded-[4px] border border-hairline p-3 transition hover:border-graphite hover:bg-canvas/70"
+          className="group flex items-center gap-3 rounded-[4px] border border-hairline p-3 transition hover:border-graphite hover:bg-canvas/70"
         >
           <Avatar name={company.name || "Your Company"} size="sm" />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-bone">
               {company.name || "Your company"}
             </p>
             <p className="truncate text-xs text-fog">{businessType.label}</p>
           </div>
+          <Settings
+            aria-hidden
+            className="h-4 w-4 shrink-0 text-fog transition group-hover:text-cloud"
+          />
         </Link>
       </div>
     </aside>

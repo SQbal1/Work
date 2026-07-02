@@ -94,6 +94,47 @@ their own try/catch. The exceptions are `addInvoice`/`updateInvoice`/`duplicateI
 rethrow because their callers (`InvoiceBuilder`, the invoices list) need to know success/failure
 before navigating.
 
+## ZATCA Phase 2 preview (structural, not certified)
+
+`src/lib/zatca/` builds a UBL 2.1 invoice XML, chains invoice hashes
+(ICV/PIH), and signs the result with an ECDSA (secp256k1) key — but that key
+is **generated locally per workspace, not a real ZATCA-issued CSID**. This is
+a structural preview of the Phase 2 pipeline, not a live ZATCA connection;
+`/compliance` and the Settings → "VAT & ZATCA" card both say so explicitly.
+No compliance-check/reporting/clearance API calls are made — that requires
+real onboarding credentials (OTP-based, through ZATCA's Fatoora portal) that
+this project doesn't have.
+
+- `zatca_keys` (migration `0012`) holds one self-signed keypair per
+  workspace, generated lazily in Node the first time an invoice is signed
+  (Postgres can't do secp256k1 keygen). `src/lib/actions/zatcaSigning.ts`'s
+  `getOrCreateZatcaKeyRow()` is race-safe via `upsert(..., { ignoreDuplicates:
+  true })` + re-select, not a lock.
+- Two `security definer` functions split the atomic part from the
+  can't-be-SQL part, the same way `create_invoice` splits numbering from line
+  items: `zatca_reserve_sequence()` row-locks `zatca_keys` and atomically
+  claims the next ICV + previous-invoice-hash (so concurrent signing calls in
+  one workspace can never collide), then Node builds the XML/hash/signature
+  with that reserved data, and `zatca_finalize_signature()` writes it back
+  plus an immutable `'signed'` `invoice_events` row carrying the full XML
+  (the XML lives only in the event payload, not duplicated on `invoices` —
+  downloading it always reads back exactly what was hashed).
+- Once `zatca_signed_at` is set, `updateInvoice`/`deleteInvoice`
+  (`src/lib/actions/invoices.ts`) reject further changes to financial fields
+  or deletion — a "signed" invoice that can still silently change afterward
+  would be worse than not signing it.
+- The signing flow is **Supabase-only** and intentionally bypasses the
+  `DataAdapter` abstraction — `signInvoiceZatca()` is called directly from
+  the invoice detail page (gated on `useStore().usingSupabase`), and its
+  result is applied to local state via `patchInvoiceLocal()`, a
+  local-state-only setter on `StoreValue` that skips the adapter entirely.
+  The local demo has no real database to chain hashes against, so this
+  doesn't degrade there — it's just hidden.
+- Known gap, stated plainly rather than silently: the hash is computed over
+  the generated XML directly, not ZATCA's official canonicalization
+  algorithm (which strips the `UBLExtensions` signature block first) — not
+  yet byte-conformant with a real ZATCA SDK.
+
 ## Local dev setup
 
 ```bash
@@ -110,10 +151,11 @@ rate limit.
 
 ## What's deliberately NOT built yet
 
-- **Real ZATCA integration** — no XML generation, QR codes, digital signing, or submission to
-  ZATCA's systems. `invoice_events` exists as the audit-log foundation for this later. The
-  Settings → "VAT & ZATCA" card is honest about this ("ZATCA-ready workflow foundation," not a
-  compliance claim).
+- **Real ZATCA integration** — UBL XML generation, invoice hash chaining, and signing now exist as
+  a structural preview (see "ZATCA Phase 2 preview" above), but the signing key is a locally
+  generated development key, not a ZATCA-issued CSID, and there is still no compliance-check,
+  reporting, or clearance API call to ZATCA's actual systems. The Settings → "VAT & ZATCA" card and
+  `/compliance` are honest about this ("ZATCA-ready workflow foundation," not a compliance claim).
 - **Payments / Stripe.**
 - **Real email/WhatsApp delivery** — `placeholderSend()` in the invoice detail page still just
   shows a toast.

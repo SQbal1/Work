@@ -67,6 +67,9 @@ interface StoreValue {
   getInvoice: (id: string | null) => Invoice | undefined;
   markInvoicePaid: (id: string) => Promise<void>;
   duplicateInvoice: (id: string) => Promise<Invoice | undefined>;
+  /** Local-state-only patch, no adapter call — for Supabase-only flows (e.g. ZATCA signing)
+   *  that write via their own server action and just need the store to reflect the result. */
+  patchInvoiceLocal: (id: string, partial: Partial<Invoice>) => void;
 
   // Company & settings
   updateCompany: (data: Partial<Company>) => Promise<void>;
@@ -249,6 +252,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
     },
     getInvoice(id) {
       return id ? db.invoices.find((inv) => inv.id === id) : undefined;
+    },
+    patchInvoiceLocal(id, partial) {
+      setDb((prev) => ({
+        ...prev,
+        invoices: prev.invoices.map((inv) => (inv.id === id ? { ...inv, ...partial } : inv)),
+      }));
     },
     async markInvoicePaid(id) {
       try {

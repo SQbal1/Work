@@ -308,7 +308,8 @@ body {
   .log-cursor,
   .signal-pulse,
   .cue-ring,
-  .marquee-track {
+  .marquee-track,
+  .animate-shimmer {
     animation: none !important;
     transform: none !important;
   }

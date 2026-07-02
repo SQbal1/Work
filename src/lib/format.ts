@@ -1,13 +1,17 @@
 import { brand } from "@/config/brand";
 
-/** Format money as e.g. "1,250.00 SAR" (amount first reads best in an English UI). */
-export function formatCurrency(amount: number, currency: string = brand.currency): string {
+/** Just the numeric part, e.g. "1,250.00" — shared by formatCurrency and <Money>. */
+export function formatAmount(amount: number): string {
   const safe = Number.isFinite(amount) ? amount : 0;
-  const formatted = new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(safe);
-  return `${formatted} ${currency}`;
+}
+
+/** Format money as e.g. "1,250.00 SAR" (amount first reads best in an English UI). */
+export function formatCurrency(amount: number, currency: string = brand.currency): string {
+  return `${formatAmount(amount)} ${currency}`;
 }
 
 /** Compact money for charts/tight spaces, e.g. "12.5k SAR". */

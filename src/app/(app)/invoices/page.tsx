@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -17,10 +17,12 @@ import { Button, buttonStyles } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { FadeIn } from "@/components/ui/Motion";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/Table";
 import { StatusBadge } from "@/components/invoices/StatusBadge";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
+import { useDebouncedValue } from "@/lib/useDebouncedValue";
 import { getEffectiveStatus, STATUS_FILTERS } from "@/lib/status";
 import { invoiceTotal } from "@/lib/metrics";
 import { formatCurrency, formatDate } from "@/lib/format";
@@ -35,7 +37,17 @@ export default function InvoicesPage() {
 
   const [filter, setFilter] = useState<FilterId>("all");
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 200);
   const [deleting, setDeleting] = useState<Invoice | null>(null);
+
+  // Honour a "?status=overdue" deep-link (e.g. from the dashboard Overdue card).
+  useEffect(() => {
+    const status = new URLSearchParams(window.location.search).get("status");
+    if (status && ["draft", "sent", "paid", "overdue"].includes(status)) {
+      setFilter(status as FilterId);
+      history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   const counts = useMemo(() => {
     const c: Record<FilterId, number> = { all: invoices.length, draft: 0, sent: 0, paid: 0, overdue: 0 };
@@ -44,7 +56,7 @@ export default function InvoicesPage() {
   }, [invoices]);
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    const q = debouncedSearch.trim().toLowerCase();
     return [...invoices]
       .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
       .filter((inv) => filter === "all" || getEffectiveStatus(inv) === filter)
@@ -55,7 +67,7 @@ export default function InvoicesPage() {
           .filter(Boolean)
           .some((f) => (f as string).toLowerCase().includes(q));
       });
-  }, [invoices, filter, search, getCustomer]);
+  }, [invoices, filter, debouncedSearch, getCustomer]);
 
   return (
     <div>
@@ -81,6 +93,7 @@ export default function InvoicesPage() {
           }
         />
       ) : (
+        <FadeIn>
         <Card className="overflow-hidden">
           {/* Filters + search */}
           <div className="flex flex-col gap-3 border-b border-hairline p-3 sm:flex-row sm:items-center sm:justify-between">
@@ -115,7 +128,23 @@ export default function InvoicesPage() {
 
           {filtered.length === 0 ? (
             <div className="p-6">
-              <EmptyState title="No invoices match" description="Try a different filter or search term." />
+              <EmptyState
+                title="No invoices match"
+                description="Try a different filter or search term."
+                action={
+                  search || filter !== "all" ? (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setSearch("");
+                        setFilter("all");
+                      }}
+                    >
+                      Clear filters
+                    </Button>
+                  ) : undefined
+                }
+              />
             </div>
           ) : (
             <Table>
@@ -194,6 +223,7 @@ export default function InvoicesPage() {
             </Table>
           )}
         </Card>
+        </FadeIn>
       )}
 
       <Modal

@@ -1,15 +1,33 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { Loader2 } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { CommandPalette } from "./CommandPalette";
+import { DashboardSkeleton, ListSkeleton } from "@/components/ui/Skeleton";
 import { useStore } from "@/lib/store";
 
 /** The authenticated app frame: fixed sidebar (desktop), drawer (mobile), topbar. */
 export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { ready } = useStore();
+  const pathname = usePathname() ?? "";
+  const isDashboard = pathname === "/dashboard" || pathname === "/";
+
+  // Lock body scroll while the mobile drawer is open (matches Modal behaviour).
+  useEffect(() => {
+    if (!mobileOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  // Close the drawer when the route changes (belt-and-braces with onNavigate).
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-canvas text-bone">
@@ -34,15 +52,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="lg:pl-64">
         <Topbar onOpenMenu={() => setMobileOpen(true)} />
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          {ready ? (
-            children
-          ) : (
-            <div className="flex h-[60vh] items-center justify-center text-fog">
-              <Loader2 className="h-6 w-6 animate-spin" />
-            </div>
-          )}
+          {ready ? children : isDashboard ? <DashboardSkeleton /> : <ListSkeleton />}
         </main>
       </div>
+
+      <CommandPalette />
     </div>
   );
 }

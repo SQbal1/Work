@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Cookie, X } from "lucide-react";
 
 /**
  * Transparency notice for our cookieless, memory-only analytics (see
@@ -57,10 +57,7 @@ export function AnalyticsNotice() {
           className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-2xl rounded-[4px] border border-hairline bg-ink/95 p-4 shadow-[0_18px_40px_-20px_rgba(0,0,0,0.8)] backdrop-blur-[6px] sm:inset-x-auto sm:right-4 sm:left-auto sm:bottom-4"
         >
           <div className="flex items-start gap-3">
-            <span
-              aria-hidden
-              className="mt-1 h-2 w-2 shrink-0 rounded-full bg-signal signal-pulse"
-            />
+            <Cookie aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-signal" />
             <div className="min-w-0 flex-1">
               <p className="text-sm leading-relaxed text-fog">
                 We use privacy-first, <span className="text-cloud">cookieless</span> analytics to

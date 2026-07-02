@@ -35,10 +35,16 @@ export default function CompliancePage() {
         <LegalList
           items={[
             "Integrate directly with ZATCA or submit invoices to any tax authority.",
-            "Generate cryptographically signed or cleared tax invoices.",
+            "Generate a ZATCA-certified cryptographic stamp, or clear or report invoices with ZATCA.",
             "Replace advice from a qualified accountant or tax advisor.",
           ]}
         />
+        <p>
+          Invoices can optionally generate a UBL XML file with a hash chain and digital signature —
+          but that signature comes from a self-signed development key generated locally, not a
+          ZATCA-issued Cryptographic Stamp Identifier (CSID). It demonstrates the structure of the
+          workflow, not a compliance guarantee.
+        </p>
         <p>
           We describe this as a <strong className="text-bone">VAT-ready workflow foundation</strong>{" "}
           rather than certified compliance, on purpose.

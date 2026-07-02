@@ -94,5 +94,11 @@ export function rowToInvoice(
     paidDate: row.paid_date,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    zatcaIcv: row.zatca_icv,
+    zatcaPreviousHash: row.zatca_previous_hash,
+    zatcaInvoiceHash: row.zatca_invoice_hash,
+    zatcaSignature: row.zatca_signature,
+    zatcaPublicKey: row.zatca_public_key,
+    zatcaSignedAt: row.zatca_signed_at,
   };
 }

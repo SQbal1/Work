@@ -9,19 +9,26 @@ import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { FadeIn } from "@/components/ui/Motion";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/Table";
 import { ProductForm } from "@/components/products/ProductForm";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
+import { useDebouncedValue } from "@/lib/useDebouncedValue";
 import { formatCurrency } from "@/lib/format";
 import { vatCategoryLabel } from "@/data/constants";
+import { cn } from "@/lib/cn";
 import type { Product } from "@/types";
+
+type StatusFilter = "all" | "active" | "inactive";
 
 export default function ProductsPage() {
   const { products, addProduct, updateProduct, deleteProduct } = useStore();
   const toast = useToast();
 
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 200);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [addOpen, setAddOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState<Product | null>(null);
@@ -33,13 +40,23 @@ export default function ProductsPage() {
     }
   }, []);
 
+  const counts = useMemo(
+    () => ({
+      all: products.length,
+      active: products.filter((p) => p.active).length,
+      inactive: products.filter((p) => !p.active).length,
+    }),
+    [products],
+  );
+
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return products;
-    return products.filter((p) =>
-      [p.name, p.description].some((f) => f.toLowerCase().includes(q)),
-    );
-  }, [products, search]);
+    const q = debouncedSearch.trim().toLowerCase();
+    return products
+      .filter((p) =>
+        statusFilter === "all" ? true : statusFilter === "active" ? p.active : !p.active,
+      )
+      .filter((p) => (!q ? true : [p.name, p.description].some((f) => f.toLowerCase().includes(q))));
+  }, [products, debouncedSearch, statusFilter]);
 
   return (
     <div>
@@ -65,21 +82,62 @@ export default function ProductsPage() {
           }
         />
       ) : (
+        <FadeIn>
         <Card className="overflow-hidden">
-          <div className="border-b border-hairline p-3">
+          <div className="flex flex-col gap-3 border-b border-hairline p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-1">
+              {(["all", "active", "inactive"] as StatusFilter[]).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setStatusFilter(f)}
+                  className={cn(
+                    "rounded-[4px] px-3 py-1.5 text-sm font-medium capitalize transition",
+                    statusFilter === f
+                      ? "bg-signal text-ink"
+                      : "text-fog hover:bg-white/[0.03] hover:text-cloud",
+                  )}
+                >
+                  {f}
+                  <span
+                    className={cn(
+                      "ml-1.5 font-mono",
+                      statusFilter === f ? "text-ink/70" : "text-fog",
+                    )}
+                  >
+                    {counts[f]}
+                  </span>
+                </button>
+              ))}
+            </div>
             <Input
               aria-label="Search products"
               placeholder="Search products & services…"
               leftIcon={<Search className="h-4 w-4" />}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="max-w-sm"
+              className="sm:max-w-xs"
             />
           </div>
 
           {filtered.length === 0 ? (
             <div className="p-6">
-              <EmptyState title="No matches" description="Try a different search term." />
+              <EmptyState
+                title="No matches"
+                description="Try a different search term or filter."
+                action={
+                  search || statusFilter !== "all" ? (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setSearch("");
+                        setStatusFilter("all");
+                      }}
+                    >
+                      Clear filters
+                    </Button>
+                  ) : undefined
+                }
+              />
             </div>
           ) : (
             <Table>
@@ -148,6 +206,7 @@ export default function ProductsPage() {
             </Table>
           )}
         </Card>
+        </FadeIn>
       )}
 
       {/* Add */}

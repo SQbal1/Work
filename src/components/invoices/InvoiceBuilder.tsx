@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Plus, Trash2, Eye, Save, FileX } from "lucide-react";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { Plus, Trash2, Eye, Pencil, Save, FileX } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button, buttonStyles } from "@/components/ui/Button";
@@ -12,6 +13,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { controlClass } from "@/components/ui/Field";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Money } from "@/components/ui/Money";
 import { InvoiceDocument } from "@/components/invoices/InvoiceDocument";
 import {
   CompletenessChecklist,
@@ -59,34 +61,50 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
     existing ? existing.items.map((i) => ({ ...i })) : [],
   );
   const [discountPercent, setDiscountPercent] = useState<number>(existing?.discountPercent ?? 0);
+  const [discountNote, setDiscountNote] = useState<string | null>(null);
   const [notes, setNotes] = useState(existing?.notes ?? settings.defaultNotes);
+  // Mobile: switch between the editor and the live preview (they stack on desktop).
+  const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
+  // The freshly added line briefly highlights so the user sees what appeared.
+  const [justAddedId, setJustAddedId] = useState<string | null>(null);
 
   const number = existing?.number ?? peekInvoiceNumber();
   const activeProducts = products.filter((p) => p.active);
   const customer = customers.find((c) => c.id === customerId) ?? null;
   const totals = computeTotals(items, discountPercent);
 
+  function flashNewLine(id: string) {
+    setJustAddedId(id);
+    window.setTimeout(() => setJustAddedId((curr) => (curr === id ? null : curr)), 1100);
+  }
+
   function addProductLine(productId: string) {
     const p = products.find((x) => x.id === productId);
     if (!p) return;
+    const id = uid("li_");
     setItems((prev) => [
       ...prev,
       {
-        id: uid("li_"),
+        id,
         productId: p.id,
         name: p.name,
         quantity: 1,
         unitPrice: p.unitPrice,
+        // Catalogue lines take VAT from the product's own category (a
+        // zero-rated/exempt product should default to 0%). Custom lines below
+        // have no category, so they fall back to the workspace default rate.
         vatRate: vatRateForCategory(p.vatCategory),
       },
     ]);
+    flashNewLine(id);
   }
 
   function addCustomLine() {
+    const id = uid("li_");
     setItems((prev) => [
       ...prev,
       {
-        id: uid("li_"),
+        id,
         productId: null,
         name: "",
         quantity: 1,
@@ -94,6 +112,16 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
         vatRate: settings.defaultVatRate,
       },
     ]);
+    flashNewLine(id);
+  }
+
+  /** Scroll a field into view and focus it (used by the completeness checklist). */
+  function focusField(id: string) {
+    setMobileView("edit");
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => (el as HTMLElement).focus({ preventScroll: true }), 320);
   }
 
   function updateItem(id: string, patch: Partial<InvoiceLineItem>) {
@@ -105,17 +133,41 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
   }
 
   const checklist: ChecklistItem[] = [
-    { label: "Customer selected", done: !!customerId },
-    { label: "Invoice date added", done: !!issueDate },
-    { label: "Due date added", done: !!dueDate },
+    {
+      label: "Customer selected",
+      done: !!customerId,
+      action: { label: "Select", onClick: () => focusField("inv-customer") },
+    },
+    {
+      label: "Invoice date added",
+      done: !!issueDate,
+      action: { label: "Set", onClick: () => focusField("inv-issue") },
+    },
+    {
+      label: "Due date added",
+      done: !!dueDate,
+      action: { label: "Set", onClick: () => focusField("inv-due") },
+    },
     {
       label: "At least one line item",
       done: items.length > 0 && items.every((i) => i.name.trim() !== "" && i.quantity > 0),
+      action: {
+        label: "Add",
+        onClick: () => {
+          setMobileView("edit");
+          addCustomLine();
+        },
+      },
     },
-    { label: "Seller VAT number checked", done: company.vatNumber.trim() !== "" },
+    {
+      label: "Seller VAT number checked",
+      done: company.vatNumber.trim() !== "",
+      action: { label: "Settings", href: "/settings" },
+    },
     {
       label: "Seller details checked",
       done: company.name.trim() !== "" && company.address.trim() !== "",
+      action: { label: "Settings", href: "/settings" },
     },
   ];
 
@@ -124,11 +176,17 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
       toast.error("Select a customer first");
       return;
     }
-    const validItems = items.filter((i) => i.name.trim() !== "");
-    if (validItems.length === 0) {
+    if (items.length === 0) {
       toast.error("Add at least one line item");
       return;
     }
+    // Keep this in lock-step with the completeness checklist ("At least one
+    // line item"): every line must have a description and a quantity ≥ 1.
+    if (items.some((i) => i.name.trim() === "" || i.quantity <= 0)) {
+      toast.error("Each line item needs a description and a quantity of at least 1");
+      return;
+    }
+    const validItems = items.map((i) => ({ ...i, name: i.name.trim() }));
     const payload = {
       customerId,
       issueDate,
@@ -172,7 +230,25 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
         }
       />
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      {/* Mobile-only toggle between the editor and the live preview. */}
+      <div className="mb-4 flex rounded-[4px] border border-hairline bg-ink p-1 lg:hidden">
+        {(["edit", "preview"] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            onClick={() => setMobileView(v)}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-1.5 rounded-[4px] px-3 py-1.5 text-sm font-medium transition",
+              mobileView === v ? "bg-signal text-ink" : "text-fog hover:text-cloud",
+            )}
+          >
+            {v === "edit" ? <Pencil className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {v === "edit" ? "Edit" : "Preview"}
+          </button>
+        ))}
+      </div>
+
+      <div className={cn("grid gap-6 lg:grid-cols-3", mobileView === "preview" && "hidden lg:grid")}>
         {/* Builder */}
         <div className="space-y-6 lg:col-span-2">
           <Card>
@@ -257,21 +333,37 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
                     <div className="col-span-2">VAT</div>
                     <div className="col-span-2 text-right">Amount</div>
                   </div>
-                  <div className="space-y-2">
-                    {items.map((item) => (
-                      <LineItemRow
-                        key={item.id}
-                        item={item}
-                        onChange={(patch) => updateItem(item.id, patch)}
-                        onRemove={() => removeItem(item.id)}
-                      />
-                    ))}
-                  </div>
+                  <MotionConfig reducedMotion="user">
+                    <div className="space-y-2">
+                      <AnimatePresence initial={false}>
+                        {items.map((item) => (
+                          <motion.div
+                            key={item.id}
+                            layout
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, x: 8 }}
+                            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                          >
+                            <LineItemRow
+                              item={item}
+                              highlight={item.id === justAddedId}
+                              onChange={(patch) => updateItem(item.id, patch)}
+                              onRemove={() => removeItem(item.id)}
+                            />
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  </MotionConfig>
                 </div>
               )}
 
               {/* Discount */}
               <div className="mt-4 flex items-center justify-end gap-3 border-t border-hairline pt-4">
+                {discountNote ? (
+                  <span className="text-xs font-medium text-key-lime">{discountNote}</span>
+                ) : null}
                 <label htmlFor="inv-discount" className="text-sm font-medium text-cloud">
                   Discount (%)
                 </label>
@@ -282,9 +374,13 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
                   max="100"
                   step="1"
                   value={discountPercent}
-                  onChange={(e) =>
-                    setDiscountPercent(Math.min(100, Math.max(0, Number(e.target.value) || 0)))
-                  }
+                  onChange={(e) => {
+                    const raw = Number(e.target.value) || 0;
+                    setDiscountPercent(Math.min(100, Math.max(0, raw)));
+                    setDiscountNote(
+                      raw > 100 ? "Capped at 100%" : raw < 0 ? "Can’t be negative" : null,
+                    );
+                  }}
                   className={cn(controlClass, "h-10 w-24 text-right")}
                 />
               </div>
@@ -311,17 +407,24 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
             <Card>
               <CardHeader title="Summary" />
               <CardBody className="space-y-3">
-                <SummaryRow label="Subtotal" value={formatCurrency(totals.subtotal)} />
+                <SummaryRow label="Subtotal" value={<Money amount={totals.subtotal} currency={settings.currency} />} />
                 {discountPercent > 0 ? (
                   <SummaryRow
                     label={`Discount (${discountPercent}%)`}
-                    value={`− ${formatCurrency(totals.discountAmount)}`}
+                    value={
+                      <span className="inline-flex items-baseline gap-1">
+                        <span>−</span>
+                        <Money amount={totals.discountAmount} currency={settings.currency} />
+                      </span>
+                    }
                   />
                 ) : null}
-                <SummaryRow label="VAT" value={formatCurrency(totals.vatTotal)} />
+                <SummaryRow label="VAT" value={<Money amount={totals.vatTotal} currency={settings.currency} />} />
                 <div className="flex items-center justify-between border-t border-hairline pt-3 text-lg font-semibold text-bone">
                   <span>Total</span>
-                  <span>{formatCurrency(totals.total)}</span>
+                  <span>
+                    <Money amount={totals.total} currency={settings.currency} />
+                  </span>
                 </div>
                 <Button className="mt-2 w-full" onClick={handleSave}>
                   <Save className="h-4 w-4" /> {editing ? "Save changes" : "Save invoice"}
@@ -343,7 +446,7 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
       </div>
 
       {/* Live preview */}
-      <div className="mt-8">
+      <div className={cn("mt-8", mobileView === "edit" && "hidden lg:block")}>
         <div className="mb-2 flex items-center gap-2 text-sm font-medium text-fog">
           <Eye className="h-4 w-4" /> Live preview
         </div>
@@ -368,7 +471,7 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
   );
 }
 
-function SummaryRow({ label, value }: { label: string; value: string }) {
+function SummaryRow({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex items-center justify-between text-sm text-fog">
       <span>{label}</span>
@@ -385,13 +488,20 @@ function LineItemRow({
   item,
   onChange,
   onRemove,
+  highlight,
 }: {
   item: InvoiceLineItem;
   onChange: (patch: Partial<InvoiceLineItem>) => void;
   onRemove: () => void;
+  highlight?: boolean;
 }) {
   return (
-    <div className="grid grid-cols-1 gap-2 rounded-[4px] border border-hairline bg-ink p-3 sm:grid-cols-12 sm:items-center sm:p-2">
+    <div
+      className={cn(
+        "grid grid-cols-1 gap-2 rounded-[4px] border bg-ink p-3 transition-colors duration-500 sm:grid-cols-12 sm:items-center sm:p-2",
+        highlight ? "border-signal/50 bg-signal/[0.06]" : "border-hairline",
+      )}
+    >
       <div className="sm:col-span-4">
         <MiniLabel>Description</MiniLabel>
         <input

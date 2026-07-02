@@ -5,7 +5,7 @@ import type { Database } from "@/types";
  * wrapped in try/catch so a corrupt value or private-mode browser never crashes
  * the app. This is the single seam to replace when wiring a real backend.
  */
-const STORAGE_KEY = "placeholder_db_v1";
+const STORAGE_KEY = "placeholder_db_v2";
 
 export function isBrowser(): boolean {
   return typeof window !== "undefined";

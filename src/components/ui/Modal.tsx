@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 type ModalSize = "sm" | "md" | "lg" | "xl";
 
@@ -30,16 +33,57 @@ export function Modal({
   footer?: ReactNode;
   size?: ModalSize;
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (!open) return;
+    // Remember what had focus so we can restore it when the modal closes.
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
+
+    const dialog = dialogRef.current;
+    const focusables = () =>
+      dialog ? Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE)) : [];
+
+    // Move focus into the dialog on open — prefer the first form field so
+    // typing can start immediately; otherwise the first focusable, or the
+    // dialog itself (e.g. a confirm dialog lands on its first button).
+    const firstField = dialog?.querySelector<HTMLElement>(
+      "input:not([disabled]), textarea:not([disabled]), select:not([disabled])",
+    );
+    (firstField ?? focusables()[0] ?? dialog)?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab" || !dialog) return;
+      // Trap Tab focus inside the dialog.
+      const els = focusables();
+      if (els.length === 0) {
+        e.preventDefault();
+        dialog.focus();
+        return;
+      }
+      const first = els[0];
+      const last = els[els.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !dialog.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !dialog.contains(active))) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      restoreFocusRef.current?.focus?.();
     };
   }, [open, onClose]);
 
@@ -53,10 +97,12 @@ export function Modal({
         aria-hidden
       />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
+        tabIndex={-1}
         className={cn(
-          "relative z-10 max-h-[92vh] w-full animate-scale-in overflow-y-auto rounded-t-[4px] border border-hairline bg-canvas text-cloud scrollbar-slim sm:rounded-[4px]",
+          "relative z-10 max-h-[92vh] w-full animate-scale-in overflow-y-auto rounded-t-[4px] border border-hairline bg-canvas text-cloud outline-none scrollbar-slim sm:rounded-[4px]",
           sizeClass[size],
         )}
       >

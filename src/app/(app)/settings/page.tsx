@@ -63,8 +63,8 @@ export default function SettingsPage() {
           </div>
           <div className="flex items-center justify-between rounded-[4px] border border-hairline bg-ink p-4">
             <div>
-              <div className="text-sm font-medium text-bone">ZATCA e-invoicing integration</div>
-              <div className="text-xs text-fog">Phase 2 (Integration) connection</div>
+              <div className="text-sm font-medium text-bone">ZATCA live connection</div>
+              <div className="text-xs text-fog">Submission, clearance & reporting APIs</div>
             </div>
             <div className="flex items-center gap-3">
               <Badge tone="gray" dot>
@@ -74,6 +74,18 @@ export default function SettingsPage() {
                 Connect (soon)
               </Button>
             </div>
+          </div>
+          <div className="flex items-center justify-between rounded-[4px] border border-hairline bg-ink p-4">
+            <div>
+              <div className="text-sm font-medium text-bone">UBL XML generation & signing</div>
+              <div className="text-xs text-fog">
+                Development preview — a self-signed local key, not a ZATCA-issued CSID. See each
+                invoice&rsquo;s ZATCA card.
+              </div>
+            </div>
+            <Badge tone="blue" dot>
+              Simulated
+            </Badge>
           </div>
         </CardBody>
       </Card>
@@ -184,6 +196,15 @@ export default function SettingsPage() {
             ? "This permanently deletes all customers, products, and invoices from this browser. You'll be taken to onboarding to set up again."
             : "This replaces your current data with the original sample workspace."}
         </p>
+        {confirm === "clear" ? (
+          <button
+            type="button"
+            onClick={exportData}
+            className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-signal transition hover:text-key-lime"
+          >
+            <Download className="h-3.5 w-3.5" /> Export a backup first
+          </button>
+        ) : null}
       </Modal>
     </div>
   );

@@ -47,8 +47,34 @@ export async function createInvoice(data: NewInvoice): Promise<Invoice> {
   return rowToInvoice({ ...row, invoice_line_items: itemRows });
 }
 
+/** Financial fields that must freeze once an invoice has been ZATCA-signed — a signed
+ *  hash/signature that could silently drift from the invoice content is worse than no
+ *  signature at all. See src/lib/zatca/. */
+const ZATCA_FROZEN_FIELDS = ["customerId", "issueDate", "discountPercent", "items"] as const;
+
+async function assertNotZatcaSigned(
+  supabase: Awaited<ReturnType<typeof requireWorkspaceId>>["supabase"],
+  workspaceId: string,
+  id: string,
+) {
+  const { data: row, error } = await supabase
+    .from("invoices")
+    .select("zatca_signed_at")
+    .eq("id", id)
+    .eq("workspace_id", workspaceId)
+    .maybeSingle();
+  if (error) throw error;
+  if (row?.zatca_signed_at) {
+    throw new Error("This invoice has been ZATCA-signed and can no longer be changed.");
+  }
+}
+
 export async function updateInvoice(id: string, data: Partial<Omit<Invoice, "id">>): Promise<void> {
   const { supabase, workspaceId } = await requireWorkspaceId();
+
+  if (ZATCA_FROZEN_FIELDS.some((field) => data[field] !== undefined)) {
+    await assertNotZatcaSigned(supabase, workspaceId, id);
+  }
 
   const patch: TablesUpdate<"invoices"> = {};
   if (data.customerId !== undefined) patch.customer_id = data.customerId;
@@ -81,6 +107,7 @@ export async function updateInvoice(id: string, data: Partial<Omit<Invoice, "id"
 
 export async function deleteInvoice(id: string): Promise<void> {
   const { supabase, workspaceId } = await requireWorkspaceId();
+  await assertNotZatcaSigned(supabase, workspaceId, id);
   const { error } = await supabase.from("invoices").delete().eq("id", id).eq("workspace_id", workspaceId);
   if (error) throw error;
 }
