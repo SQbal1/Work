@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ShieldCheck,
   Users,
@@ -10,10 +11,11 @@ import {
   Trash2,
   Plus,
   Info,
+  LogOut,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonStyles } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
 import { Modal } from "@/components/ui/Modal";
@@ -23,6 +25,67 @@ import { ZatcaCsrCard } from "@/components/settings/ZatcaCsrCard";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { todayISO } from "@/lib/format";
+import { createClient } from "@/lib/supabase/client";
+
+function AccountCard() {
+  const router = useRouter();
+  const toast = useToast();
+  const { usingSupabase } = useStore();
+  const [email, setEmail] = useState<string | null>(null);
+  const [signingOut, setSigningOut] = useState(false);
+
+  useEffect(() => {
+    if (!usingSupabase) return;
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+  }, [usingSupabase]);
+
+  async function onSignOut() {
+    setSigningOut(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      setSigningOut(false);
+      toast.error(error.message);
+      return;
+    }
+    router.push("/login");
+    router.refresh();
+  }
+
+  return (
+    <Card>
+      <CardHeader
+        title="Account"
+        subtitle={usingSupabase ? "Manage your sign-in session." : "You're exploring the demo."}
+      />
+      <CardBody>
+        <div className="flex flex-col gap-3 rounded-[10px] border border-hairline bg-ink p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="text-sm font-medium text-bone">
+              {usingSupabase ? email ?? "Signed in" : "No account — local demo only"}
+            </div>
+            <div className="text-xs text-fog">
+              {usingSupabase
+                ? "Signing out ends this session on this device."
+                : "Create a free account to save your data to the cloud."}
+            </div>
+          </div>
+          {usingSupabase ? (
+            <Button variant="secondary" size="sm" onClick={onSignOut} disabled={signingOut}>
+              <LogOut className="h-4 w-4" />
+              {signingOut ? "Signing out…" : "Sign out"}
+            </Button>
+          ) : (
+            <Link href="/signup" className={buttonStyles("secondary", "sm")}>
+              Create a free account
+            </Link>
+          )}
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -46,6 +109,8 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader title="Settings" description="Manage your company, invoice defaults, and data." />
+
+      <AccountCard />
 
       <CompanyProfileCard />
       <InvoicePreferencesCard />
