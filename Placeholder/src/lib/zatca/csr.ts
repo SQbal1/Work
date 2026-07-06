@@ -3,18 +3,20 @@
  *
  * ZATCA requires a PKCS#10 CSR with a secp256k1 key and a specific,
  * non-standard field layout: most identity fields sit in a subjectAltName
- * "directoryName" extension rather than the Subject DN directly. There is no
- * off-the-shelf Node library that builds this shape (node-forge's CSR path is
- * RSA-oriented; WebCrypto-based libraries don't support secp256k1), so this
- * hand-rolls the minimal DER/ASN.1 needed — the same approach signing.ts
- * already takes for ZATCA's other crypto quirks.
+ * "directoryName" extension rather than the Subject DN directly, plus a
+ * Microsoft-style "certificate template name" extension that routes the CSR
+ * to the right cert pool. There is no off-the-shelf Node library that builds
+ * this shape (node-forge's CSR path is RSA-oriented; WebCrypto-based
+ * libraries don't support secp256k1), so this hand-rolls the minimal
+ * DER/ASN.1 needed — the same approach signing.ts already takes for ZATCA's
+ * other crypto quirks.
  *
- * Field layout assembled from public ZATCA onboarding references (community
- * CSR generator tools/guides), NOT verified byte-for-byte against ZATCA's
- * official CSR template — treat this as a best-effort structural preview,
- * same epistemic status as ubl.ts's XML. Validate the generated CSR against
- * ZATCA's actual Fatoora portal / compliance CSID endpoint before relying on
- * it; if a field is rejected, that tells us exactly what to correct here.
+ * Field layout cross-checked against Microsoft's published Dynamics 365
+ * Saudi e-invoicing onboarding guide (which documents ZATCA's own CSR config
+ * template + onboarding script verbatim) — closer to source than the
+ * earlier community-blog pass, though still not verified against a live
+ * ZATCA submission. If ZATCA's actual validator rejects a field, that tells
+ * us exactly what to correct here.
  */
 
 import { generateKeyPairSync, sign as cryptoSign, type KeyObject } from "crypto";
@@ -44,7 +46,23 @@ const OID = {
   businessCategory: "2.5.4.15",
   extensionRequest: "1.2.840.113549.1.9.14",
   subjectAltName: "2.5.29.17",
+  /** Microsoft AD "certificate template name" OID — ZATCA reuses it to say which cert pool/environment this CSR targets. */
+  certificateTemplateName: "1.3.6.1.4.1.311.20.2",
   ecdsaWithSha256: "1.2.840.10045.4.3.2",
+};
+
+export type ZatcaCsrEnvironment = "simulation" | "production";
+
+/**
+ * ZATCA's simulation portal requires the Common Name AND certificate
+ * template name to be the literal fixed string "PREZATCA-Code-Signing" (not
+ * the business's own unit name) — a documented quirk, not a placeholder we
+ * forgot to fill in. Production uses the real business/branch name as CN and
+ * the un-prefixed template name.
+ */
+export const ZATCA_CERT_TEMPLATE_NAME: Record<ZatcaCsrEnvironment, string> = {
+  simulation: "PREZATCA-Code-Signing",
+  production: "ZATCA-Code-Signing",
 };
 
 export interface ZatcaCsrKeypair {
@@ -66,6 +84,7 @@ export function generateZatcaCsrKeypair(): ZatcaCsrKeypair {
 export interface ZatcaCsrInput {
   organizationName: string;
   organizationalUnit: string;
+  /** Ignored for the "simulation" environment — ZATCA requires a fixed CN there. See ZATCA_CERT_TEMPLATE_NAME. */
   commonName: string;
   vatNumber: string;
   address: string;
@@ -73,6 +92,7 @@ export interface ZatcaCsrInput {
   invoiceType: ZatcaInvoiceTypeSupport;
   /** Unique-per-request identifier folded into the DN serialNumber (EGS unit id). */
   serial: string;
+  environment: ZatcaCsrEnvironment;
 }
 
 // --- Minimal DER/ASN.1 encoding helpers ---
@@ -154,14 +174,26 @@ function rdn(oid: string, value: Buffer): Buffer {
 
 /** Builds the CSR's PEM. Signs with the workspace's ECDSA (secp256k1) private key. */
 export function buildZatcaCsr(input: ZatcaCsrInput, keypair: ZatcaCsrKeypair): string {
+  const templateName = ZATCA_CERT_TEMPLATE_NAME[input.environment];
+  // Simulation forces a fixed CN regardless of the business's own unit name — see ZATCA_CERT_TEMPLATE_NAME.
+  const commonName = input.environment === "simulation" ? templateName : input.commonName;
+
   // Subject DN: identity/naming fields ZATCA expects directly on the Subject.
   const subjectSerial = `1-InvoiceX|2-1.0.0|3-${input.serial}`;
   const subject = derSequence(
     rdn(OID.countryName, derPrintableString("SA")),
     rdn(OID.organizationalUnitName, derUtf8String(input.organizationalUnit)),
     rdn(OID.organizationName, derUtf8String(input.organizationName)),
-    rdn(OID.commonName, derUtf8String(input.commonName)),
+    rdn(OID.commonName, derUtf8String(commonName)),
     rdn(OID.serialNumber, derPrintableString(subjectSerial)),
+  );
+
+  // certificateTemplateName: tells ZATCA which cert pool/environment this CSR
+  // targets (production vs. simulation). Unlike the SAN extension below,
+  // this one's extnValue is a bare PrintableString, not a wrapped Name.
+  const certTemplateExtension = derSequence(
+    derOid(OID.certificateTemplateName),
+    derOctetString(derPrintableString(templateName)),
   );
 
   // subjectAltName -> directoryName: ZATCA's non-standard home for VAT number,
@@ -177,7 +209,7 @@ export function buildZatcaCsr(input: ZatcaCsrInput, keypair: ZatcaCsrKeypair): s
   const directoryNameGeneralName = derContext(4, sanName);
   const generalNames = derSequence(directoryNameGeneralName);
   const sanExtension = derSequence(derOid(OID.subjectAltName), derOctetString(generalNames));
-  const extensions = derSequence(sanExtension);
+  const extensions = derSequence(certTemplateExtension, sanExtension);
 
   const extensionRequestAttribute = derSequence(derOid(OID.extensionRequest), derSet(extensions));
   // attributes ::= [0] IMPLICIT SET OF Attribute — implicit tagging replaces

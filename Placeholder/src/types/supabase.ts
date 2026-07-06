@@ -5,7 +5,7 @@
 // hand-authored to match migration 0012 because no live Supabase project was
 // connected when that migration was written — regenerate this file for real
 // once the migration has been applied to confirm it matches exactly. The
-// zatca_csr_requests table (migration 0013) was hand-authored the same way.
+// zatca_csr_requests table (migrations 0013, 0014) was hand-authored the same way.
 export type Json =
   | string
   | number
@@ -429,41 +429,53 @@ export type Database = {
         Row: {
           branch_name: string
           city: string
+          compliance_csid: string | null
           created_at: string
           csr_pem: string
+          encrypted_compliance_secret: string | null
           encrypted_private_key: string
+          environment: string
           invoice_type: string
           organization_name: string
           status: string
           updated_at: string
           vat_number: string
           workspace_id: string
+          zatca_request_id: string | null
         }
         Insert: {
           branch_name: string
           city: string
+          compliance_csid?: string | null
           created_at?: string
           csr_pem: string
+          encrypted_compliance_secret?: string | null
           encrypted_private_key: string
+          environment?: string
           invoice_type: string
           organization_name: string
           status?: string
           updated_at?: string
           vat_number: string
           workspace_id: string
+          zatca_request_id?: string | null
         }
         Update: {
           branch_name?: string
           city?: string
+          compliance_csid?: string | null
           created_at?: string
           csr_pem?: string
+          encrypted_compliance_secret?: string | null
           encrypted_private_key?: string
+          environment?: string
           invoice_type?: string
           organization_name?: string
           status?: string
           updated_at?: string
           vat_number?: string
           workspace_id?: string
+          zatca_request_id?: string | null
         }
         Relationships: [
           {

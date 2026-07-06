@@ -146,44 +146,64 @@ this project doesn't have.
   algorithm (which strips the `UBLExtensions` signature block first) — not
   yet byte-conformant with a real ZATCA SDK.
 
-### ZATCA CSID onboarding (step 1 of the real integration)
+### ZATCA CSID onboarding (steps 1–2 of the real integration)
 
 Settings → "ZATCA CSID onboarding" (`ZatcaCsrCard.tsx`) generates a real
-Certificate Signing Request — the artifact a business submits through
-ZATCA's Fatoora portal (with an OTP) to request an actual Compliance CSID.
-This is a distinct keypair/table from the `zatca_keys` preview above; it's
-meant to eventually hold a real ZATCA-issued credential, not a simulation.
+Certificate Signing Request and can exchange it for an actual ZATCA
+Compliance CSID. This is a distinct keypair/table from the `zatca_keys`
+preview above; it's meant to hold a real ZATCA-issued credential, not a
+simulation.
 
 - `src/lib/zatca/csr.ts` hand-rolls the minimal DER/ASN.1 needed to build a
   PKCS#10 CSR with a secp256k1 key in ZATCA's non-standard field layout (VAT
   number, invoice-type support, address, and business category live in a
-  subjectAltName `directoryName`, not the Subject DN). No off-the-shelf
-  Node library builds this shape (node-forge's CSR path is RSA-oriented;
-  WebCrypto-based libraries don't support secp256k1), so this follows the
-  same "implement the crypto primitive directly" approach as `signing.ts`.
-  **The field layout was assembled from public ZATCA onboarding references,
-  not verified byte-for-byte against ZATCA's official CSR template** —
-  treat it as a best-effort structural preview like the UBL XML above. If
-  ZATCA's actual validator rejects a field, that tells us exactly what to
-  fix.
-- `zatca_csr_requests` (migration `0013`) stores one CSR per workspace. The
-  private key is AES-256-GCM-encrypted before it touches the database
+  subjectAltName `directoryName`, not the Subject DN; a Microsoft-style
+  `certificateTemplateName` extension routes it to the right cert
+  pool/environment). No off-the-shelf Node library builds this shape
+  (node-forge's CSR path is RSA-oriented; WebCrypto-based libraries don't
+  support secp256k1), so this follows the same "implement the crypto
+  primitive directly" approach as `signing.ts`. Field layout is
+  cross-checked against Microsoft's published Dynamics 365 Saudi
+  e-invoicing onboarding guide (which reproduces ZATCA's own CSR config +
+  onboarding script verbatim) — **confirmed against ZATCA's live simulation
+  endpoint**: a CSR from this module gets back `Invalid-OTP`, i.e. ZATCA
+  parsed and accepted the CSR itself.
+  **Simulation environment forces a fixed CN/certificateTemplateName
+  (`PREZATCA-Code-Signing`)** per ZATCA's own requirement — not a bug, see
+  `ZATCA_CERT_TEMPLATE_NAME`.
+- `src/lib/zatca/complianceCsid.ts` exchanges the CSR + a Fatoora-portal OTP
+  for a real Compliance CSID via ZATCA's `/compliance` endpoint — the first
+  live network call in the onboarding flow (everything before it is local).
+  Carries over the reference script's double-encoding quirks: the `csr`
+  field is base64 of the *full PEM text* (armor included), and the returned
+  `binarySecurityToken` is base64 of the cert's PEM body text, unwrapped
+  once and re-armored. ZATCA's error body shape isn't consistent across
+  failure layers (`{errors:[{code,message}]}` vs.
+  `{errorCode,errorCategory,errorMessage}`) — `extractZatcaErrorMessage`
+  handles both, confirmed against both shapes live.
+- `zatca_csr_requests` (migrations `0013`, `0014`) stores one onboarding
+  record per workspace: the CSR/private key, then (once requested) the
+  Compliance CSID fields. The private key and the ZATCA-issued compliance
+  secret are both AES-256-GCM-encrypted before they touch the database
   (`src/lib/zatca/csrEncryption.ts`) with a server-only
-  `ZATCA_CSR_ENCRYPTION_KEY` — treated as a secret from day one since it's
-  meant to eventually correspond to a real CSID, not a demo artifact.
-- `status` only models the two states that have real logic behind them
-  today (`not_started` implied by no row, `csr_generated`). The rest of the
-  onboarding ladder (compliance CSID received → compliance checks passed →
-  production CSID → live) intentionally isn't modeled yet — adding those
-  enum values with nothing behind them would just be dead state. Add them
-  when the corresponding action (submitting the CSR to ZATCA, exchanging
-  for a Compliance CSID, running compliance-check submissions, etc.) is
+  `ZATCA_CSR_ENCRYPTION_KEY` — both are real bearer credentials from day
+  one, not demo artifacts. `compliance_csid` (the binarySecurityToken) is
+  stored as-is since it's a certificate and also functions as the Basic
+  Auth *username* — useless without the paired (encrypted) secret.
+- `status` only models the three states that have real logic behind them
+  today (`not_started` implied by no row, `csr_generated`,
+  `compliance_csid_received`). The rest of the onboarding ladder (compliance
+  checks passed → production CSID → live) intentionally isn't modeled yet —
+  adding those enum values with nothing behind them would just be dead
+  state. Add them when the corresponding action (submitting sample invoices
+  for compliance checks, exchanging for a Production CSID, etc.) is
   actually built.
-- Still not built: submitting the CSR to ZATCA, exchanging it for a
-  Compliance/Production CSID, and any live Compliance Check / Reporting /
-  Clearance API calls. All of that requires a real ZATCA sandbox account
-  and OTP obtained through the Fatoora portal — a manual, external step
-  this project can't automate.
+- Still not built: running ZATCA's compliance checks (submitting sample
+  invoices), exchanging for a Production CSID, and any live Reporting /
+  Clearance API calls. All of that requires the user to actually complete
+  onboarding through their real ZATCA account — a manual, external process
+  this project can't automate past making the right API calls at the right
+  time.
 
 ## Local dev setup
 
@@ -203,11 +223,12 @@ Settings → "ZATCA CSID onboarding" card can generate a CSR.
 ## What's deliberately NOT built yet
 
 - **Real ZATCA integration** — UBL XML generation, invoice hash chaining, and signing now exist as
-  a structural preview (see "ZATCA Phase 2 preview" above), and CSR generation exists for real
-  CSID onboarding (see "ZATCA CSID onboarding" above), but the invoice-signing key is still a
-  locally generated development key, not a ZATCA-issued CSID, and there is still no
-  compliance-check, reporting, or clearance API call to ZATCA's actual systems — that requires
-  submitting the generated CSR through ZATCA's Fatoora portal first, a manual external step. The
+  a structural preview (see "ZATCA Phase 2 preview" above), and CSR generation + the live Compliance
+  CSID exchange exist for real CSID onboarding (see "ZATCA CSID onboarding" above), but the
+  invoice-signing key is still a locally generated development key, not the real Compliance CSID,
+  and there is still no compliance-check (sample invoice submission), Production CSID exchange, or
+  reporting/clearance API call to ZATCA's actual systems — those require the user to actually
+  complete onboarding through their own Fatoora account first, a manual external step. The
   Settings → "VAT & ZATCA" card and `/compliance` are honest about this ("ZATCA-ready workflow
   foundation," not a compliance claim).
 - **Payments / Stripe.**
