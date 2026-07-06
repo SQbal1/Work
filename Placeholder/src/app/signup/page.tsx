@@ -1,14 +1,19 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock, User, Building2 } from "lucide-react";
+import { Mail, Lock, User, Building2, ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/auth/AuthShell";
+import { OAuthButtons } from "@/components/auth/OAuthButtons";
+import { WorkspacePreview } from "@/components/auth/WorkspacePreview";
+import { PasswordStrength } from "@/components/auth/PasswordStrength";
 import { Input } from "@/components/ui/Input";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
 import { createClient } from "@/lib/supabase/client";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function SignupPage() {
   const router = useRouter();
@@ -20,13 +25,17 @@ export default function SignupPage() {
     password: "",
     confirmPassword: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [navigating, startNavigate] = useTransition();
   const [checkEmail, setCheckEmail] = useState(false);
 
   const passwordMismatch =
     form.confirmPassword.length > 0 && form.password !== form.confirmPassword;
   const passwordsMatch =
     form.confirmPassword.length > 0 && form.password === form.confirmPassword;
+  const emailValid = EMAIL_RE.test(form.email);
+  const firstName = form.name.trim().split(/\s+/)[0] || "";
+  const busy = submitting || navigating;
 
   function set(key: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -38,26 +47,29 @@ export default function SignupPage() {
       toast.error("Passwords don’t match");
       return;
     }
-    setLoading(true);
+    setSubmitting(true);
     const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: { data: { full_name: form.name, company_name: form.company } },
     });
-    setLoading(false);
     if (error) {
+      setSubmitting(false);
       toast.error(error.message);
       return;
     }
     if (!data.session) {
       // Email confirmation is required before a session exists.
+      setSubmitting(false);
       setCheckEmail(true);
       return;
     }
     toast.success("Account created");
-    router.push("/onboarding");
-    router.refresh();
+    startNavigate(() => {
+      router.push("/onboarding");
+      router.refresh();
+    });
   }
 
   if (checkEmail) {
@@ -77,8 +89,13 @@ export default function SignupPage() {
 
   return (
     <AuthShell
-      title="Create your account"
-      subtitle="Set up your workspace in a couple of minutes."
+      title={firstName ? `Welcome, ${firstName}` : "Create your account"}
+      subtitle={
+        firstName
+          ? "A few details and your workspace is live."
+          : "Set up your workspace in a couple of minutes."
+      }
+      aside={<WorkspacePreview name={form.name} company={form.company} />}
       footer={
         <>
           Already have an account?{" "}
@@ -88,25 +105,36 @@ export default function SignupPage() {
         </>
       }
     >
+      <OAuthButtons />
+
+      <div className="my-5 flex items-center gap-3">
+        <span className="h-px flex-1 bg-hairline" />
+        <span className="text-xs text-fog">or with email</span>
+        <span className="h-px flex-1 bg-hairline" />
+      </div>
+
       <form onSubmit={onSubmit} className="space-y-4">
-        <Input
-          id="name"
-          label="Full name"
-          placeholder="e.g. Noura Al-Saud"
-          leftIcon={<User className="h-4 w-4" />}
-          value={form.name}
-          onChange={(e) => set("name", e.target.value)}
-          required
-        />
-        <Input
-          id="company"
-          label="Company name"
-          placeholder="e.g. Noura Consulting"
-          leftIcon={<Building2 className="h-4 w-4" />}
-          value={form.company}
-          onChange={(e) => set("company", e.target.value)}
-          required
-        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Input
+            id="name"
+            label="Full name"
+            placeholder="e.g. Noura Al-Saud"
+            leftIcon={<User className="h-4 w-4" />}
+            value={form.name}
+            onChange={(e) => set("name", e.target.value)}
+            autoFocus
+            required
+          />
+          <Input
+            id="company"
+            label="Company name"
+            placeholder="e.g. Noura Consulting"
+            leftIcon={<Building2 className="h-4 w-4" />}
+            value={form.company}
+            onChange={(e) => set("company", e.target.value)}
+            required
+          />
+        </div>
         <Input
           id="email"
           type="email"
@@ -115,19 +143,25 @@ export default function SignupPage() {
           leftIcon={<Mail className="h-4 w-4" />}
           value={form.email}
           onChange={(e) => set("email", e.target.value)}
+          hint={emailValid ? "Looks good ✓" : undefined}
           required
         />
-        <Input
-          id="password"
-          type="password"
-          label="Password"
-          placeholder="At least 8 characters"
-          leftIcon={<Lock className="h-4 w-4" />}
-          value={form.password}
-          onChange={(e) => set("password", e.target.value)}
-          minLength={8}
-          required
-        />
+        <div>
+          <Input
+            id="password"
+            type="password"
+            label="Password"
+            placeholder="At least 8 characters"
+            leftIcon={<Lock className="h-4 w-4" />}
+            value={form.password}
+            onChange={(e) => set("password", e.target.value)}
+            minLength={8}
+            required
+          />
+          <div className="mt-2">
+            <PasswordStrength password={form.password} />
+          </div>
+        </div>
         <Input
           id="confirm-password"
           type="password"
@@ -137,12 +171,19 @@ export default function SignupPage() {
           value={form.confirmPassword}
           onChange={(e) => set("confirmPassword", e.target.value)}
           error={passwordMismatch ? "Passwords don’t match" : undefined}
-          hint={passwordsMatch ? "Passwords match" : undefined}
+          hint={passwordsMatch ? "Passwords match ✓" : undefined}
           minLength={8}
           required
         />
-        <Button type="submit" className="w-full" disabled={loading || passwordMismatch}>
-          {loading ? "Creating account…" : "Create account & continue"}
+        <Button type="submit" className="w-full" disabled={busy || passwordMismatch}>
+          {busy ? (
+            "Creating your workspace…"
+          ) : (
+            <>
+              {firstName ? `Let's go, ${firstName}` : "Create account & continue"}
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
         </Button>
       </form>
 

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/auth/AuthShell";
+import { OAuthButtons } from "@/components/auth/OAuthButtons";
 import { Input } from "@/components/ui/Input";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
@@ -15,27 +16,62 @@ export default function LoginPage() {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [navigating, startNavigate] = useTransition();
+  const busy = submitting || navigating;
+
+  // Surface OAuth callback failures (auth/callback redirects here with ?authError=…),
+  // then strip the param so a refresh doesn't re-toast it.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const authError = params.get("authError");
+    if (authError) {
+      toast.error(authError);
+      window.history.replaceState({}, "", "/login");
+    }
+    // Warm the next screens so the post-login jump feels instant.
+    router.prefetch("/dashboard");
+    router.prefetch("/onboarding");
+  }, [router, toast]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
     if (error) {
+      setSubmitting(false);
       toast.error(error.message);
       return;
     }
     toast.success("Signed in");
-    router.push("/dashboard");
-    router.refresh();
+    startNavigate(() => {
+      router.push("/dashboard");
+      router.refresh();
+    });
+  }
+
+  async function onForgotPassword() {
+    if (!email.trim()) {
+      toast.error("Enter your email above first, then tap “Forgot password?”");
+      document.getElementById("email")?.focus();
+      return;
+    }
+    const supabase = createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(`Reset link sent to ${email.trim()} — check your inbox.`);
   }
 
   return (
     <AuthShell
       title="Welcome back"
-      subtitle="Sign in to your invoicing workspace."
+      subtitle="Pick up right where you left off."
       footer={
         <>
           Don&apos;t have an account?{" "}
@@ -45,14 +81,24 @@ export default function LoginPage() {
         </>
       }
     >
+      <OAuthButtons />
+
+      <div className="my-5 flex items-center gap-3">
+        <span className="h-px flex-1 bg-hairline" />
+        <span className="text-xs text-fog">or with email</span>
+        <span className="h-px flex-1 bg-hairline" />
+      </div>
+
       <form onSubmit={onSubmit} className="space-y-4">
         <Input
           id="email"
           type="email"
           label="Email"
+          placeholder="you@company.sa"
           leftIcon={<Mail className="h-4 w-4" />}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoFocus
           required
         />
         <Input
@@ -69,12 +115,23 @@ export default function LoginPage() {
             <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-hairline bg-ink accent-signal" />
             Remember me
           </label>
-          <a href="#" className="font-medium text-signal hover:text-key-lime">
+          <button
+            type="button"
+            onClick={onForgotPassword}
+            className="font-medium text-signal transition-colors hover:text-key-lime"
+          >
             Forgot password?
-          </a>
+          </button>
         </div>
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Signing in…" : "Sign in"}
+        <Button type="submit" className="w-full" disabled={busy}>
+          {busy ? (
+            "Signing you in…"
+          ) : (
+            <>
+              Sign in
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
         </Button>
       </form>
 
