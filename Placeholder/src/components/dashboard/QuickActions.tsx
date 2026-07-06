@@ -36,7 +36,7 @@ export function QuickActions() {
             key={a.href}
             href={a.href}
             className={cn(
-              "group flex items-center gap-3 rounded-[4px] border p-3 transition",
+              "group flex items-center gap-3 rounded-[10px] border p-3 transition",
               a.primary
                 ? "border-signal/30 bg-signal/10 hover:bg-signal/15"
                 : "border-hairline bg-ink hover:border-graphite",
@@ -44,7 +44,7 @@ export function QuickActions() {
           >
             <span
               className={cn(
-                "grid h-10 w-10 shrink-0 place-items-center rounded-[4px] border",
+                "grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border",
                 a.primary ? "border-signal bg-signal text-ink" : "border-hairline bg-canvas text-fog",
               )}
             >

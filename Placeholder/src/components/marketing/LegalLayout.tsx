@@ -44,7 +44,7 @@ export function LegalLayout({
               <span className="h-1.5 w-1.5 rounded-full bg-signal" />
               <span className="text-signal">{eyebrow}</span>
             </div>
-            <h1 className="mt-4 text-balance font-display text-4xl font-medium tracking-[0.025em] text-bone sm:text-5xl">
+            <h1 className="mt-4 text-balance font-display text-4xl font-semibold tracking-tight text-bone sm:text-5xl">
               {title}
             </h1>
             {intro ? (
@@ -89,7 +89,7 @@ export function LegalSection({
           {number}
         </div>
       ) : null}
-      <h2 className="text-balance font-display text-xl font-medium tracking-[0.025em] text-bone sm:text-2xl">
+      <h2 className="text-balance font-display text-xl font-semibold tracking-tight text-bone sm:text-2xl">
         {heading}
       </h2>
       <div className="mt-4 flex flex-col gap-3 text-sm leading-relaxed text-fog">{children}</div>

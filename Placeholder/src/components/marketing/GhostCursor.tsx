@@ -315,7 +315,7 @@ export function GhostCursor({
       </AnimatePresence>
 
       {/* minimal label */}
-      <span className="absolute left-4 top-5 whitespace-nowrap rounded-[3px] border border-signal/40 bg-ink/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-signal">
+      <span className="absolute left-4 top-5 whitespace-nowrap rounded-[5px] border border-signal/40 bg-ink/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-signal">
         {label}
       </span>
 
@@ -331,7 +331,7 @@ export function GhostCursor({
         <path
           d="M1 1 L1 19 L5.6 14.6 L8.7 22.2 L11.4 21 L8.3 13.5 L14.5 13.4 Z"
           fill="#a8ff53"
-          stroke="#121317"
+          stroke="#05070c"
           strokeWidth="1.1"
           strokeLinejoin="round"
         />
@@ -401,7 +401,7 @@ export function StaticHint({
       className="pointer-events-none fixed left-0 top-0 z-[65]"
       style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
     >
-      <span className="absolute left-4 top-5 whitespace-nowrap rounded-[3px] border border-signal/40 bg-ink/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-signal">
+      <span className="absolute left-4 top-5 whitespace-nowrap rounded-[5px] border border-signal/40 bg-ink/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-signal">
         Your turn
       </span>
       <svg
@@ -415,7 +415,7 @@ export function StaticHint({
         <path
           d="M1 1 L1 19 L5.6 14.6 L8.7 22.2 L11.4 21 L8.3 13.5 L14.5 13.4 Z"
           fill="#a8ff53"
-          stroke="#121317"
+          stroke="#05070c"
           strokeWidth="1.1"
           strokeLinejoin="round"
         />

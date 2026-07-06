@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -17,10 +17,12 @@ import { Button, buttonStyles } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { FadeIn } from "@/components/ui/Motion";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/Table";
 import { StatusBadge } from "@/components/invoices/StatusBadge";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
+import { useDebouncedValue } from "@/lib/useDebouncedValue";
 import { getEffectiveStatus, STATUS_FILTERS } from "@/lib/status";
 import { invoiceTotal } from "@/lib/metrics";
 import { formatCurrency, formatDate } from "@/lib/format";
@@ -35,7 +37,17 @@ export default function InvoicesPage() {
 
   const [filter, setFilter] = useState<FilterId>("all");
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 200);
   const [deleting, setDeleting] = useState<Invoice | null>(null);
+
+  // Honour a "?status=overdue" deep-link (e.g. from the dashboard Overdue card).
+  useEffect(() => {
+    const status = new URLSearchParams(window.location.search).get("status");
+    if (status && ["draft", "sent", "paid", "overdue"].includes(status)) {
+      setFilter(status as FilterId);
+      history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   const counts = useMemo(() => {
     const c: Record<FilterId, number> = { all: invoices.length, draft: 0, sent: 0, paid: 0, overdue: 0 };
@@ -44,7 +56,7 @@ export default function InvoicesPage() {
   }, [invoices]);
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    const q = debouncedSearch.trim().toLowerCase();
     return [...invoices]
       .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
       .filter((inv) => filter === "all" || getEffectiveStatus(inv) === filter)
@@ -55,7 +67,7 @@ export default function InvoicesPage() {
           .filter(Boolean)
           .some((f) => (f as string).toLowerCase().includes(q));
       });
-  }, [invoices, filter, search, getCustomer]);
+  }, [invoices, filter, debouncedSearch, getCustomer]);
 
   return (
     <div>
@@ -73,7 +85,7 @@ export default function InvoicesPage() {
         <EmptyState
           icon={Receipt}
           title="No invoices yet"
-          description="Create your first invoice — it only takes a minute."
+          description="Create your first invoice. It only takes a minute."
           action={
             <Link href="/invoices/new" className={buttonStyles("primary", "md")}>
               <Plus className="h-4 w-4" /> New invoice
@@ -81,6 +93,7 @@ export default function InvoicesPage() {
           }
         />
       ) : (
+        <FadeIn>
         <Card className="overflow-hidden">
           {/* Filters + search */}
           <div className="flex flex-col gap-3 border-b border-hairline p-3 sm:flex-row sm:items-center sm:justify-between">
@@ -90,7 +103,7 @@ export default function InvoicesPage() {
                   key={f.id}
                   onClick={() => setFilter(f.id)}
                   className={cn(
-                    "rounded-[4px] px-3 py-1.5 text-sm font-medium transition",
+                    "rounded-[10px] px-3 py-1.5 text-sm font-medium transition",
                     filter === f.id
                       ? "bg-signal text-ink"
                       : "text-fog hover:bg-white/[0.03] hover:text-cloud",
@@ -115,7 +128,23 @@ export default function InvoicesPage() {
 
           {filtered.length === 0 ? (
             <div className="p-6">
-              <EmptyState title="No invoices match" description="Try a different filter or search term." />
+              <EmptyState
+                title="No invoices match"
+                description="Try a different filter or search term."
+                action={
+                  search || filter !== "all" ? (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setSearch("");
+                        setFilter("all");
+                      }}
+                    >
+                      Clear filters
+                    </Button>
+                  ) : undefined
+                }
+              />
             </div>
           ) : (
             <Table>
@@ -172,8 +201,8 @@ export default function InvoicesPage() {
                           <IconAction
                             label="Duplicate"
                             icon={<Copy className="h-4 w-4" />}
-                            onClick={() => {
-                              const dup = duplicateInvoice(inv.id);
+                            onClick={async () => {
+                              const dup = await duplicateInvoice(inv.id);
                               if (dup) toast.success(`Duplicated as ${dup.number}`);
                             }}
                           />
@@ -194,6 +223,7 @@ export default function InvoicesPage() {
             </Table>
           )}
         </Card>
+        </FadeIn>
       )}
 
       <Modal
@@ -224,7 +254,7 @@ export default function InvoicesPage() {
         <p className="text-sm text-fog">
           This permanently removes draft{" "}
           <span className="font-mono font-medium text-bone">{deleting?.number}</span>. Only drafts can be
-          deleted — sent or paid invoices are kept for your records.
+          deleted. Sent or paid invoices are kept for your records.
         </p>
       </Modal>
     </div>
@@ -245,7 +275,7 @@ function IconAction({
   danger?: boolean;
 }) {
   const className = cn(
-    "grid h-9 w-9 place-items-center rounded-[4px] text-fog transition hover:bg-white/[0.03]",
+    "grid h-9 w-9 place-items-center rounded-[10px] text-fog transition hover:bg-white/[0.03]",
     danger ? "hover:text-mute-red" : "hover:text-bone",
   );
   if (href) {

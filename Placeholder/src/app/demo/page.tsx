@@ -10,7 +10,7 @@ import { buttonStyles } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "Demo",
   description:
-    "A guided, front-end demo of the Placeholder invoicing workflow — customer record, VAT-aware invoice, VAT readiness, and payment status tracking. Runs on demo data, no account needed.",
+    "A guided, front-end demo of the Invoice X invoicing workflow: customer record, VAT-aware invoice, VAT readiness, and payment status tracking. Runs on demo data, no account needed.",
 };
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -32,11 +32,11 @@ export default function DemoPage() {
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <Eyebrow>Guided demo</Eyebrow>
-            <h1 className="mt-3 font-display text-4xl font-medium tracking-[0.025em] text-bone sm:text-5xl">
+            <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-bone sm:text-5xl">
               A guided demo of the invoicing workflow
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-fog">
-              This is a guided demo workspace running on demo data — no account, no sign-up, nothing
+              This is a guided demo workspace running on demo data. No account, no sign-up, nothing
               saved. Step through the core workflow to see how the product fits together.
             </p>
             <p className="mt-4 text-base font-medium leading-relaxed text-cloud">
@@ -72,11 +72,11 @@ export default function DemoPage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow>Walkthrough</Eyebrow>
-            <h2 className="mt-3 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               Customer → Invoice → VAT readiness → Payment
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-fog">
-              Browse the four steps at your own pace, or start the guided walkthrough — a
+              Browse the four steps at your own pace, or start the guided walkthrough, a
               spotlighted tutorial where you perform each action on demo data.
             </p>
           </Reveal>
@@ -92,12 +92,12 @@ export default function DemoPage() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
-            <h2 className="font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               Want to run this on your own invoices?
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-fog">
               The demo shows the workflow on sample data. Pilot teams get hands-on onboarding and a
-              direct feedback loop — free during the pilot.
+              direct feedback loop, free during the pilot.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href="/pricing" className={buttonStyles("primary", "lg")}>

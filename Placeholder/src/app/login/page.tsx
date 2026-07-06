@@ -8,19 +8,28 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { Input } from "@/components/ui/Input";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
   const toast = useToast();
-  const [email, setEmail] = useState("demo@placeholder.sa");
-  const [password, setPassword] = useState("demo1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    toast.success("Signed in (demo)");
-    window.setTimeout(() => router.push("/dashboard"), 400);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Signed in");
+    router.push("/dashboard");
+    router.refresh();
   }
 
   return (
@@ -57,7 +66,7 @@ export default function LoginPage() {
         />
         <div className="flex items-center justify-between text-sm">
           <label className="flex items-center gap-2 text-fog">
-            <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-hairline bg-ink text-signal" />
+            <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-hairline bg-ink accent-signal" />
             Remember me
           </label>
           <a href="#" className="font-medium text-signal hover:text-key-lime">
@@ -71,7 +80,7 @@ export default function LoginPage() {
 
       <div className="mt-4">
         <Link href="/dashboard" className={buttonStyles("secondary", "md", "w-full")}>
-          Skip — explore the demo
+          Skip and explore the demo
         </Link>
       </div>
     </AuthShell>

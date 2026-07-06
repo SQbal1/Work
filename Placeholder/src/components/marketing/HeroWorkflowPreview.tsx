@@ -99,13 +99,13 @@ export function HeroWorkflowPreview({
   const headerStatus = getHeaderStatus(step);
 
   return (
-    <div className="relative overflow-hidden rounded-[4px] border border-hairline bg-ink lg:flex lg:h-full lg:flex-col">
+    <div className="relative overflow-hidden rounded-[10px] border border-hairline bg-ink lg:flex lg:h-full lg:flex-col">
       <SignalTransfer step={step} reduced={reduced} />
 
       <div className="relative z-10 border-b border-hairline bg-ink/96 px-4 py-4 sm:px-5">
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[4px] border border-signal/25 bg-signal/10 text-signal">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[10px] border border-signal/25 bg-signal/10 text-signal">
               <Radio className="h-4 w-4" />
             </span>
             <div className="min-w-0 flex-1 overflow-hidden">
@@ -199,7 +199,7 @@ function ClientRequestLane({ step, reduced }: { step: number; reduced: boolean }
       <div className="flex min-w-0 items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="font-mono text-[11px] uppercase tracking-[0.08em] text-fog">Request lane</div>
-          <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap font-display text-lg font-medium tracking-[0.025em] text-bone">
+          <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap font-display text-lg font-semibold tracking-tight text-bone">
             Client request
           </h3>
         </div>
@@ -211,12 +211,12 @@ function ClientRequestLane({ step, reduced }: { step: number; reduced: boolean }
           borderColor: step >= 0 ? "rgba(168, 255, 83, 0.34)" : "rgba(39, 42, 46, 1)",
           y: step === 0 && !reduced ? -2 : 0,
         }}
-        className="mt-4 overflow-hidden rounded-[4px] border border-hairline bg-ink p-4"
+        className="mt-4 overflow-hidden rounded-[10px] border border-hairline bg-ink p-4"
         initial={false}
         transition={SPRINGS.state}
       >
         <div className="flex min-w-0 items-center gap-3">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-canvas text-signal">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-canvas text-signal">
             <UserRound className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1 overflow-hidden">
@@ -237,7 +237,7 @@ function ClientRequestLane({ step, reduced }: { step: number; reduced: boolean }
         </div>
       </motion.div>
 
-      <div className="mt-4 overflow-hidden text-ellipsis whitespace-nowrap rounded-[4px] border border-hairline bg-ink px-3 py-2 font-mono text-[11px] text-fog">
+      <div className="mt-4 overflow-hidden text-ellipsis whitespace-nowrap rounded-[10px] border border-hairline bg-ink px-3 py-2 font-mono text-[11px] text-fog">
         request.id <span className="text-cloud">REQ-438</span>
       </div>
     </section>
@@ -246,7 +246,7 @@ function ClientRequestLane({ step, reduced }: { step: number; reduced: boolean }
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-[4px] border border-hairline bg-canvas px-2.5 py-2">
+    <div className="min-w-0 rounded-[10px] border border-hairline bg-canvas px-2.5 py-2">
       <div className="overflow-hidden text-ellipsis whitespace-nowrap text-fog">{label}</div>
       <div className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-cloud">{value}</div>
     </div>
@@ -275,7 +275,7 @@ function InvoiceWorkspace({
           <div className="font-mono text-[11px] uppercase tracking-[0.08em] text-fog">
             Invoice workspace
           </div>
-          <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap font-display text-xl font-medium tracking-[0.025em] text-bone">
+          <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap font-display text-xl font-semibold tracking-tight text-bone">
             Consulting retainer
           </h3>
         </div>
@@ -294,7 +294,7 @@ function InvoiceWorkspace({
         <AnimatedField active label="Issue date" reduced={reduced} value={issueDate} />
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-[4px] border border-hairline bg-ink">
+      <div className="mt-4 overflow-hidden rounded-[10px] border border-hairline bg-ink">
         <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_54px_96px] gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.06em] text-fog sm:grid-cols-[minmax(0,1fr)_64px_112px]">
           <span className="overflow-hidden text-ellipsis whitespace-nowrap">Description</span>
           <span className="overflow-hidden text-ellipsis whitespace-nowrap text-right">Qty</span>
@@ -357,7 +357,7 @@ function AnimatedField({
         borderColor: active ? "rgba(168, 255, 83, 0.24)" : "rgba(39, 42, 46, 1)",
         backgroundColor: active ? "rgba(18, 19, 23, 1)" : "rgba(18, 19, 23, 0.72)",
       }}
-      className="min-h-[72px] min-w-0 overflow-hidden rounded-[4px] border border-hairline bg-ink px-3 py-2.5"
+      className="min-h-[72px] min-w-0 overflow-hidden rounded-[10px] border border-hairline bg-ink px-3 py-2.5"
       initial={false}
       transition={SPRINGS.state}
     >
@@ -450,11 +450,11 @@ function ValidationRail({ reduced, step }: { reduced: boolean; step: number }) {
           <div className="overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.08em] text-fog">
             Validation
           </div>
-          <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap font-display text-lg font-medium tracking-[0.025em] text-bone">
+          <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap font-display text-lg font-semibold tracking-tight text-bone">
             VAT and payment
           </h3>
         </div>
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-ink text-signal">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-ink text-signal">
           <ListChecks className="h-4 w-4" />
         </span>
       </div>
@@ -468,7 +468,7 @@ function ValidationRail({ reduced, step }: { reduced: boolean; step: number }) {
                 borderColor: active ? "rgba(168, 255, 83, 0.28)" : "rgba(39, 42, 46, 1)",
                 x: active || reduced ? 0 : -3,
               }}
-              className="rounded-[4px] border border-hairline bg-ink p-3"
+              className="rounded-[10px] border border-hairline bg-ink p-3"
               initial={false}
               key={check.label}
               transition={SPRINGS.state}
@@ -501,20 +501,20 @@ function ValidationRail({ reduced, step }: { reduced: boolean; step: number }) {
         })}
       </div>
 
-      <div className="mt-4 rounded-[4px] border border-hairline bg-ink p-3">
+      <div className="mt-4 rounded-[10px] border border-hairline bg-ink p-3">
         <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
           <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-sm text-fog">
             Payment state
           </span>
           <SaudiRiyal className="h-4 w-4 text-signal" />
         </div>
-        <div className="grid min-w-0 grid-cols-3 gap-1 rounded-[4px] border border-hairline bg-canvas p-1">
+        <div className="grid min-w-0 grid-cols-3 gap-1 rounded-[10px] border border-hairline bg-canvas p-1">
           {paymentStates.map((state, index) => {
             const active = index === activePaymentIndex;
             return (
               <div
                 className={cn(
-                  "relative h-8 overflow-hidden rounded-[4px] px-1 text-center font-mono text-[11px] leading-8",
+                  "relative h-8 overflow-hidden rounded-[10px] px-1 text-center font-mono text-[11px] leading-8",
                   active ? "text-ink" : "text-fog",
                 )}
                 key={state}
@@ -522,7 +522,7 @@ function ValidationRail({ reduced, step }: { reduced: boolean; step: number }) {
                 {active ? (
                   <motion.span
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute inset-0 rounded-[4px] bg-signal"
+                    className="absolute inset-0 rounded-[10px] bg-signal"
                     initial={reduced ? false : { opacity: 0, scale: 0.92 }}
                     transition={SPRINGS.state}
                   />

@@ -8,6 +8,7 @@ export const SPRINGS = {
   preview: { type: "spring", stiffness: 150, damping: 28, mass: 1.12 },
   parallax: { type: "spring", stiffness: 120, damping: 24, mass: 1.1 },
   hover: { type: "spring", stiffness: 520, damping: 38, mass: 0.58 },
+  tilt: { type: "spring", stiffness: 130, damping: 22, mass: 0.6 },
   state: { type: "spring", stiffness: 360, damping: 30, mass: 0.74 },
   line: { type: "spring", stiffness: 190, damping: 28, mass: 0.84 },
   scrollCard: { type: "spring", stiffness: 210, damping: 30, mass: 0.9 },

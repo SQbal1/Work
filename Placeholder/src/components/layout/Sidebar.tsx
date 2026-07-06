@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 import { NAV_ITEMS } from "@/config/nav";
 import { Logo } from "@/components/Logo";
 import { buttonStyles } from "@/components/ui/Button";
@@ -49,12 +49,20 @@ export function Sidebar({
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "group flex items-center gap-3 rounded-[4px] border px-3 py-2.5 text-sm font-medium transition",
+                "group relative flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium transition",
                 active
-                  ? "border-signal/20 bg-canvas text-bone"
-                  : "border-transparent text-fog hover:border-hairline hover:bg-canvas/70 hover:text-cloud",
+                  ? "border-signal/20 bg-white/[0.05] text-bone"
+                  : "border-transparent text-fog hover:border-hairline hover:bg-white/[0.03] hover:text-cloud",
               )}
             >
+              {/* active edge — the signal rail */}
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-gradient-to-b from-signal to-mint transition-opacity",
+                  active ? "opacity-100" : "opacity-0",
+                )}
+              />
               <Icon
                 className={cn(
                   "h-5 w-5",
@@ -71,15 +79,19 @@ export function Sidebar({
         <Link
           href="/settings"
           onClick={onNavigate}
-          className="flex items-center gap-3 rounded-[4px] border border-hairline p-3 transition hover:border-graphite hover:bg-canvas/70"
+          className="group flex items-center gap-3 rounded-xl border border-hairline bg-white/[0.02] p-3 transition hover:border-graphite hover:bg-white/[0.04]"
         >
           <Avatar name={company.name || "Your Company"} size="sm" />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-bone">
               {company.name || "Your company"}
             </p>
             <p className="truncate text-xs text-fog">{businessType.label}</p>
           </div>
+          <Settings
+            aria-hidden
+            className="h-4 w-4 shrink-0 text-fog transition group-hover:text-cloud"
+          />
         </Link>
       </div>
     </aside>

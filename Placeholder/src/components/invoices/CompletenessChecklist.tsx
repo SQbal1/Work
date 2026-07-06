@@ -1,10 +1,13 @@
-import { Check, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { brand } from "@/config/brand";
 
 export interface ChecklistItem {
   label: string;
   done: boolean;
+  /** Shown on incomplete items — jumps to the field/screen that fixes it. */
+  action?: { label: string; href?: string; onClick?: () => void };
 }
 
 /**
@@ -41,18 +44,37 @@ export function CompletenessChecklist({ items }: { items: ChecklistItem[] }) {
             >
               <Check className="h-3 w-3" />
             </span>
-            <span className={it.done ? "text-cloud" : "text-fog"}>{it.label}</span>
+            <span className={cn("flex-1", it.done ? "text-cloud" : "text-fog")}>{it.label}</span>
+            {!it.done && it.action ? <FixAction action={it.action} /> : null}
           </li>
         ))}
       </ul>
 
-      <div className="mt-4 flex items-start gap-2 rounded-[4px] border border-key-lime/20 bg-key-lime/10 p-3 text-xs text-key-lime">
+      <div className="mt-4 flex items-start gap-2 rounded-[10px] border border-key-lime/20 bg-key-lime/10 p-3 text-xs text-key-lime">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-key-lime" />
         <p>
-          Compliance checklist placeholder. {brand.name} provides a ZATCA-ready workflow foundation — a
+          Compliance checklist placeholder. {brand.name} provides a ZATCA-ready workflow foundation. A
           final compliance review is required before production use.
         </p>
       </div>
     </div>
+  );
+}
+
+/** The little "Fix →" affordance on an incomplete checklist item. */
+function FixAction({ action }: { action: NonNullable<ChecklistItem["action"]> }) {
+  const cls =
+    "inline-flex shrink-0 items-center gap-0.5 rounded-[10px] px-1.5 py-0.5 text-xs font-medium text-signal transition hover:bg-signal/10 hover:text-key-lime";
+  if (action.href) {
+    return (
+      <Link href={action.href} className={cls}>
+        {action.label} <ArrowRight className="h-3 w-3" />
+      </Link>
+    );
+  }
+  return (
+    <button type="button" onClick={action.onClick} className={cls}>
+      {action.label} <ArrowRight className="h-3 w-3" />
+    </button>
   );
 }

@@ -62,7 +62,7 @@ export const BUSINESS_TYPES: BusinessTypeDef[] = [
   {
     id: "other",
     label: "Other",
-    description: "Something else — we'll keep it flexible",
+    description: "Something else, we'll keep it flexible",
     icon: Building2,
   },
 ];

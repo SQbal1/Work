@@ -19,6 +19,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Modal } from "@/components/ui/Modal";
 import { CompanyProfileCard } from "@/components/settings/CompanyProfileCard";
 import { InvoicePreferencesCard } from "@/components/settings/InvoicePreferencesCard";
+import { ZatcaCsrCard } from "@/components/settings/ZatcaCsrCard";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { todayISO } from "@/lib/format";
@@ -26,7 +27,8 @@ import { todayISO } from "@/lib/format";
 export default function SettingsPage() {
   const router = useRouter();
   const toast = useToast();
-  const { company, settings, customers, products, invoices, resetDemoData, clearAllData } = useStore();
+  const { company, settings, customers, products, invoices, usingSupabase, resetDemoData, clearAllData } =
+    useStore();
   const [confirm, setConfirm] = useState<null | "reset" | "clear">(null);
 
   function exportData() {
@@ -52,18 +54,18 @@ export default function SettingsPage() {
       <Card>
         <CardHeader title="VAT & ZATCA" subtitle="E-invoicing compliance workflow (placeholder)." />
         <CardBody className="space-y-4">
-          <div className="flex items-start gap-3 rounded-[4px] border border-key-lime/20 bg-key-lime/10 p-4 text-sm text-key-lime">
+          <div className="flex items-start gap-3 rounded-[10px] border border-key-lime/20 bg-key-lime/10 p-4 text-sm text-key-lime">
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" />
             <p>
-              Placeholder provides a <strong>ZATCA-ready workflow foundation</strong>. This MVP does not
+              Invoice X provides a <strong>ZATCA-ready workflow foundation</strong>. This MVP does not
               connect to official ZATCA systems and is not a claim of compliance. A final compliance
               review is required before production use.
             </p>
           </div>
-          <div className="flex items-center justify-between rounded-[4px] border border-hairline bg-ink p-4">
+          <div className="flex items-center justify-between rounded-[10px] border border-hairline bg-ink p-4">
             <div>
-              <div className="text-sm font-medium text-bone">ZATCA e-invoicing integration</div>
-              <div className="text-xs text-fog">Phase 2 (Integration) connection</div>
+              <div className="text-sm font-medium text-bone">ZATCA live connection</div>
+              <div className="text-xs text-fog">Submission, clearance & reporting APIs</div>
             </div>
             <div className="flex items-center gap-3">
               <Badge tone="gray" dot>
@@ -74,8 +76,22 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
+          <div className="flex items-center justify-between rounded-[10px] border border-hairline bg-ink p-4">
+            <div>
+              <div className="text-sm font-medium text-bone">UBL XML generation & signing</div>
+              <div className="text-xs text-fog">
+                Development preview: a self-signed local key, not a ZATCA-issued CSID. See each
+                invoice&rsquo;s ZATCA card.
+              </div>
+            </div>
+            <Badge tone="blue" dot>
+              Simulated
+            </Badge>
+          </div>
         </CardBody>
       </Card>
+
+      <ZatcaCsrCard />
 
       {/* Team members placeholder */}
       <Card>
@@ -89,7 +105,7 @@ export default function SettingsPage() {
           }
         />
         <CardBody>
-          <div className="flex items-center justify-between rounded-[4px] border border-hairline bg-ink p-3">
+          <div className="flex items-center justify-between rounded-[10px] border border-hairline bg-ink p-3">
             <div className="flex items-center gap-3">
               <Avatar name={company.name || "You"} size="sm" />
               <div>
@@ -107,7 +123,14 @@ export default function SettingsPage() {
 
       {/* Data & export */}
       <Card>
-        <CardHeader title="Data & export" subtitle="Your data is stored locally in this browser." />
+        <CardHeader
+          title="Data & export"
+          subtitle={
+            usingSupabase
+              ? "Your data is stored in your workspace."
+              : "Your data is stored locally in this browser."
+          }
+        />
         <CardBody className="space-y-3">
           <DataRow
             title="Export data"
@@ -118,15 +141,17 @@ export default function SettingsPage() {
               </Button>
             }
           />
-          <DataRow
-            title="Restore demo data"
-            description="Reset to the sample workspace."
-            action={
-              <Button variant="secondary" size="sm" onClick={() => setConfirm("reset")}>
-                <RotateCcw className="h-4 w-4" /> Restore
-              </Button>
-            }
-          />
+          {!usingSupabase ? (
+            <DataRow
+              title="Restore demo data"
+              description="Reset to the sample workspace."
+              action={
+                <Button variant="secondary" size="sm" onClick={() => setConfirm("reset")}>
+                  <RotateCcw className="h-4 w-4" /> Restore
+                </Button>
+              }
+            />
+          ) : null}
           <DataRow
             title="Clear all data"
             description="Delete customers, products, and invoices."
@@ -174,6 +199,15 @@ export default function SettingsPage() {
             ? "This permanently deletes all customers, products, and invoices from this browser. You'll be taken to onboarding to set up again."
             : "This replaces your current data with the original sample workspace."}
         </p>
+        {confirm === "clear" ? (
+          <button
+            type="button"
+            onClick={exportData}
+            className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-signal transition hover:text-key-lime"
+          >
+            <Download className="h-3.5 w-3.5" /> Export a backup first
+          </button>
+        ) : null}
       </Modal>
     </div>
   );
@@ -189,7 +223,7 @@ function DataRow({
   action: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-[4px] border border-hairline bg-ink p-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 rounded-[10px] border border-hairline bg-ink p-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <div className="text-sm font-medium text-bone">{title}</div>
         <div className="text-xs text-fog">{description}</div>

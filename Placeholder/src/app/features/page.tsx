@@ -21,7 +21,7 @@ import { cn } from "@/lib/cn";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "A focused invoicing workspace for small businesses — customer records, invoice generation, VAT-aware totals, and payment tracking in one place.",
+    "A focused invoicing workspace for small businesses: customer records, invoice generation, VAT-aware totals, and payment tracking in one place.",
 };
 
 // Single lead-capture path — all pilot CTAs land on the form (/pricing#request).
@@ -103,7 +103,7 @@ const HERO_INVOICES: {
 
 function HeroWorkspacePreview() {
   return (
-    <div className="mt-10 overflow-hidden rounded-[4px] border border-hairline bg-canvas text-left">
+    <div className="mt-10 overflow-hidden rounded-[10px] border border-hairline bg-canvas text-left">
       <div className="flex items-center justify-between border-b border-hairline px-4 py-2.5">
         <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-fog">
           workspace · invoices
@@ -142,10 +142,10 @@ function HeroWorkspacePreview() {
 
 function CustomerRecordPanel() {
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <PanelTag icon={UserRound}>customer.record</PanelTag>
       <div className="mt-4 flex items-center gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-ink text-signal">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-ink text-signal">
           <UserRound className="h-4 w-4" />
         </span>
         <div className="min-w-0">
@@ -155,7 +155,7 @@ function CustomerRecordPanel() {
           <div className="font-mono text-[11px] text-fog">customer.id · CUS-117</div>
         </div>
       </div>
-      <div className="mt-4 rounded-[4px] border border-hairline bg-ink p-3 font-mono text-[11px]">
+      <div className="mt-4 rounded-[10px] border border-hairline bg-ink p-3 font-mono text-[11px]">
         <div className="flex justify-between gap-3">
           <span className="text-fog">vat_number</span>
           <span className="truncate text-cloud">300458921700003</span>
@@ -171,7 +171,7 @@ function CustomerRecordPanel() {
       </div>
       <div className="mt-3 flex items-center gap-2 border-t border-hairline pt-3 font-mono text-[11px] text-fog">
         <Check className="h-3.5 w-3.5 shrink-0 text-signal" />
-        Reused across INV-1207 and 3 other invoices — no re-entry
+        Reused across INV-1207 and 3 other invoices, no re-entry
       </div>
     </div>
   );
@@ -192,7 +192,7 @@ function InvoiceBuilderPanel() {
   const total = subtotal + vat;
 
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <div className="flex items-center justify-between border-b border-hairline pb-3">
         <PanelTag icon={FileText}>invoice.build</PanelTag>
         <span className="font-mono text-[11px] text-fog">INV-1208</span>
@@ -205,7 +205,7 @@ function InvoiceBuilderPanel() {
         {SERVICE_LINES.map((line, i) => (
           <div
             key={i}
-            className="flex items-center justify-between gap-3 rounded-[4px] border border-hairline bg-ink px-3 py-2"
+            className="flex items-center justify-between gap-3 rounded-[10px] border border-hairline bg-ink px-3 py-2"
           >
             <div className="min-w-0">
               <div className="text-xs text-cloud">{line.desc}</div>
@@ -219,7 +219,7 @@ function InvoiceBuilderPanel() {
           </div>
         ))}
       </div>
-      <div className="mt-3 flex items-center justify-between rounded-[4px] border border-hairline bg-ink p-3 font-mono text-[11px]">
+      <div className="mt-3 flex items-center justify-between rounded-[10px] border border-hairline bg-ink p-3 font-mono text-[11px]">
         <span className="text-fog">total · incl. VAT 15%</span>
         <span className="font-medium text-bone">SAR {total.toLocaleString()}</span>
       </div>
@@ -239,7 +239,7 @@ const VAT_CHECKS = [
 
 function VATReadinessPanel() {
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <PanelTag icon={ListChecks}>vat.readiness</PanelTag>
       <div className="mt-4 space-y-2.5">
         {VAT_CHECKS.map((check) => (
@@ -251,7 +251,7 @@ function VATReadinessPanel() {
           </div>
         ))}
       </div>
-      <div className="mt-4 rounded-[4px] border border-hairline bg-ink p-3 font-mono text-[11px]">
+      <div className="mt-4 rounded-[10px] border border-hairline bg-ink p-3 font-mono text-[11px]">
         <div className="flex justify-between">
           <span className="text-fog">subtotal</span>
           <span className="text-cloud">SAR 12,000</span>
@@ -278,12 +278,12 @@ const PAYMENT_ACTIVE = 2; // "Open"
 
 function PaymentTrackingPanel() {
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <div className="flex items-center justify-between">
         <PanelTag icon={Wallet}>payment.timeline</PanelTag>
         <StatusPill status="open" />
       </div>
-      <div className="mt-4 rounded-[4px] border border-hairline bg-ink px-3 py-2.5 font-mono text-[11px]">
+      <div className="mt-4 rounded-[10px] border border-hairline bg-ink px-3 py-2.5 font-mono text-[11px]">
         <div className="flex items-center justify-between">
           <span className="text-fog">INV-1207</span>
           <span className="text-bone">SAR 13,800</span>
@@ -342,7 +342,7 @@ function PaymentTrackingPanel() {
           ))}
         </div>
       </div>
-      <div className="mt-4 overflow-hidden rounded-[4px] border border-hairline">
+      <div className="mt-4 overflow-hidden rounded-[10px] border border-hairline">
         <div className="grid grid-cols-4 font-mono">
           {PAYMENT_STEPS.map((step, i) => (
             <div
@@ -383,7 +383,7 @@ export default function FeaturesPage() {
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <Eyebrow>Features</Eyebrow>
-            <h1 className="mt-3 text-balance font-display text-4xl font-medium tracking-[0.025em] text-bone sm:text-5xl">
+            <h1 className="mt-3 text-balance font-display text-4xl font-semibold tracking-tight text-bone sm:text-5xl">
               Everything needed to move from customer to invoice to payment state
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-fog">
@@ -417,12 +417,12 @@ export default function FeaturesPage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8">
           <Reveal>
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-[4px] border border-hairline bg-canvas text-syntax-violet">
+              <span className="grid h-10 w-10 place-items-center rounded-[10px] border border-hairline bg-canvas text-syntax-violet">
                 <Users className="h-5 w-5" />
               </span>
               <Eyebrow>Customer records</Eyebrow>
             </div>
-            <h2 className="mt-5 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-5 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               Save a customer once, reuse them everywhere
             </h2>
             <p className="mt-3 text-base leading-relaxed text-fog">
@@ -441,16 +441,16 @@ export default function FeaturesPage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8">
           <Reveal className="lg:order-2">
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-[4px] border border-hairline bg-canvas text-syntax-pink">
+              <span className="grid h-10 w-10 place-items-center rounded-[10px] border border-hairline bg-canvas text-syntax-pink">
                 <FileText className="h-5 w-5" />
               </span>
               <Eyebrow>Invoice creation</Eyebrow>
             </div>
-            <h2 className="mt-5 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-5 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               Create structured invoices in seconds
             </h2>
             <p className="mt-3 text-base leading-relaxed text-fog">
-              Build a complete invoice from saved customers and service lines — no formatting by
+              Build a complete invoice from saved customers and service lines, with no formatting by
               hand.
             </p>
           </Reveal>
@@ -465,19 +465,19 @@ export default function FeaturesPage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8">
           <Reveal>
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-[4px] border border-hairline bg-canvas text-loop-green">
+              <span className="grid h-10 w-10 place-items-center rounded-[10px] border border-hairline bg-canvas text-loop-green">
                 <Percent className="h-5 w-5" />
               </span>
               <Eyebrow>VAT-aware workflow</Eyebrow>
             </div>
-            <h2 className="mt-5 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-5 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               VAT-aware totals and readiness checks
             </h2>
             <p className="mt-3 text-base leading-relaxed text-fog">
               Per-line VAT and a completeness checklist help you confirm an invoice is ready before
               sending.
             </p>
-            <p className="mt-4 rounded-[4px] border border-hairline bg-canvas/60 p-3 text-xs leading-relaxed text-fog">
+            <p className="mt-4 rounded-[10px] border border-hairline bg-canvas/60 p-3 text-xs leading-relaxed text-fog">
               Official ZATCA integration is not part of the MVP. The current goal is a cleaner
               VAT-aware workflow foundation, not certified compliance.
             </p>
@@ -493,12 +493,12 @@ export default function FeaturesPage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8">
           <Reveal className="lg:order-2">
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-[4px] border border-hairline bg-canvas text-key-lime">
+              <span className="grid h-10 w-10 place-items-center rounded-[10px] border border-hairline bg-canvas text-key-lime">
                 <Wallet className="h-5 w-5" />
               </span>
               <Eyebrow>Payment tracking</Eyebrow>
             </div>
-            <h2 className="mt-5 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-5 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               Know exactly what&apos;s still open
             </h2>
             <p className="mt-3 text-base leading-relaxed text-fog">
@@ -515,17 +515,17 @@ export default function FeaturesPage() {
       {/* Features CTA */}
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="home-pilot-panel overflow-hidden rounded-[4px] border border-signal/35">
+          <Reveal className="home-pilot-panel overflow-hidden rounded-[10px] border border-signal/35">
             <div className="grid lg:grid-cols-2">
               {/* left — pitch */}
               <div className="aurora relative p-8 sm:p-10">
                 <div className="relative z-10">
                   <Eyebrow>Early access</Eyebrow>
-                  <h2 className="mt-4 font-display text-3xl font-medium leading-[1.12] tracking-[0.025em] text-bone sm:text-4xl">
+                  <h2 className="mt-4 font-display text-3xl font-medium leading-[1.12] tracking-tight text-bone sm:text-4xl">
                     See it on your own invoices
                   </h2>
                   <p className="mt-4 max-w-md text-sm leading-relaxed text-fog">
-                    Placeholder is in early pilot — manual onboarding, direct support, and
+                    Invoice X is in early pilot: manual onboarding, direct support, and
                     feedback-based improvements as you use it on real invoices.
                   </p>
                   <div className="mt-8 flex flex-wrap items-center gap-3">

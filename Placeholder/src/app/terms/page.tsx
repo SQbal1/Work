@@ -6,7 +6,7 @@ import { LegalLayout, LegalSection, LegalList } from "@/components/marketing/Leg
 export const metadata: Metadata = {
   title: "Terms of Use",
   description:
-    "Terms for using the Placeholder marketing site and early pilot — a prototype invoicing product for Saudi & GCC SMEs, not a production billing system.",
+    "Terms for using the Invoice X marketing site and early pilot: a prototype invoicing product for Saudi & GCC SMEs, not a production billing system.",
   alternates: { canonical: "/terms" },
 };
 

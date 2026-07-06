@@ -35,7 +35,7 @@ export const PROBLEMS: IconItem[] = [
     icon: Users,
     title: "Customer data scattered",
     description:
-      "Small teams re-enter the same client details across invoices, chats, and spreadsheets — wasting time and inviting mistakes.",
+      "Small teams re-enter the same client details across invoices, chats, and spreadsheets, wasting time and inviting mistakes.",
   },
   {
     icon: Calculator,
@@ -66,7 +66,7 @@ export const WORKFLOW: IconItem[] = [
   {
     icon: Percent,
     title: "VAT-aware totals",
-    description: "Subtotal, VAT, and grand total calculated as you go — no manual math.",
+    description: "Subtotal, VAT, and grand total calculated as you go, with no manual math.",
   },
   {
     icon: CircleDollarSign,
@@ -115,7 +115,7 @@ export const MVP_FEATURES: IconItem[] = [
   {
     icon: RefreshCw,
     title: "Reusable customer records",
-    description: "Pull a saved customer into any invoice — no repeated typing.",
+    description: "Pull a saved customer into any invoice without retyping anything.",
   },
   {
     icon: FileText,
@@ -140,7 +140,7 @@ export const MVP_FEATURES: IconItem[] = [
   {
     icon: FileDown,
     title: "PDF export placeholder",
-    description: "Export is scaffolded as a placeholder — real generation comes after the pilot.",
+    description: "Export is scaffolded as a placeholder. Real generation comes after the pilot.",
   },
 ];
 
@@ -203,19 +203,19 @@ export interface Faq {
 
 export const FAQS: Faq[] = [
   {
-    question: "Is Placeholder officially ZATCA compliant?",
+    question: "Is Invoice X officially ZATCA compliant?",
     answer:
-      "Not yet. Placeholder is an MVP with a ZATCA-ready workflow foundation and VAT readiness checks. It does not claim certified compliance — a final compliance review is required before production use.",
+      "Not yet. Invoice X is an MVP with a ZATCA-ready workflow foundation and VAT readiness checks. It does not claim certified compliance, and a final compliance review is required before production use.",
   },
   {
     question: "Do I need accounting knowledge to use it?",
     answer:
-      "No. Placeholder is designed so anyone can create a clean, VAT-aware invoice without accounting jargon or spreadsheets.",
+      "No. Invoice X is designed so anyone can create a clean, VAT-aware invoice without accounting jargon or spreadsheets.",
   },
   {
     question: "How does the pilot work?",
     answer:
-      "Pilot access is onboarded manually with direct support. You get the core workflow — customer records, invoices, VAT-aware totals, and payment tracking — and a direct feedback loop to shape what we build next.",
+      "Pilot access is onboarded manually with direct support. You get the core workflow (customer records, invoices, VAT-aware totals, and payment tracking) plus a direct feedback loop to shape what we build next.",
   },
   {
     question: "How do payments work during the pilot?",
@@ -225,6 +225,6 @@ export const FAQS: Faq[] = [
   {
     question: "Which businesses is it for?",
     answer:
-      "We're starting with service businesses — consulting firms, professional services, logistics SMEs, and small Saudi/GCC teams — and designing to expand into adjacent SME operations later.",
+      "We're starting with service businesses like consulting firms, professional services, logistics SMEs, and small Saudi/GCC teams, then expanding into adjacent SME operations later.",
   },
 ];

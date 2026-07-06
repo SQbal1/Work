@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** Shared control styling for inputs/selects/textareas. */
+/** Shared control styling for inputs/selects/textareas — quiet glass wells. */
 export const controlClass =
-  "w-full rounded-[4px] border border-hairline bg-ink px-3.5 text-sm text-bone placeholder:text-fog transition [color-scheme:dark] focus:border-signal focus:outline-none focus:ring-2 focus:ring-signal/15 disabled:bg-canvas disabled:text-fog";
+  "w-full rounded-xl border border-hairline bg-white/[0.03] px-3.5 text-sm text-bone placeholder:text-fog transition [color-scheme:dark] hover:border-graphite focus:border-signal/60 focus:bg-white/[0.045] focus:outline-none focus:ring-2 focus:ring-signal/15 disabled:bg-canvas disabled:text-fog";
 
 /** Label + hint/error wrapper used by all form controls. */
 export function Field({

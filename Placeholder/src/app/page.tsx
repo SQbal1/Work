@@ -9,6 +9,7 @@ import {
   WorkflowSection,
   BuiltForSection,
   FeatureGridSection,
+  EcosystemSection,
   PilotJourneySection,
   PilotSection,
   FaqSection,
@@ -33,6 +34,7 @@ export default function LandingPage() {
       <BuiltForSection />
       <FeatureGridSection />
       <PilotJourneySection />
+      <EcosystemSection />
       <PilotSection />
       <FaqSection />
       <FinalCtaSection />

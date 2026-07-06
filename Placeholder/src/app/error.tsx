@@ -29,7 +29,7 @@ export default function Error({
         <span className="text-fog">runtime.error</span>
       </div>
 
-      <h1 className="mt-5 text-balance font-display text-3xl font-medium tracking-[0.025em] text-bone sm:text-4xl">
+      <h1 className="mt-5 text-balance font-display text-3xl font-semibold tracking-tight text-bone sm:text-4xl">
         Something went wrong
       </h1>
       <p className="mx-auto mt-4 max-w-md text-balance text-sm leading-relaxed text-fog">

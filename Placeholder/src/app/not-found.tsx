@@ -38,7 +38,7 @@ export default function NotFound() {
               404
             </h1>
 
-            <h2 className="mt-6 text-balance font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-6 text-balance font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               We couldn&apos;t find that page
             </h2>
             <p className="mx-auto mt-4 max-w-md text-balance text-base leading-relaxed text-fog">
@@ -56,7 +56,7 @@ export default function NotFound() {
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fog">
               {quickLinks.map((l) => (
-                <Link key={l.href} href={l.href} className="rounded-[2px] transition hover:text-bone focus-ring">
+                <Link key={l.href} href={l.href} className="rounded-[4px] transition hover:text-bone focus-ring">
                   {l.label}
                 </Link>
               ))}

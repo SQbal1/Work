@@ -12,7 +12,7 @@ import { PILOT_OFFER, FUTURE_TIERS, PILOT_NEXT_STEPS } from "@/data/marketing";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Free pilot access to a VAT-aware invoicing workflow for Saudi & GCC small businesses — customer records, VAT readiness, and payment tracking. Onboarded manually, no checkout yet.",
+    "Free pilot access to a VAT-aware invoicing workflow for Saudi & GCC small businesses: customer records, VAT readiness, and payment tracking. Onboarded manually, no checkout yet.",
 };
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -34,11 +34,11 @@ export default function PricingPage() {
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <Eyebrow>Pricing</Eyebrow>
-            <h1 className="mt-3 text-balance font-display text-4xl font-medium tracking-[0.025em] text-bone sm:text-5xl">
+            <h1 className="mt-3 text-balance font-display text-4xl font-semibold tracking-tight text-bone sm:text-5xl">
               Free pilot access for Saudi &amp; GCC SMEs
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-fog">
-              Placeholder is an invoicing workspace for Saudi &amp; GCC small businesses — keep
+              Invoice X is an invoicing workspace for Saudi &amp; GCC small businesses. Keep
               customer records, build VAT-aware invoices, check VAT readiness before sending, and
               track payment status in one place. Start free with a guided pilot before committing to
               a larger system.
@@ -68,11 +68,11 @@ export default function PricingPage() {
       <section id="request" className="scroll-mt-20 border-b border-hairline py-16 sm:py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-start lg:gap-12 lg:px-8">
           {/* left — the live offer */}
-          <Reveal className="relative flex flex-col rounded-[4px] border border-signal/45 bg-canvas p-7">
+          <Reveal className="relative flex flex-col rounded-[10px] border border-signal/45 bg-canvas p-7">
             <span className="absolute -top-3 left-6 rounded-full border border-signal/25 bg-ink px-3 py-1 font-mono text-xs text-signal">
               Available now
             </span>
-            <h2 className="font-display font-medium tracking-[0.025em] text-bone">
+            <h2 className="font-display font-semibold tracking-tight text-bone">
               {PILOT_OFFER.name}
             </h2>
             <p className="mt-1 text-sm text-fog">{PILOT_OFFER.blurb}</p>
@@ -128,23 +128,23 @@ export default function PricingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow>For later</Eyebrow>
-            <h2 className="mt-3 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+            <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
               Coming after the pilot
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-fog">
-              These tiers are planned, not yet available. Pricing is finalized after the pilot — join
-              by requesting pilot access now and you&apos;ll be first to hear.
+              These tiers are planned, not yet available. Pricing is finalized after the pilot.
+              Request pilot access now and you&apos;ll be first to hear.
             </p>
           </Reveal>
           <div className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
             {FUTURE_TIERS.map((tier, i) => (
               <Reveal
                 key={tier.name}
-                className="flex flex-col rounded-[4px] border border-hairline bg-canvas/60 p-6"
+                className="flex flex-col rounded-[10px] border border-hairline bg-canvas/60 p-6"
                 delay={i * 80}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-display font-medium tracking-[0.025em] text-bone">
+                  <h3 className="font-display font-semibold tracking-tight text-bone">
                     {tier.name}
                   </h3>
                   <span className="shrink-0 rounded-full border border-hairline bg-ink px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-fog">
@@ -171,7 +171,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <Eyebrow>FAQ</Eyebrow>
-            <h2 className="mt-3 font-display text-3xl font-medium tracking-[0.025em] text-bone sm:text-4xl">
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-bone sm:text-4xl">
               Pilot questions, answered
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-fog">

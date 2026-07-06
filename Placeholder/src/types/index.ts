@@ -1,5 +1,5 @@
 /**
- * Core data model for Placeholder.
+ * Core data model for Invoice X.
  *
  * Everything is intentionally simple and flat so it maps cleanly to a real
  * database later (each interface ≈ one table). Money is stored as plain numbers
@@ -83,6 +83,16 @@ export interface Invoice {
   paidDate: string | null;
   createdAt: string;
   updatedAt: string;
+  /**
+   * ZATCA Phase-2 structural preview — set only once signed (Supabase
+   * workspaces only, never present in local demo mode). See src/lib/zatca/.
+   */
+  zatcaIcv?: number | null;
+  zatcaPreviousHash?: string | null;
+  zatcaInvoiceHash?: string | null;
+  zatcaSignature?: string | null;
+  zatcaPublicKey?: string | null;
+  zatcaSignedAt?: string | null;
 }
 
 export interface Settings {

@@ -64,7 +64,7 @@ export function PilotRequestForm() {
 
   if (status === "success") {
     return (
-      <div className="rounded-[4px] border border-hairline bg-ink p-7">
+      <div className="rounded-[10px] border border-hairline bg-ink p-7">
         <div className="flex items-center gap-4 border-b border-hairline pb-5">
           <span
             aria-hidden
@@ -84,11 +84,11 @@ export function PilotRequestForm() {
             </span>
           </div>
         </div>
-        <h3 className="mt-5 font-display text-xl font-medium tracking-[0.025em] text-bone">
+        <h3 className="mt-5 font-display text-xl font-semibold tracking-tight text-bone">
           Pilot request received
         </h3>
         <p className="mt-2 text-sm leading-relaxed text-fog">
-          Thanks — we&apos;ll review fit and reply within 24 hours to arrange a short onboarding
+          Thanks, we&apos;ll review fit and reply within 24 hours to arrange a short onboarding
           call. Nothing is charged and no account is created automatically; pilot access is set up
           manually with you.
         </p>
@@ -108,7 +108,7 @@ export function PilotRequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[4px] border border-hairline bg-ink p-7"
+      className="rounded-[10px] border border-hairline bg-ink p-7"
       noValidate={false}
     >
       <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-fog">
@@ -173,7 +173,7 @@ export function PilotRequestForm() {
       {status === "error" ? (
         <p
           role="alert"
-          className="mt-5 flex items-start gap-2 rounded-[4px] border border-mute-red/30 bg-mute-red/[0.07] p-3 text-sm leading-relaxed text-mute-red"
+          className="mt-5 flex items-start gap-2 rounded-[10px] border border-mute-red/30 bg-mute-red/[0.07] p-3 text-sm leading-relaxed text-mute-red"
         >
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
@@ -196,7 +196,7 @@ export function PilotRequestForm() {
         )}
       </button>
       <p className="mt-3 text-xs leading-relaxed text-fog">
-        This sends a manual pilot request — not an automated signup. No payment, no account is
+        This sends a manual pilot request, not an automated signup. No payment, no account is
         created yet.
       </p>
     </form>

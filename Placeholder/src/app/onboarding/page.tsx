@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion, MotionConfig, type Variants } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,10 +18,23 @@ import { Card, CardBody } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { BusinessTypePicker } from "@/components/settings/BusinessTypePicker";
+import { SPRINGS, STAGGER } from "@/components/marketing/motion";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { cn } from "@/lib/cn";
 import type { BusinessTypeId } from "@/types";
+
+// Reuse the marketing site's tuned motion vocabulary so onboarding feels part
+// of the same brand rather than a flat, separate flow.
+const stepContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: STAGGER.pills, delayChildren: 0.02 } },
+  exit: { opacity: 0, x: -14, transition: { duration: 0.16 } },
+};
+const stepItem: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: SPRINGS.body },
+};
 
 const STEPS = [
   { n: 1, label: "Business", icon: Building2 },
@@ -33,7 +47,16 @@ const STEPS = [
 export default function OnboardingPage() {
   const router = useRouter();
   const toast = useToast();
-  const { company, updateCompany, addCustomer, addProduct, setOnboarded } = useStore();
+  const {
+    ready,
+    company,
+    hasWorkspace,
+    createWorkspace,
+    updateCompany,
+    addCustomer,
+    addProduct,
+    setOnboarded,
+  } = useStore();
 
   const [step, setStep] = useState(1);
   const [businessType, setBusinessType] = useState<BusinessTypeId>(company.businessType);
@@ -50,10 +73,13 @@ export default function OnboardingPage() {
 
   const canNext = step !== 2 || companyForm.name.trim() !== "";
 
-  function persistAll() {
-    updateCompany({ ...companyForm, businessType });
+  async function persistAll() {
+    if (!hasWorkspace) {
+      await createWorkspace(companyForm.name.trim() || "My Workspace");
+    }
+    await updateCompany({ ...companyForm, businessType });
     if (customerForm.name.trim()) {
-      addCustomer({
+      await addCustomer({
         name: customerForm.name.trim(),
         company: customerForm.company.trim(),
         email: customerForm.email.trim(),
@@ -64,7 +90,7 @@ export default function OnboardingPage() {
       });
     }
     if (productForm.name.trim() && productForm.price) {
-      addProduct({
+      await addProduct({
         name: productForm.name.trim(),
         description: "",
         unitPrice: parseFloat(productForm.price) || 0,
@@ -72,21 +98,27 @@ export default function OnboardingPage() {
         active: true,
       });
     }
-    setOnboarded(true);
+    await setOnboarded(true);
   }
 
-  function finish(destination: string) {
-    persistAll();
-    toast.success("Setup complete — welcome aboard!");
-    router.push(destination);
+  async function finish(destination: string) {
+    if (!ready) return;
+    try {
+      await persistAll();
+      toast.success("Setup complete. Welcome aboard!");
+      router.push(destination);
+    } catch {
+      // store already surfaced an error toast
+    }
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="aurora min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-10 sm:py-14">
         <div className="mb-8 flex flex-col items-center">
           <Logo href={null} />
-          <h1 className="mt-5 font-display text-2xl font-medium tracking-[0.025em] text-bone">
+          <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight text-bone">
             Let&apos;s set up your workspace
           </h1>
           <p className="mt-1 text-sm text-fog">Five quick steps. Most are optional.</p>
@@ -131,14 +163,15 @@ export default function OnboardingPage() {
 
         <Card>
           <CardBody className="min-h-[280px] p-6 sm:p-8">
+            <AnimatePresence mode="wait">
             {step === 1 ? (
-              <StepShell title="What kind of business do you run?" description="We'll tailor the experience. You can change this anytime.">
+              <StepShell key="s1" title="What kind of business do you run?" description="We'll tailor the experience. You can change this anytime.">
                 <BusinessTypePicker value={businessType} onChange={setBusinessType} />
               </StepShell>
             ) : null}
 
             {step === 2 ? (
-              <StepShell title="Tell us about your business" description="This appears as the seller on your invoices.">
+              <StepShell key="s2" title="Tell us about your business" description="This appears as the seller on your invoices.">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Input
                     id="ob-name"
@@ -185,7 +218,7 @@ export default function OnboardingPage() {
             ) : null}
 
             {step === 3 ? (
-              <StepShell title="Add your first customer" description="Optional — you can skip and add customers later.">
+              <StepShell key="s3" title="Add your first customer" description="Optional. You can skip and add customers later.">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Input
                     id="ob-cname"
@@ -213,7 +246,7 @@ export default function OnboardingPage() {
             ) : null}
 
             {step === 4 ? (
-              <StepShell title="Add a service or product" description="Optional — these become reusable invoice line items.">
+              <StepShell key="s4" title="Add a service or product" description="Optional. These become reusable invoice line items.">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Input
                     id="ob-pname"
@@ -238,22 +271,31 @@ export default function OnboardingPage() {
             ) : null}
 
             {step === 5 ? (
-              <StepShell title="Ready to operate" description="Here's what we've prepared for you.">
+              <StepShell key="s5" title="Ready to operate" description="Here's what we've prepared for you.">
                 <ul className="space-y-2 text-sm">
                   <SummaryItem label="Business type & company profile" />
-                  <SummaryItem label={customerForm.name ? `Customer: ${customerForm.name}` : "Customer — skipped (add later)"} />
-                  <SummaryItem label={productForm.name ? `Service: ${productForm.name}` : "Service — skipped (add later)"} />
+                  <SummaryItem label={customerForm.name ? `Customer: ${customerForm.name}` : "Customer: skipped (add later)"} />
+                  <SummaryItem label={productForm.name ? `Service: ${productForm.name}` : "Service: skipped (add later)"} />
                 </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <Button className="flex-1" onClick={() => finish("/invoices/new")}>
+                  <Button className="flex-1" disabled={!ready} onClick={() => finish("/invoices/new")}>
                     <FileText className="h-4 w-4" /> Create my first invoice
                   </Button>
-                  <Button variant="secondary" className="flex-1" onClick={() => finish("/dashboard")}>
+                  <Button
+                    variant="secondary"
+                    className="flex-1"
+                    disabled={!ready}
+                    onClick={() => finish("/dashboard")}
+                  >
                     Go to dashboard
                   </Button>
                 </div>
+                {!ready ? (
+                  <p className="mt-3 text-center text-xs text-fog">Loading your workspace…</p>
+                ) : null}
               </StepShell>
             ) : null}
+            </AnimatePresence>
           </CardBody>
         </Card>
 
@@ -267,22 +309,17 @@ export default function OnboardingPage() {
             >
               <ArrowLeft className="h-4 w-4" /> Back
             </Button>
-            <div className="flex items-center gap-2">
-              {step === 3 || step === 4 ? (
-                <Button variant="ghost" onClick={() => setStep((s) => s + 1)}>
-                  Skip
-                </Button>
-              ) : null}
-              <Button onClick={() => setStep((s) => s + 1)} disabled={!canNext}>
-                Continue <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
+            <Button onClick={() => setStep((s) => s + 1)} disabled={!canNext}>
+              {step === 3 || step === 4 ? "Skip / Continue" : "Continue"}{" "}
+              <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
         ) : (
           <div className="mt-6 text-center">
             <button
               onClick={() => finish("/dashboard")}
-              className="text-sm font-medium text-fog hover:text-cloud"
+              disabled={!ready}
+              className="text-sm font-medium text-fog hover:text-cloud disabled:opacity-50"
             >
               Skip setup and go to dashboard
             </button>
@@ -290,6 +327,7 @@ export default function OnboardingPage() {
         )}
       </div>
     </div>
+    </MotionConfig>
   );
 }
 
@@ -303,11 +341,20 @@ function StepShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="animate-fade-in">
-      <h2 className="font-display text-xl font-medium tracking-[0.025em] text-bone">{title}</h2>
-      <p className="mt-1 text-sm text-fog">{description}</p>
-      <div className="mt-6">{children}</div>
-    </div>
+    <motion.div variants={stepContainer} initial="hidden" animate="show" exit="exit">
+      <motion.h2
+        variants={stepItem}
+        className="font-display text-xl font-semibold tracking-tight text-bone"
+      >
+        {title}
+      </motion.h2>
+      <motion.p variants={stepItem} className="mt-1 text-sm text-fog">
+        {description}
+      </motion.p>
+      <motion.div variants={stepItem} className="mt-6">
+        {children}
+      </motion.div>
+    </motion.div>
   );
 }
 

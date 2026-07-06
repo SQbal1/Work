@@ -35,7 +35,7 @@ export function MarketingNav() {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  // Let the bar settle (gain a shadow) once the page moves — a quiet depth cue.
+  // Let the bar settle into glass once the page moves — a quiet depth cue.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -50,10 +50,10 @@ export function MarketingNav() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 border-b bg-canvas/95 backdrop-blur-[6px] transition-[box-shadow,background-color,border-color] duration-300",
-          scrolled
-            ? "border-hairline bg-canvas/98 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]"
-            : "border-transparent",
+          "sticky top-0 z-40 border-b transition-[box-shadow,background-color,border-color,backdrop-filter] duration-300",
+          scrolled || open
+            ? "border-hairline bg-canvas/80 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.9)] backdrop-blur-xl"
+            : "border-transparent bg-transparent",
         )}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -66,8 +66,8 @@ export function MarketingNav() {
               return (
                 <Link
                   className={cn(
-                    "relative rounded-[2px] text-sm font-medium transition-colors focus-ring",
-                    active ? "text-bone" : "text-cloud hover:text-bone",
+                    "relative rounded-[4px] text-sm font-medium transition-colors focus-ring",
+                    active ? "text-bone" : "text-ash hover:text-bone",
                   )}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
@@ -78,7 +78,7 @@ export function MarketingNav() {
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "absolute -bottom-1.5 left-0 h-px bg-signal transition-all duration-300",
+                      "absolute -bottom-1.5 left-0 h-px bg-gradient-x transition-all duration-300",
                       active ? "w-full opacity-100" : "w-0 opacity-0",
                     )}
                   />
@@ -89,9 +89,9 @@ export function MarketingNav() {
 
           <div className="flex items-center gap-2">
             {/* Desktop sign-in */}
-            <div className="hidden rounded-[4px] sm:block">
+            <div className="hidden rounded-full sm:block">
               <Link
-                className="block rounded-[4px] px-3 py-2 text-sm font-medium text-cloud transition-colors hover:text-bone focus-ring"
+                className="block rounded-full px-3.5 py-2 text-sm font-medium text-ash transition-colors hover:text-bone focus-ring"
                 href="/login"
               >
                 Sign in
@@ -99,8 +99,8 @@ export function MarketingNav() {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden rounded-[4px] md:block">
-              <Link className={buttonStyles("primary", "sm", "transition-none hover:bg-signal")} href="/pricing">
+            <div className="hidden rounded-full md:block">
+              <Link className={buttonStyles("primary", "sm")} href="/pricing">
                 Get started
               </Link>
             </div>
@@ -111,7 +111,7 @@ export function MarketingNav() {
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="grid h-9 w-9 place-items-center rounded-[4px] border border-hairline bg-ink text-cloud transition-colors hover:border-graphite hover:text-bone focus-ring md:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-graphite bg-white/[0.04] text-cloud transition-colors hover:border-[rgba(226,233,244,0.3)] hover:text-bone focus-ring md:hidden"
             >
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -132,7 +132,7 @@ export function MarketingNav() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 z-30 bg-ink/60 backdrop-blur-[2px] md:hidden"
+              className="fixed inset-0 z-30 bg-canvas/70 backdrop-blur-[2px] md:hidden"
             />
 
             {/* Panel */}
@@ -142,7 +142,7 @@ export function MarketingNav() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed left-0 right-0 top-16 z-40 border-b border-hairline bg-canvas/98 px-4 pb-6 pt-4 backdrop-blur-[8px] md:hidden"
+              className="fixed left-0 right-0 top-16 z-40 border-b border-hairline bg-canvas/95 px-4 pb-6 pt-4 backdrop-blur-xl md:hidden"
             >
               <nav className="flex flex-col gap-1">
                 {links.map((link) => {
@@ -154,8 +154,10 @@ export function MarketingNav() {
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex items-center justify-between gap-3 rounded-[4px] px-3 py-3 text-sm font-medium transition-colors focus-ring",
-                        active ? "bg-ink text-bone" : "text-cloud hover:bg-ink hover:text-bone",
+                        "flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-colors focus-ring",
+                        active
+                          ? "bg-white/[0.06] text-bone"
+                          : "text-cloud hover:bg-white/[0.04] hover:text-bone",
                       )}
                     >
                       {link.label}

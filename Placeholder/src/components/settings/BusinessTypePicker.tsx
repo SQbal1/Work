@@ -21,7 +21,7 @@ export function BusinessTypePicker({
             type="button"
             onClick={() => onChange(b.id)}
             className={cn(
-              "flex items-start gap-3 rounded-[4px] border p-4 text-left transition",
+              "flex items-start gap-3 rounded-[10px] border p-4 text-left transition",
               active
                 ? "border-signal/40 bg-signal/10"
                 : "border-hairline bg-ink hover:border-graphite",
@@ -30,7 +30,7 @@ export function BusinessTypePicker({
           >
             <span
               className={cn(
-                "grid h-10 w-10 shrink-0 place-items-center rounded-[4px] border",
+                "grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border",
                 active ? "border-signal/30 bg-signal text-ink" : "border-hairline bg-canvas text-fog",
               )}
             >

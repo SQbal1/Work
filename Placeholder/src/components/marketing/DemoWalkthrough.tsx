@@ -134,7 +134,7 @@ function PanelAction({
 }) {
   if (done) {
     return (
-      <div className="mt-4 flex items-center gap-2 rounded-[4px] border border-signal/30 bg-signal/[0.07] px-3 py-2.5 font-mono text-[11px] text-signal">
+      <div className="mt-4 flex items-center gap-2 rounded-[10px] border border-signal/30 bg-signal/[0.07] px-3 py-2.5 font-mono text-[11px] text-signal">
         <CheckCircle2 className="h-4 w-4 shrink-0" />
         {doneLabel}
       </div>
@@ -176,10 +176,10 @@ function CustomerPanel({ tutorial, tick, phase, done, onAction }: StepView) {
   const saved = !tutorial || done;
 
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <PanelTag icon={UserRound}>customer.record</PanelTag>
       <div className="mt-4 flex items-center gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-ink text-signal">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-ink text-signal">
           <UserRound className="h-4 w-4" />
         </span>
         <div className="min-w-0">
@@ -189,7 +189,7 @@ function CustomerPanel({ tutorial, tick, phase, done, onAction }: StepView) {
           </div>
         </div>
       </div>
-      <div className="mt-4 space-y-2 rounded-[4px] border border-hairline bg-ink p-3 font-mono text-[11px]">
+      <div className="mt-4 space-y-2 rounded-[10px] border border-hairline bg-ink p-3 font-mono text-[11px]">
         {CUSTOMER_ROWS.map((row, i) => (
           <div
             key={row.label}
@@ -216,7 +216,7 @@ function CustomerPanel({ tutorial, tick, phase, done, onAction }: StepView) {
       {saved ? (
         <div className="mt-3 flex items-start gap-2 border-t border-hairline pt-3 font-mono text-[11px] leading-relaxed text-fog">
           <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-signal" />
-          Saved once — reused on every future invoice, no re-entry.
+          Saved once. Reused on every future invoice, no re-entry.
         </div>
       ) : null}
     </div>
@@ -234,7 +234,7 @@ function InvoicePanel({ tutorial, tick, phase, done, onAction }: StepView) {
   const hasLines = lines.length > 0;
 
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <div className="flex items-center justify-between border-b border-hairline pb-3">
         <PanelTag icon={FileText}>invoice.build</PanelTag>
         <span className="font-mono text-[11px] text-fog">
@@ -250,7 +250,7 @@ function InvoicePanel({ tutorial, tick, phase, done, onAction }: StepView) {
         <span className="text-fog">issued {ISSUE_DATE}</span>
       </div>
 
-      <div className="mt-3 overflow-hidden rounded-[4px] border border-hairline bg-ink">
+      <div className="mt-3 overflow-hidden rounded-[10px] border border-hairline bg-ink">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-b border-hairline px-3 py-2 font-mono text-[10px] uppercase tracking-[0.06em] text-fog">
           <span>Description</span>
           <span className="text-right">Amount</span>
@@ -277,7 +277,7 @@ function InvoicePanel({ tutorial, tick, phase, done, onAction }: StepView) {
         )}
       </div>
 
-      <div className="mt-3 space-y-1.5 rounded-[4px] border border-hairline bg-ink p-3 font-mono text-[11px]">
+      <div className="mt-3 space-y-1.5 rounded-[10px] border border-hairline bg-ink p-3 font-mono text-[11px]">
         <div className="flex items-center justify-between">
           <span className="text-fog">subtotal</span>
           <span className="text-cloud">{hasLines ? sar(totals.subtotal) : "—"}</span>
@@ -302,7 +302,7 @@ function InvoicePanel({ tutorial, tick, phase, done, onAction }: StepView) {
         />
       ) : null}
       {tutorial && done ? (
-        <div className="mt-4 flex items-center gap-2 rounded-[4px] border border-signal/30 bg-signal/[0.07] px-3 py-2.5 font-mono text-[11px] text-signal">
+        <div className="mt-4 flex items-center gap-2 rounded-[10px] border border-signal/30 bg-signal/[0.07] px-3 py-2.5 font-mono text-[11px] text-signal">
           <CheckCircle2 className="h-4 w-4 shrink-0" />
           Invoice generated · {sar(totals.total)}
         </div>
@@ -360,7 +360,7 @@ function VatReadinessPanel({ tutorial, phase, done, reduced, onAction }: StepVie
   const actionable = tutorial && !done && phase === "action" && !running;
 
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <div className="flex items-center justify-between">
         <PanelTag icon={ListChecks}>vat.readiness</PanelTag>
         <span
@@ -383,7 +383,7 @@ function VatReadinessPanel({ tutorial, phase, done, reduced, onAction }: StepVie
             <div
               key={check.label}
               className={cn(
-                "flex items-start gap-2.5 rounded-[4px] border bg-ink p-3 transition-colors duration-300",
+                "flex items-start gap-2.5 rounded-[10px] border bg-ink p-3 transition-colors duration-300",
                 on ? "border-hairline" : "border-hairline/60",
               )}
             >
@@ -433,7 +433,7 @@ function VatReadinessPanel({ tutorial, phase, done, reduced, onAction }: StepVie
 
       <p className="mt-4 flex items-start gap-2 border-t border-hairline pt-3 text-[11px] leading-relaxed text-fog">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-signal" />
-        VAT readiness foundation — not certified ZATCA compliance. A final compliance review is
+        VAT readiness foundation, not certified ZATCA compliance. A final compliance review is
         required before production use.
       </p>
     </div>
@@ -447,7 +447,7 @@ function VatReadinessPanel({ tutorial, phase, done, reduced, onAction }: StepVie
 type PaymentState = "Draft" | "Sent" | "Open" | "Paid";
 
 const PAYMENT_STATES: { key: PaymentState; receivable: string }[] = [
-  { key: "Draft", receivable: "Not a receivable yet — drafted" },
+  { key: "Draft", receivable: "Not a receivable yet · drafted" },
   { key: "Sent", receivable: `Sent to customer · issued ${ISSUE_DATE}` },
   { key: "Open", receivable: `Open receivable · due ${DUE_DATE} · Net 14` },
   { key: "Paid", receivable: `Settled · ${sar(17250)} paid` },
@@ -477,7 +477,7 @@ function PaymentPanel({ tutorial, tick, phase, done, reduced, onAction }: StepVi
   };
 
   return (
-    <div className="rounded-[4px] border border-hairline bg-canvas p-5">
+    <div className="rounded-[10px] border border-hairline bg-canvas p-5">
       <div className="flex items-center justify-between">
         <PanelTag icon={Wallet}>payment.timeline</PanelTag>
         <span
@@ -490,7 +490,7 @@ function PaymentPanel({ tutorial, tick, phase, done, reduced, onAction }: StepVi
         </span>
       </div>
 
-      <div className="mt-4 rounded-[4px] border border-hairline bg-ink px-3 py-2.5 font-mono text-[11px]">
+      <div className="mt-4 rounded-[10px] border border-hairline bg-ink px-3 py-2.5 font-mono text-[11px]">
         <div className="flex items-center justify-between">
           <span className="text-fog">{INVOICE_ID}</span>
           <span className="text-bone">{sar(17250)}</span>
@@ -531,7 +531,7 @@ function PaymentPanel({ tutorial, tick, phase, done, reduced, onAction }: StepVi
 
       <div
         className={cn(
-          "mt-4 grid grid-cols-4 gap-1 rounded-[4px] border bg-ink p-1 transition-shadow",
+          "mt-4 grid grid-cols-4 gap-1 rounded-[10px] border bg-ink p-1 transition-shadow",
           actionable && tutorial && !done
             ? "cue-ring border-signal/40"
             : "border-hairline",
@@ -548,7 +548,7 @@ function PaymentPanel({ tutorial, tick, phase, done, reduced, onAction }: StepVi
               disabled={locked}
               onClick={() => handleChip(state.key)}
               className={cn(
-                "relative h-8 overflow-hidden rounded-[4px] font-mono text-[11px] uppercase tracking-[0.04em] transition-colors focus-ring",
+                "relative h-8 overflow-hidden rounded-[10px] font-mono text-[11px] uppercase tracking-[0.04em] transition-colors focus-ring",
                 active ? "text-ink" : "text-fog hover:text-cloud",
                 locked && "cursor-default",
               )}
@@ -556,7 +556,7 @@ function PaymentPanel({ tutorial, tick, phase, done, reduced, onAction }: StepVi
               {active ? (
                 <motion.span
                   layoutId={reduced ? undefined : "demo-payment-active"}
-                  className="absolute inset-0 rounded-[4px] bg-signal"
+                  className="absolute inset-0 rounded-[10px] bg-signal"
                   transition={{ type: "spring", stiffness: 360, damping: 30 }}
                 />
               ) : null}
@@ -571,7 +571,7 @@ function PaymentPanel({ tutorial, tick, phase, done, reduced, onAction }: StepVi
         {locked ? "Tracking status automatically…" : "Tap a status to set the receivable state."}
       </p>
       <p className="mt-3 border-t border-hairline pt-3 text-[11px] leading-relaxed text-fog">
-        Invoice/payment status tracking — not payment processing.
+        Invoice/payment status tracking, not payment processing.
       </p>
     </div>
   );
@@ -598,7 +598,7 @@ const STEPS: {
     eyebrow: "Step 1 · Customer",
     title: "Save the customer once",
     description:
-      "Keep a client's details — name, VAT number, contact, payment terms, and address — in one record. Saved customers can be reused across every future invoice.",
+      "Keep a client's details (name, VAT number, contact, payment terms, and address) in one record. Saved customers can be reused across every future invoice.",
     panel: (v) => <CustomerPanel {...v} />,
   },
   {
@@ -618,8 +618,8 @@ const STEPS: {
     eyebrow: "Step 3 · VAT readiness",
     title: "Check readiness before sending",
     description:
-      "A readiness pass confirms the essentials — seller VAT, customer VAT, line items, and payment terms — before an invoice goes out.",
-    note: "VAT readiness foundation — not certified ZATCA compliance.",
+      "A readiness pass confirms the essentials (seller VAT, customer VAT, line items, and payment terms) before an invoice goes out.",
+    note: "VAT readiness foundation, not certified ZATCA compliance.",
     panel: (v) => <VatReadinessPanel {...v} />,
   },
   {
@@ -662,29 +662,29 @@ const TUTORIAL_COPY: Record<Phase, { title: string; body: string }>[] = [
   {
     demo: {
       title: "Filling the customer record",
-      body: "Watch the client's details populate — name, VAT number, contact, terms, and address.",
+      body: "Watch the client's details populate: name, VAT number, contact, terms, and address.",
     },
     action: {
-      title: "Your turn — save the customer",
+      title: "Your turn: save the customer",
       body: "Click “Save customer” in the panel to store this record for reuse.",
     },
     done: {
       title: "Customer saved",
-      body: "Stored as CUS-117 — now reusable on every future invoice.",
+      body: "Stored as CUS-117. Now reusable on every future invoice.",
     },
   },
   {
     demo: {
       title: "Starting the invoice",
-      body: "The saved customer is attached and the first service line is added — totals update automatically.",
+      body: "The saved customer is attached and the first service line is added, so totals update automatically.",
     },
     action: {
-      title: "Your turn — add a service line",
+      title: "Your turn: add a service line",
       body: "Click “Add line item” to add the onboarding workshop and watch subtotal, VAT, and total update.",
     },
     done: {
       title: "Invoice generated",
-      body: "Two VAT-aware lines — INV-1208 totals SAR 17,250.",
+      body: "Two VAT-aware lines. INV-1208 totals SAR 17,250.",
     },
   },
   {
@@ -693,12 +693,12 @@ const TUTORIAL_COPY: Record<Phase, { title: string; body: string }>[] = [
       body: "Four checks confirm an invoice is ready: seller VAT, customer VAT, line items, and payment terms.",
     },
     action: {
-      title: "Your turn — run the check",
-      body: "Click “Run VAT readiness check”. VAT readiness foundation — not certified ZATCA compliance.",
+      title: "Your turn: run the check",
+      body: "Click “Run VAT readiness check”. VAT readiness foundation, not certified ZATCA compliance.",
     },
     done: {
       title: "Readiness checks passed",
-      body: "4 / 4 passed. VAT readiness foundation — not certified ZATCA compliance.",
+      body: "4 / 4 passed. VAT readiness foundation, not certified ZATCA compliance.",
     },
   },
   {
@@ -707,7 +707,7 @@ const TUTORIAL_COPY: Record<Phase, { title: string; body: string }>[] = [
       body: "Once issued, the invoice moves Draft → Sent → Open automatically.",
     },
     action: {
-      title: "Your turn — set the status",
+      title: "Your turn: set the status",
       body: "Click a status control to track the receivable. Status tracking, not payment processing.",
     },
     done: {
@@ -756,7 +756,7 @@ const TutorialCard = forwardRef<
       tabIndex={-1}
       role="region"
       aria-label="Guided walkthrough instructions"
-      className="rounded-[8px] border border-signal/40 bg-ink/95 p-5 shadow-[0_0_0_1px_rgba(168,255,83,0.18),0_18px_50px_-12px_rgba(0,0,0,0.7)] outline-none"
+      className="rounded-[14px] border border-signal/40 bg-ink/95 p-5 shadow-[0_0_0_1px_rgba(168,255,83,0.18),0_18px_50px_-12px_rgba(0,0,0,0.7)] outline-none"
     >
       <div className="flex items-center justify-between gap-3">
         <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-signal">
@@ -766,7 +766,7 @@ const TutorialCard = forwardRef<
         <button
           type="button"
           onClick={onExit}
-          className="inline-flex items-center gap-1 rounded-[4px] px-1.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-fog transition-colors hover:text-bone focus-ring"
+          className="inline-flex items-center gap-1 rounded-[10px] px-1.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-fog transition-colors hover:text-bone focus-ring"
         >
           <X className="h-3.5 w-3.5" /> Exit
         </button>
@@ -889,7 +889,7 @@ const TutorialCard = forwardRef<
           className="mt-3 flex items-center justify-center gap-1.5 text-center font-mono text-[10px] uppercase tracking-[0.08em] text-signal"
         >
           <Check className="h-3 w-3" />
-          Step complete — {isLast ? "finish up" : "you can continue"}
+          Step complete, {isLast ? "finish up" : "you can continue"}
         </motion.p>
       )}
     </div>
@@ -901,8 +901,8 @@ const TutorialCard = forwardRef<
 /* ------------------------------------------------------------------ */
 
 const RECAP = [
-  "Customer saved — reusable record",
-  "Invoice generated — VAT-aware totals",
+  "Customer saved as a reusable record",
+  "Invoice generated with VAT-aware totals",
   "VAT readiness checked",
   "Payment status tracked",
 ];
@@ -922,9 +922,9 @@ const CompletionCard = forwardRef<
       initial={{ opacity: 0, scale: 0.97, y: 8 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full max-w-md rounded-[8px] border border-signal/45 bg-ink p-6 shadow-[0_0_0_1px_rgba(168,255,83,0.2),0_30px_80px_-20px_rgba(0,0,0,0.8)] outline-none sm:p-7"
+      className="w-full max-w-md rounded-[14px] border border-signal/45 bg-ink p-6 shadow-[0_0_0_1px_rgba(168,255,83,0.2),0_30px_80px_-20px_rgba(0,0,0,0.8)] outline-none sm:p-7"
     >
-      <span className="grid h-11 w-11 place-items-center rounded-[6px] border border-signal/30 bg-signal/10 text-signal">
+      <span className="grid h-11 w-11 place-items-center rounded-[12px] border border-signal/30 bg-signal/10 text-signal">
         <CheckCircle2 className="h-5 w-5" />
       </span>
       <h3 className="mt-4 font-display text-2xl font-medium tracking-[0.02em] text-bone">
@@ -955,7 +955,7 @@ const CompletionCard = forwardRef<
         </div>
       </div>
       <p className="mt-4 border-t border-hairline pt-3 text-center font-mono text-[10px] uppercase tracking-[0.08em] text-fog">
-        Demo data only — nothing was saved
+        Demo data only, nothing was saved
       </p>
       </motion.div>
     </div>
@@ -1209,16 +1209,16 @@ export function DemoWalkthrough() {
       {!tutorial ? (
         <div
           id="start-walkthrough"
-          className="mb-6 flex flex-col items-start justify-between gap-4 rounded-[4px] border border-signal/35 bg-ink p-5 sm:flex-row sm:items-center"
+          className="mb-6 flex flex-col items-start justify-between gap-4 rounded-[10px] border border-signal/35 bg-ink p-5 sm:flex-row sm:items-center"
         >
           <div className="flex items-start gap-3">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-signal/25 bg-signal/10 text-signal">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-signal/25 bg-signal/10 text-signal">
               <Play className="h-4 w-4" />
             </span>
             <div>
               <div className="text-sm font-medium text-bone">Take the guided walkthrough</div>
               <p className="mt-0.5 text-[13px] leading-relaxed text-fog">
-                A spotlighted, 4-step tutorial — you perform each action on demo data.
+                A spotlighted, 4-step tutorial where you perform each action on demo data.
               </p>
             </div>
           </div>
@@ -1252,7 +1252,7 @@ export function DemoWalkthrough() {
                     disabled={tutorial}
                     onClick={() => passiveGo(i)}
                     className={cn(
-                      "flex items-center gap-2.5 rounded-[4px] border px-3 py-2.5 text-left transition-colors focus-ring",
+                      "flex items-center gap-2.5 rounded-[10px] border px-3 py-2.5 text-left transition-colors focus-ring",
                       i === step
                         ? "border-signal/50 bg-signal/[0.06]"
                         : "border-hairline bg-ink",
@@ -1288,7 +1288,7 @@ export function DemoWalkthrough() {
             {/* workspace window — spotlighted in tutorial mode */}
             <div
               className={cn(
-                "mt-5 overflow-hidden rounded-[4px] border bg-ink transition-shadow duration-300",
+                "mt-5 overflow-hidden rounded-[10px] border bg-ink transition-shadow duration-300",
                 tutorial
                   ? "border-signal/50 shadow-[0_0_0_1px_rgba(168,255,83,0.35),0_0_55px_-12px_rgba(168,255,83,0.4)]"
                   : "border-hairline",
@@ -1296,7 +1296,7 @@ export function DemoWalkthrough() {
             >
               <div className="flex items-center justify-between gap-3 border-b border-hairline px-4 py-2.5">
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-[4px] border border-signal/25 bg-signal/10 text-signal">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-[10px] border border-signal/25 bg-signal/10 text-signal">
                     <Radio className="h-3.5 w-3.5" />
                   </span>
                   <span className="truncate font-mono text-[11px] text-cloud">
@@ -1390,7 +1390,7 @@ function StepBody({
   const content = tutorial ? (
     <div className="min-w-0">
       <div className="flex items-center gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-canvas text-signal">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-canvas text-signal">
           <active.icon className="h-4 w-4" />
         </span>
         <div className="min-w-0">
@@ -1408,26 +1408,26 @@ function StepBody({
     <div className="grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-12">
       <div className="min-w-0">
         <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-canvas text-signal">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-canvas text-signal">
             <active.icon className="h-4 w-4" />
           </span>
           <span className="font-mono text-xs uppercase tracking-[0.12em] text-signal">
             {active.eyebrow}
           </span>
         </div>
-        <h3 className="mt-4 font-display text-2xl font-medium tracking-[0.025em] text-bone sm:text-3xl">
+        <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight text-bone sm:text-3xl">
           {active.title}
         </h3>
         <p className="mt-3 text-base leading-relaxed text-fog">{active.description}</p>
         {active.note ? (
-          <p className="mt-4 flex items-start gap-2 rounded-[4px] border border-hairline bg-canvas/60 p-3 text-xs leading-relaxed text-fog">
+          <p className="mt-4 flex items-start gap-2 rounded-[10px] border border-hairline bg-canvas/60 p-3 text-xs leading-relaxed text-fog">
             <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-signal" />
             {active.note}
           </p>
         ) : null}
         <div className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] text-fog">
           <SaudiRiyal className="h-3.5 w-3.5 text-signal" />
-          Demo only — nothing is saved and no real invoice is created.
+          Demo only, nothing is saved and no real invoice is created.
         </div>
       </div>
       <div className="min-w-0">{active.panel(view)}</div>

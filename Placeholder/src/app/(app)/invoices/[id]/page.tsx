@@ -13,15 +13,18 @@ import {
   Pencil,
   Trash2,
   FileQuestion,
+  FileSignature,
 } from "lucide-react";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button, buttonStyles } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { InvoiceDocument } from "@/components/invoices/InvoiceDocument";
 import { StatusBadge } from "@/components/invoices/StatusBadge";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
+import { signInvoiceZatca, getZatcaSignedXml } from "@/lib/actions/zatcaSigning";
 
 export default function InvoicePreviewPage() {
   const params = useParams<{ id: string }>();
@@ -33,13 +36,16 @@ export default function InvoicePreviewPage() {
     getCustomer,
     company,
     settings,
+    usingSupabase,
     markInvoicePaid,
     duplicateInvoice,
     deleteInvoice,
+    patchInvoiceLocal,
   } = useStore();
 
   const invoice = getInvoice(id);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [signingZatca, setSigningZatca] = useState(false);
 
   if (!invoice) {
     return (
@@ -70,6 +76,41 @@ export default function InvoicePreviewPage() {
     window.setTimeout(() => window.print(), 300);
   }
 
+  const handleSignZatca = async () => {
+    setSigningZatca(true);
+    try {
+      const result = await signInvoiceZatca(invoice.id);
+      patchInvoiceLocal(invoice.id, {
+        zatcaIcv: result.icv,
+        zatcaPreviousHash: result.previousHash,
+        zatcaInvoiceHash: result.invoiceHash,
+        zatcaSignature: result.signature,
+        zatcaPublicKey: result.publicKey,
+        zatcaSignedAt: result.signedAt,
+      });
+      toast.success("ZATCA XML generated and signed (simulated Phase 2 preview)");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to generate the ZATCA signature");
+    } finally {
+      setSigningZatca(false);
+    }
+  };
+
+  const handleDownloadZatcaXml = async () => {
+    try {
+      const xml = await getZatcaSignedXml(invoice.id);
+      const blob = new Blob([xml], { type: "application/xml" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${invoice.number}-zatca.xml`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to download the ZATCA XML");
+    }
+  };
+
   return (
     <div>
       {/* Top bar */}
@@ -77,7 +118,7 @@ export default function InvoicePreviewPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/invoices"
-            className="grid h-10 w-10 place-items-center rounded-[4px] border border-hairline bg-ink text-fog transition hover:border-graphite hover:text-bone"
+            className="grid h-10 w-10 place-items-center rounded-[10px] border border-hairline bg-ink text-fog transition hover:border-graphite hover:text-bone"
             aria-label="Back to invoices"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -102,7 +143,7 @@ export default function InvoicePreviewPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Document */}
         <div className="lg:col-span-2">
-          <div className="print-area overflow-hidden rounded-[4px] border border-hairline bg-ink print:bg-white">
+          <div className="print-area overflow-hidden rounded-[10px] border border-hairline bg-ink print:bg-white">
             <InvoiceDocument
               company={company}
               customer={customer}
@@ -114,6 +155,9 @@ export default function InvoicePreviewPage() {
               discountPercent={invoice.discountPercent}
               notes={invoice.notes}
               currency={settings.currency}
+              zatcaInvoiceHash={invoice.zatcaInvoiceHash}
+              zatcaSignature={invoice.zatcaSignature}
+              zatcaPublicKey={invoice.zatcaPublicKey}
             />
           </div>
         </div>
@@ -161,8 +205,8 @@ export default function InvoicePreviewPage() {
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
-                  onClick={() => {
-                    const dup = duplicateInvoice(invoice.id);
+                  onClick={async () => {
+                    const dup = await duplicateInvoice(invoice.id);
                     if (dup) {
                       toast.success(`Duplicated as ${dup.number}`);
                       router.push(`/invoices/${dup.id}`);
@@ -186,6 +230,57 @@ export default function InvoicePreviewPage() {
                     <Trash2 className="h-4 w-4" /> Delete draft
                   </Button>
                 ) : null}
+              </CardBody>
+            </Card>
+
+            <Card>
+              <CardHeader
+                title="ZATCA (preview)"
+                subtitle="Simulated Phase 2 signing, not a ZATCA connection."
+              />
+              <CardBody className="space-y-3">
+                {!usingSupabase ? (
+                  <p className="text-xs text-fog">
+                    Sign in to a workspace to generate a simulated ZATCA signature. Local demo mode
+                    has no workspace to chain invoices against.
+                  </p>
+                ) : invoice.zatcaSignedAt ? (
+                  <>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-fog">Status</span>
+                      <Badge tone="green" dot>
+                        Signed (simulated)
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-fog">ICV</span>
+                      <span className="font-mono text-bone">{invoice.zatcaIcv}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-fog">Hash</span>
+                      <span className="font-mono text-bone">
+                        {(invoice.zatcaInvoiceHash ?? "").slice(0, 12)}…
+                      </span>
+                    </div>
+                    <Button
+                      variant="secondary"
+                      className="w-full justify-start"
+                      onClick={handleDownloadZatcaXml}
+                    >
+                      <Download className="h-4 w-4" /> Download UBL XML
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    variant="secondary"
+                    className="w-full justify-start"
+                    onClick={handleSignZatca}
+                    disabled={signingZatca}
+                  >
+                    <FileSignature className="h-4 w-4" />
+                    {signingZatca ? "Generating…" : "Generate ZATCA XML & signature"}
+                  </Button>
+                )}
               </CardBody>
             </Card>
           </div>

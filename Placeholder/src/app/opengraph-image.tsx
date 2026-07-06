@@ -3,8 +3,8 @@ import { brand } from "@/config/brand";
 
 /**
  * Dynamically generated Open Graph / social share image (1200×630).
- * On-brand: dark ink canvas, faint grid, lime glow + accent. Next.js wires
- * this into og:image automatically (and twitter-image.tsx re-exports it).
+ * On-brand: near-black canvas, faint grid, lime→mint gradient X. Next.js
+ * wires this into og:image automatically (twitter-image.tsx re-exports it).
  */
 export const alt = `${brand.name} — Simple e-invoicing for SMEs in Saudi Arabia & the GCC`;
 export const size = { width: 1200, height: 630 };
@@ -22,9 +22,9 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 80,
-          backgroundColor: "#121317",
+          backgroundColor: "#05070c",
           backgroundImage:
-            "linear-gradient(to right, rgba(215,217,221,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(215,217,221,0.05) 1px, transparent 1px)",
+            "linear-gradient(to right, rgba(226,233,244,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(226,233,244,0.05) 1px, transparent 1px)",
           backgroundSize: "48px 48px, 48px 48px",
           fontFamily: "sans-serif",
         }}
@@ -38,7 +38,19 @@ export default function OpengraphImage() {
             width: 760,
             height: 760,
             backgroundImage:
-              "radial-gradient(circle at 50% 50%, rgba(168,255,83,0.22), rgba(168,255,83,0) 70%)",
+              "radial-gradient(circle at 50% 50%, rgba(168,255,83,0.2), rgba(168,255,83,0) 70%)",
+          }}
+        />
+        {/* mint glow, bottom-left */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: -300,
+            left: -220,
+            width: 720,
+            height: 720,
+            backgroundImage:
+              "radial-gradient(circle at 50% 50%, rgba(62,230,160,0.14), rgba(62,230,160,0) 70%)",
           }}
         />
 
@@ -59,15 +71,19 @@ export default function OpengraphImage() {
                 justifyContent: "center",
                 width: 56,
                 height: 56,
-                borderRadius: 12,
-                backgroundColor: "#1c1e21",
-                border: "1px solid #272a2e",
+                borderRadius: 16,
+                backgroundColor: "#0a0e16",
+                border: "1px solid rgba(226,233,244,0.17)",
+                color: "#a8ff53",
+                fontSize: 30,
+                fontWeight: 700,
               }}
             >
-              <div style={{ width: 22, height: 22, borderRadius: 6, backgroundColor: "#a8ff53" }} />
+              X
             </div>
-            <div style={{ marginLeft: 18, fontSize: 32, fontWeight: 600, color: "#e5e7eb" }}>
-              {brand.name}
+            <div style={{ display: "flex", marginLeft: 18, fontSize: 34, fontWeight: 600 }}>
+              <span style={{ color: "#f4f6f9" }}>Invoice&nbsp;</span>
+              <span style={{ color: "#a8ff53" }}>X</span>
             </div>
           </div>
           <div
@@ -76,9 +92,9 @@ export default function OpengraphImage() {
               alignItems: "center",
               padding: "10px 20px",
               borderRadius: 999,
-              border: "1px solid #272a2e",
+              border: "1px solid rgba(226,233,244,0.17)",
               backgroundColor: "rgba(168,255,83,0.06)",
-              color: "#878c99",
+              color: "#98a2b3",
               fontSize: 22,
             }}
           >
@@ -88,11 +104,11 @@ export default function OpengraphImage() {
 
         {/* headline */}
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 74, fontWeight: 600, color: "#e5e7eb", lineHeight: 1.05 }}>
-            Create invoices. Validate VAT.
+          <div style={{ display: "flex", fontSize: 74, fontWeight: 600, color: "#f4f6f9", lineHeight: 1.05 }}>
+            Invoicing, engineered
           </div>
           <div style={{ display: "flex", fontSize: 74, fontWeight: 600, color: "#a8ff53", lineHeight: 1.1 }}>
-            Track payment state.
+            for the ZATCA era.
           </div>
           <div
             style={{
@@ -100,7 +116,7 @@ export default function OpengraphImage() {
               marginTop: 30,
               maxWidth: 920,
               fontSize: 30,
-              color: "#878c99",
+              color: "#98a2b3",
               lineHeight: 1.4,
             }}
           >
@@ -115,14 +131,14 @@ export default function OpengraphImage() {
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
-            borderTop: "1px solid #272a2e",
+            borderTop: "1px solid rgba(226,233,244,0.17)",
             paddingTop: 28,
           }}
         >
-          <div style={{ display: "flex", color: "#878c99", fontSize: 24 }}>
-            VAT-ready workflow foundation
+          <div style={{ display: "flex", color: "#98a2b3", fontSize: 24 }}>
+            Part of the X family: PayX · RideX
           </div>
-          <div style={{ display: "flex", color: "#d7d9dd", fontSize: 24 }}>{brand.domain}</div>
+          <div style={{ display: "flex", color: "#c8d0dc", fontSize: 24 }}>{brand.domain}</div>
         </div>
       </div>
     ),

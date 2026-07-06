@@ -80,7 +80,7 @@ export function ProductForm({
         <Select
           id="p-vat"
           label="VAT category"
-          hint="Placeholder — confirm before production use"
+          hint="Placeholder, confirm before production use"
           value={vatCategory}
           onChange={(e) => setVatCategory(e.target.value as VatCategory)}
           options={VAT_CATEGORIES.map((c) => ({ value: c.id, label: c.label }))}
@@ -89,7 +89,7 @@ export function ProductForm({
 
       <div>
         <span className="mb-1.5 block text-sm font-medium text-cloud">Status</span>
-        <div className="inline-flex rounded-[4px] border border-hairline bg-ink p-1">
+        <div className="inline-flex rounded-[10px] border border-hairline bg-ink p-1">
           {[
             { value: true, label: "Active" },
             { value: false, label: "Inactive" },
@@ -99,7 +99,7 @@ export function ProductForm({
               type="button"
               onClick={() => setActive(opt.value)}
               className={cn(
-                "rounded-[4px] px-4 py-1.5 text-sm font-medium transition",
+                "rounded-[10px] px-4 py-1.5 text-sm font-medium transition",
                 active === opt.value
                   ? "bg-signal text-ink"
                   : "text-fog hover:text-cloud",

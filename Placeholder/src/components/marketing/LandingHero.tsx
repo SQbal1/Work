@@ -23,12 +23,13 @@ import {
   STAGGER,
 } from "@/components/marketing/motion";
 import { buttonStyles } from "@/components/ui/Button";
+import { XName } from "@/components/XName";
 import { brand } from "@/config/brand";
 import { cn } from "@/lib/cn";
 
-const headlineLines = ["Create invoices.", "Validate VAT.", "Track payment state."];
+const headlineLines = ["Create invoices.", "Validate VAT.", "Track every riyal."];
 
-const trustPills = ["VAT-aware totals", "Readable workflow demo", "ZATCA-ready foundation"];
+const trustPills = ["VAT-aware totals", "Bilingual EN/AR invoices", "ZATCA-ready foundation"];
 
 export function LandingHero() {
   const heroRef = useRef<HTMLElement | null>(null);
@@ -66,17 +67,17 @@ export function LandingHero() {
           variants={heroContainer}
         >
           <motion.span
-            className="inline-flex items-center gap-2 rounded-full border border-hairline bg-ink px-3 py-1 font-mono text-xs text-cloud"
+            className="inline-flex items-center gap-2 rounded-full border border-graphite bg-white/[0.04] px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-cloud backdrop-blur-sm"
             transition={SPRINGS.badge}
             variants={heroItem}
-            whileHover={reduced ? undefined : { y: -2, borderColor: "rgba(59, 62, 69, 1)" }}
+            whileHover={reduced ? undefined : { y: -2, borderColor: "rgba(168, 255, 83, 0.35)" }}
           >
             <CircleDot className="signal-pulse h-3.5 w-3.5 text-signal" />
-            Saudi/GCC e-invoicing MVP
+            Saudi/GCC e-invoicing
           </motion.span>
 
           <motion.h1
-            className="mt-7 font-display text-[2.55rem] font-medium leading-[1.03] tracking-[0.025em] text-bone sm:text-[3.25rem] lg:text-[clamp(2.75rem,1.35rem+2vw,3.55rem)] lg:tracking-[0.04em] xl:text-[clamp(3rem,1.25rem+2.15vw,3.8rem)] xl:tracking-[0.045em]"
+            className="mt-7 font-display text-[2.85rem] font-semibold leading-[1.02] tracking-tight sm:text-[3.6rem] lg:text-[clamp(3rem,1.4rem+2.3vw,4rem)] xl:text-[clamp(3.3rem,1.3rem+2.5vw,4.3rem)]"
             variants={{
               hidden: {},
               show: {
@@ -90,7 +91,10 @@ export function LandingHero() {
             {headlineLines.map((line, index) => (
               <span className="block overflow-hidden pb-1" key={line}>
                 <motion.span
-                  className={cn("block", index === headlineLines.length - 1 && "text-signal")}
+                  className={cn(
+                    "block",
+                    index === headlineLines.length - 1 ? "text-gradient-x" : "text-metal",
+                  )}
                   variants={{
                     hidden: { y: "112%", opacity: 0, rotateX: -8 },
                     show: {
@@ -109,8 +113,8 @@ export function LandingHero() {
 
           <motion.p className="mt-7 max-w-xl text-base leading-[1.7] text-ash sm:text-lg" variants={heroItem}>
             Small teams still track customer records, VAT checks, invoice status, and payment
-            follow-up across spreadsheets, WhatsApp, and memory. {brand.name} brings that workflow
-            into one calm, VAT-aware path.
+            follow-up across spreadsheets, WhatsApp, and memory. <XName name={brand.name} /> brings
+            that workflow into one calm, VAT-aware path.
           </motion.p>
 
           <motion.div
@@ -118,7 +122,7 @@ export function LandingHero() {
             variants={heroItem}
           >
             <motion.div
-              className="rounded-[4px] sm:w-auto"
+              className="rounded-[10px] sm:w-auto"
               transition={SPRINGS.hover}
               whileHover={
                 reduced
@@ -130,15 +134,12 @@ export function LandingHero() {
               }
               whileTap={reduced ? undefined : { scale: 0.992 }}
             >
-              <Link
-                className={buttonStyles("primary", "lg", "w-full transition-none hover:bg-signal sm:w-auto")}
-                href="/signup"
-              >
+              <Link className={buttonStyles("primary", "lg", "w-full sm:w-auto")} href="/signup">
                 Start free <ArrowRight className="h-4 w-4" />
               </Link>
             </motion.div>
             <motion.div
-              className="rounded-[4px] sm:w-auto"
+              className="rounded-[10px] sm:w-auto"
               transition={SPRINGS.hover}
               whileHover={
                 reduced
@@ -150,14 +151,7 @@ export function LandingHero() {
               }
               whileTap={reduced ? undefined : { scale: 0.994 }}
             >
-              <Link
-                className={buttonStyles(
-                  "secondary",
-                  "lg",
-                  "w-full transition-none hover:border-hairline hover:bg-ink hover:text-cloud sm:w-auto",
-                )}
-                href="/demo"
-              >
+              <Link className={buttonStyles("secondary", "lg", "w-full sm:w-auto")} href="/demo">
                 Open demo workspace
               </Link>
             </motion.div>
@@ -169,11 +163,11 @@ export function LandingHero() {
           >
             {trustPills.map((pill) => (
               <motion.span
-                className="inline-flex items-center gap-2 rounded-full border border-hairline bg-ink px-3 py-1.5 text-xs text-cloud"
+                className="inline-flex items-center gap-2 rounded-full border border-hairline bg-white/[0.03] px-3 py-1.5 text-xs text-cloud backdrop-blur-sm"
                 key={pill}
                 transition={SPRINGS.hover}
                 variants={heroItem}
-                whileHover={reduced ? undefined : { y: -2, borderColor: "rgba(59, 62, 69, 1)" }}
+                whileHover={reduced ? undefined : { y: -2, borderColor: "rgba(168, 255, 83, 0.3)" }}
               >
                 <Check className="h-3.5 w-3.5 shrink-0 text-signal" />
                 {pill}
@@ -228,11 +222,11 @@ function ProductPreviewStage({
   const hoverGlow = useMotionValue(0);
   const glareX = useMotionValue(50);
   const glareY = useMotionValue(50);
-  const interactiveRotateX = useSpring(pointerRotateX, SPRINGS.hover);
-  const interactiveRotateY = useSpring(pointerRotateY, SPRINGS.hover);
+  const interactiveRotateX = useSpring(pointerRotateX, SPRINGS.tilt);
+  const interactiveRotateY = useSpring(pointerRotateY, SPRINGS.tilt);
   const interactiveGlow = useSpring(hoverGlow, SPRINGS.hover);
-  const interactiveGlareX = useSpring(glareX, SPRINGS.hover);
-  const interactiveGlareY = useSpring(glareY, SPRINGS.hover);
+  const interactiveGlareX = useSpring(glareX, SPRINGS.tilt);
+  const interactiveGlareY = useSpring(glareY, SPRINGS.tilt);
   const borderAlpha = useTransform(interactiveGlow, [0, 1], [0.08, 0.26]);
   const shadowAlpha = useTransform(interactiveGlow, [0, 1], [0, 0.16]);
   const glareAlpha = useTransform(interactiveGlow, [0, 1], [0, 0.13]);
@@ -299,8 +293,8 @@ function ProductPreviewStage({
     latestPointer.current = {
       glareX: (normalizedX + 1) * 50,
       glareY: (normalizedY + 1) * 50,
-      rotateX: normalizedY * -4,
-      rotateY: normalizedX * 4,
+      rotateX: normalizedY * 7,
+      rotateY: normalizedX * -7,
     };
 
     hoverGlow.set(1);
@@ -342,6 +336,7 @@ function ProductPreviewStage({
                 rotateX: scrollRotateX,
                 scale: scrollScale,
                 y: scrollY,
+                transformStyle: "preserve-3d",
               }
         }
       >
@@ -364,7 +359,7 @@ function ProductPreviewStage({
         >
           <motion.div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-3 rounded-[4px] border border-signal/[0.08] bg-signal/[0.018]"
+            className="pointer-events-none absolute -inset-3 rounded-[10px] border border-signal/[0.08] bg-signal/[0.018]"
             style={
               reduced
                 ? undefined
@@ -394,26 +389,42 @@ function HeroAtmosphere({
     <>
       <div aria-hidden="true" className="hero-scroll-grid" />
       <div aria-hidden="true" className="hero-aura" />
+      {/* Breathing aurora — lime top-left, mint right (the Invoice X pair). */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-[8%] top-[13%] hidden h-32 w-56 rounded-[4px] border border-hairline bg-grid-faint opacity-25 lg:block"
+        className="aurora-blob -top-[28%] left-[6%] -z-10 h-[55vh] w-[52vw]"
+        style={{
+          background: "radial-gradient(ellipse at center, rgba(168,255,83,0.1), transparent 65%)",
+        }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[18%] left-[4%] hidden h-24 w-44 rounded-[4px] border border-hairline bg-ink/50 opacity-35 xl:block"
+        className="aurora-blob -top-[12%] right-[0%] -z-10 h-[48vh] w-[44vw]"
+        style={{
+          animationDelay: "-8s",
+          background: "radial-gradient(ellipse at center, rgba(62,230,160,0.09), transparent 65%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[8%] top-[13%] hidden h-32 w-56 rounded-[14px] border border-hairline bg-grid-faint opacity-25 lg:block"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[18%] left-[4%] hidden h-24 w-44 rounded-[14px] border border-hairline bg-ink/50 opacity-35 xl:block"
       >
         <span className="absolute left-4 top-4 h-1.5 w-1.5 rounded-full bg-signal" />
         <span className="absolute bottom-5 right-5 h-1 w-16 bg-hairline" />
       </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-[3%] top-[34%] hidden rounded-full border border-hairline bg-ink/80 px-3 py-1 font-mono text-[11px] text-fog xl:block"
+        className="pointer-events-none absolute right-[3%] top-[34%] hidden rounded-full border border-hairline bg-ink/80 px-3 py-1 font-mono text-[11px] text-fog backdrop-blur-sm xl:block"
       >
         VAT sync <span className="text-signal">active</span>
       </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[26%] right-[7%] hidden rounded-full border border-hairline bg-ink/80 px-3 py-1 font-mono text-[11px] text-fog xl:block"
+        className="pointer-events-none absolute bottom-[26%] right-[7%] hidden rounded-full border border-hairline bg-ink/80 px-3 py-1 font-mono text-[11px] text-fog backdrop-blur-sm xl:block"
       >
         receivable <span className="text-signal">open</span>
       </div>

@@ -28,7 +28,7 @@ import { cn } from "@/lib/cn";
  * ------------------------------------------------------------------
  * Section // 02 — replaces the old "Workflow Trace" scroll story.
  *
- * Shows Placeholder as a connected operating workspace for receivables
+ * Shows Invoice X as a connected operating workspace for receivables
  * rather than a static invoice generator: a large central dashboard mockup
  * surrounded by floating panels (customer record, VAT readiness, receivable
  * status, invoice log, payment timeline, pilot/compliance note).
@@ -96,7 +96,7 @@ function FloatingPanel({
   return (
     <div
       className={cn(
-        "home-card rounded-[4px] border border-hairline bg-ink/95 p-4 transition duration-300 hover:border-graphite",
+        "home-card rounded-[10px] border border-hairline bg-ink/95 p-4 transition duration-300 hover:border-graphite",
         className,
       )}
     >
@@ -178,10 +178,10 @@ function CentralMockup() {
     <div ref={ref} className="relative min-w-0">
       <div
         aria-hidden="true"
-        className="absolute -inset-2 rounded-[8px] border border-signal/10 bg-signal/[0.025]"
+        className="absolute -inset-2 rounded-[14px] border border-signal/10 bg-signal/[0.025]"
       />
 
-      <div className="home-showcase-frame relative min-w-0 overflow-hidden rounded-[4px] border border-graphite/70 bg-canvas">
+      <div className="home-showcase-frame relative min-w-0 overflow-hidden rounded-[10px] border border-graphite/70 bg-canvas">
         {/* faint workstation grid */}
         <div
           aria-hidden="true"
@@ -192,7 +192,7 @@ function CentralMockup() {
         {/* header */}
         <div className="relative z-10 flex items-center justify-between gap-3 border-b border-hairline px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[4px] border border-signal/25 bg-signal/10 text-signal">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[10px] border border-signal/25 bg-signal/10 text-signal">
               <Radio className="h-4 w-4" />
             </span>
             <div className="min-w-0">
@@ -226,7 +226,7 @@ function CentralMockup() {
           {/* stat tiles */}
           <div className="mt-4 grid grid-cols-3 gap-2.5">
             {STAT_TILES.map((tile, i) => (
-              <div key={tile.label} className="rounded-[4px] border border-hairline bg-ink p-3">
+              <div key={tile.label} className="rounded-[10px] border border-hairline bg-ink p-3">
                 <tile.icon className={cn("h-4 w-4", tile.tone)} />
                 <div className="mt-2 truncate font-mono text-sm font-semibold text-bone sm:text-base">
                   {tile.formatValue(statCounts[i])}
@@ -237,7 +237,7 @@ function CentralMockup() {
           </div>
 
           {/* payment status overview */}
-          <div className="mt-4 rounded-[4px] border border-hairline bg-ink p-4">
+          <div className="mt-4 rounded-[10px] border border-hairline bg-ink p-4">
             <div className="flex items-center justify-between">
               <Tag icon={Wallet}>Payment status</Tag>
               <span className="font-mono text-[11px] text-fog">{total} invoices</span>
@@ -246,7 +246,7 @@ function CentralMockup() {
               {PAYMENT_DISTRIBUTION.map((slice) => (
                 <span
                   key={slice.state}
-                  className={cn("min-w-[6px] rounded-[2px]", slice.bar)}
+                  className={cn("min-w-[6px] rounded-[4px]", slice.bar)}
                   style={{ flexGrow: slice.count }}
                 />
               ))}
@@ -263,7 +263,7 @@ function CentralMockup() {
           </div>
 
           {/* activity chart */}
-          <div className="mt-4 hidden rounded-[4px] border border-hairline bg-ink p-4 2xl:block">
+          <div className="mt-4 hidden rounded-[10px] border border-hairline bg-ink p-4 2xl:block">
             <div className="flex items-center justify-between">
               <Tag>Receivables activity</Tag>
               <span className="font-mono text-[11px] text-fog">6 mo</span>
@@ -299,7 +299,7 @@ function CentralMockup() {
               <Tag icon={FileText}>Recent invoices</Tag>
               <span className="font-mono text-[11px] text-fog">last 4</span>
             </div>
-            <div className="mt-3 overflow-hidden rounded-[4px] border border-hairline">
+            <div className="mt-3 overflow-hidden rounded-[10px] border border-hairline">
               {RECENT_INVOICES.map((invoice, index) => (
                 <div
                   key={invoice.id}
@@ -343,7 +343,7 @@ function CustomerRecordPanel() {
     <FloatingPanel delay={60} className="lg:-rotate-[0.7deg]">
       <Tag icon={UserRound}>customer.record</Tag>
       <div className="mt-3 flex items-center gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-hairline bg-canvas text-signal">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-hairline bg-canvas text-signal">
           <UserRound className="h-4 w-4" />
         </span>
         <div className="min-w-0">
@@ -466,7 +466,7 @@ function PaymentTimelinePanel() {
         ))}
       </div>
       <p className="mt-3 border-t border-hairline pt-3 text-[11px] leading-relaxed text-fog">
-        Invoice/payment status tracking — not payment processing.
+        Invoice/payment status tracking, not payment processing.
       </p>
     </FloatingPanel>
   );
@@ -731,7 +731,7 @@ export function ProductWorkspaceShowcase() {
             <span className="h-px w-8 bg-graphite" />
             <span className="text-fog">The workspace</span>
           </div>
-          <h2 className="mt-4 font-display text-3xl font-medium leading-[1.12] tracking-[0.025em] text-bone sm:text-4xl">
+          <h2 className="mt-4 font-display text-3xl font-medium leading-[1.12] tracking-tight text-bone sm:text-4xl">
             Everything around the invoice, visible in one workspace.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-fog sm:text-base">

@@ -6,7 +6,7 @@ import { LegalLayout, LegalSection, LegalList } from "@/components/marketing/Leg
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Placeholder handles data on its marketing site — privacy-first, cookieless analytics and manual pilot-request handling for Saudi & GCC SMEs.",
+    "How Invoice X handles data on its marketing site: privacy-first, cookieless analytics and manual pilot-request handling for Saudi & GCC SMEs.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
       <LegalSection number="01" heading="Who this covers">
         <p>
           This policy applies to the {brand.name} marketing website and the pilot-request process. It
-          does not cover any separate agreement we put in place with you once a pilot begins — that is
+          does not cover any separate agreement we put in place with you once a pilot begins. That is
           handled directly and in writing.
         </p>
         <p>
@@ -42,8 +42,8 @@ export default function PrivacyPage() {
             </>,
             <>
               <strong className="text-bone">Usage analytics.</strong> We measure anonymous,
-              aggregate usage — which pages are viewed and a few product events (such as starting the
-              demo or submitting a pilot request) — to understand what is useful.
+              aggregate usage to understand what is useful: which pages are viewed and a few product
+              events, such as starting the demo or submitting a pilot request.
             </>,
           ]}
         />
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
         </p>
         <LegalList
           items={[
-            "Set no cookies and write nothing to your device — measurement is in-memory only and is forgotten when you close the tab.",
+            "Set no cookies and write nothing to your device; measurement is in-memory only and is forgotten when you close the tab.",
             "Do not track you across other websites and do not build a long-term profile of you.",
             "Capture page views and a small set of explicit product events, not your keystrokes or screen recordings.",
             "Are processed in the European Union by our analytics provider (PostHog).",
@@ -68,7 +68,7 @@ export default function PrivacyPage() {
         />
         <p>
           Because no cookies or device storage are used for analytics, there is no tracking to switch
-          off — but you can always block analytics with your browser or an extension if you prefer.
+          off, but you can always block analytics with your browser or an extension if you prefer.
         </p>
       </LegalSection>
 
@@ -93,11 +93,11 @@ export default function PrivacyPage() {
         <LegalList
           items={[
             <>
-              <strong className="text-bone">Formspree</strong> — receives and stores pilot-request
+              <strong className="text-bone">Formspree</strong>: receives and stores pilot-request
               form submissions so we can read and reply to them.
             </>,
             <>
-              <strong className="text-bone">PostHog (EU)</strong> — processes the anonymous usage
+              <strong className="text-bone">PostHog (EU)</strong>: processes the anonymous usage
               analytics described above, hosted in the European Union.
             </>,
           ]}

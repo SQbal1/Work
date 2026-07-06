@@ -10,7 +10,7 @@ export function Faq({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "divide-y divide-hairline overflow-hidden rounded-[4px] border border-hairline bg-canvas",
+        "divide-y divide-hairline overflow-hidden rounded-[10px] border border-hairline bg-canvas",
         className ?? "mx-auto max-w-3xl",
       )}
     >

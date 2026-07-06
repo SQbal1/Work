@@ -2,29 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Invoice X — global styles.
+ * X-family visual language: near-black canvas, glass panels, hairlines,
+ * and the lime→mint signal gradient. Fonts are injected by next/font in
+ * src/app/layout.tsx as --font-display / --font-sans / --font-mono / --font-arabic.
+ */
+
 :root {
-  --color-slate-canvas: #1c1e21;
-  --color-ink-well: #121317;
-  --color-graphite-hairline: #3b3e45;
-  --color-steel-border: #272a2e;
-  --color-ash-text: #b5b8c0;
-  --color-fog-text: #878c99;
-  --color-cloud-text: #d7d9dd;
-  --color-bone-text: #e5e7eb;
+  /* Surfaces */
+  --color-slate-canvas: #05070c;
+  --color-ink-well: #0a0e16;
+  --color-raised: #0e131d;
+  /* Lines */
+  --color-graphite-hairline: rgba(226, 233, 244, 0.17);
+  --color-steel-border: rgba(226, 233, 244, 0.08);
+  /* Text ramp */
+  --color-bone-text: #f4f6f9;
+  --color-cloud-text: #c8d0dc;
+  --color-ash-text: #98a2b3;
+  --color-fog-text: #68738a;
+  /* Accents */
   --color-signal-lime: #a8ff53;
+  --color-mint: #3ee6a0;
   --color-syntax-violet: #9c9af2;
   --color-syntax-pink: #fa3abf;
-  --color-loop-green: #afec73;
+  --color-loop-green: #7ef29d;
   --color-key-lime: #d9f07c;
   --color-tag-magenta: #e888f8;
-  --color-mute-red: #f43f5e;
+  --color-mute-red: #ff5c72;
+  --color-warm-gold: #f0c46a;
 
-  --font-satoshi: "Satoshi", "General Sans", "Inter", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-geist: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
-  --font-geist-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, monospace;
+  /* The brand gradient — every standalone X, key phrases, signature moments. */
+  --gradient-x: linear-gradient(100deg, #d9f07c 0%, #a8ff53 42%, #3ee6a0 100%);
 
   --background: var(--color-slate-canvas);
   --foreground: var(--color-bone-text);
@@ -43,7 +53,7 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-/* Typographic micro-polish utilities (opt-in; never applied to the hero). */
+/* Typographic micro-polish utilities (opt-in). */
 .text-balance {
   text-wrap: balance;
 }
@@ -72,7 +82,7 @@ body {
   height: 8px;
 }
 .scrollbar-slim::-webkit-scrollbar-thumb {
-  background: rgba(135, 140, 153, 0.32);
+  background: rgba(152, 162, 179, 0.28);
   border-radius: 9999px;
 }
 .scrollbar-slim::-webkit-scrollbar-track {
@@ -83,6 +93,134 @@ body {
   background: var(--color-signal-lime);
   color: var(--color-ink-well);
 }
+
+/* Base focus ring for interactive elements */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--color-slate-canvas),
+    0 0 0 3px rgba(168, 255, 83, 0.45);
+}
+
+/* ---------------------------------------------------------------------------
+ * X-family surface utilities
+ * ------------------------------------------------------------------------- */
+
+/* Glass panel — the default premium surface. */
+.glass {
+  background: rgba(244, 246, 249, 0.035);
+  border: 1px solid rgba(226, 233, 244, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.glass-strong {
+  background: rgba(244, 246, 249, 0.06);
+  border: 1px solid rgba(226, 233, 244, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Metallic headline treatment — white fading into cool grey. */
+.text-metal {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f6f9 55%, #8e99ab 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* The Invoice X gradient — for the brand X and one key phrase per screen. */
+.text-gradient-x {
+  background: var(--gradient-x);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Animated hairline used as a top border on premium cards. */
+.shimmer-border {
+  background: linear-gradient(
+      90deg,
+      rgba(226, 233, 244, 0.06) 25%,
+      rgba(168, 255, 83, 0.4) 50%,
+      rgba(226, 233, 244, 0.06) 75%
+    )
+    0 0 / 200% 100%;
+  animation: shimmerSlide 2.8s linear infinite;
+}
+@keyframes shimmerSlide {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Fine grain so large dark surfaces never band. */
+.noise {
+  position: relative;
+}
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Faint dot matrix — decorative depth on feature panels. */
+.dot-grid {
+  background-image: radial-gradient(rgba(226, 233, 244, 0.09) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* Line grid — hero + section backdrops. */
+.line-grid {
+  background-image:
+    linear-gradient(rgba(226, 233, 244, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 233, 244, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* Soft edge masks */
+.mask-fade-b {
+  mask-image: linear-gradient(to bottom, black, transparent 92%);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 92%);
+}
+.mask-fade-radial {
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 0%, transparent 74%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 0%, transparent 74%);
+}
+
+/* Ambient aurora blobs — breathing radial glows behind heroes/panels. */
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(110px);
+  animation: auroraDrift 16s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift {
+  0% {
+    transform: translate3d(-6%, -4%, 0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate3d(5%, 3%, 0) scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-3%, 5%, 0) scale(0.98);
+    opacity: 0.75;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Legacy surface classes (auth, onboarding, product showcase, demo) — retuned
+ * to the new palette so existing screens inherit the family look.
+ * ------------------------------------------------------------------------- */
 
 /* Low-contrast workstation grid used on marketing + auth screens */
 .aurora {
@@ -96,8 +234,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right, rgba(215, 217, 221, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(215, 217, 221, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(226, 233, 244, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 233, 244, 0.035) 1px, transparent 1px);
   background-size: 32px 32px;
   mask-image: linear-gradient(to bottom, black, transparent 78%);
   z-index: -1;
@@ -113,44 +251,32 @@ body {
   z-index: -1;
   pointer-events: none;
   background:
-    linear-gradient(to right, rgba(215, 217, 221, 0.026) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(215, 217, 221, 0.026) 1px, transparent 1px);
+    linear-gradient(to right, rgba(226, 233, 244, 0.026) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 233, 244, 0.026) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse at 67% 48%, black 0%, transparent 68%);
 }
 
-/* Base focus ring for interactive elements */
-.focus-ring:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 1px var(--color-slate-canvas),
-    0 0 0 3px rgba(168, 255, 83, 0.45);
-}
-
-/* Soft layered radial backdrop behind the hero text + mockup.
-   Adds depth without crossing into neon/crypto territory. */
+/* Soft layered radial backdrop behind hero text + mockups. */
 .hero-aura {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(64% 58% at 50% 36%, rgba(168, 255, 83, 0.055), transparent 72%),
-    radial-gradient(70% 66% at 76% 54%, rgba(215, 217, 221, 0.035), transparent 74%);
+    radial-gradient(64% 58% at 50% 36%, rgba(168, 255, 83, 0.06), transparent 72%),
+    radial-gradient(70% 66% at 76% 54%, rgba(62, 230, 160, 0.05), transparent 74%);
 }
 
-/* Homepage-only elevation and section pacing.
-   The palette stays intentionally narrow; depth comes from restrained
-   luminance shifts, hairlines, and layered neutral shadows. */
+/* Homepage elevation + pacing. */
 .home-page {
   --home-shadow-soft:
-    0 1px 0 rgba(229, 231, 235, 0.025) inset,
-    0 14px 36px rgba(0, 0, 0, 0.12);
+    0 1px 0 rgba(244, 246, 249, 0.025) inset,
+    0 14px 36px rgba(0, 0, 0, 0.3);
   --home-shadow-strong:
-    0 1px 0 rgba(229, 231, 235, 0.035) inset,
-    0 22px 58px rgba(0, 0, 0, 0.2);
-  background:
-    linear-gradient(180deg, #111216 0%, #17191d 46%, #101115 100%);
+    0 1px 0 rgba(244, 246, 249, 0.035) inset,
+    0 22px 58px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(180deg, #04060a 0%, #070b12 46%, #04060a 100%);
 }
 
 .home-motion-content {
@@ -158,11 +284,11 @@ body {
 }
 
 .home-hero {
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
 }
 
 .home-hero.aurora {
-  background: rgba(28, 30, 33, 0.95);
+  background: rgba(5, 7, 12, 0.95);
 }
 
 .home-hero-preview {
@@ -182,24 +308,22 @@ body {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(58% 48% at 50% 42%, rgba(229, 231, 235, 0.035), transparent 76%);
+  background: radial-gradient(58% 48% at 50% 42%, rgba(226, 233, 244, 0.03), transparent 76%);
 }
 
 .home-card {
-  box-shadow: 0 1px 0 rgba(229, 231, 235, 0.02) inset;
+  box-shadow: 0 1px 0 rgba(244, 246, 249, 0.02) inset;
   transition:
     border-color 220ms ease,
     box-shadow 260ms ease,
     transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Premium hover: a small GPU lift. On the showcase's resting-tilted panels this
-   straightens-and-lifts, restoring the intended hover/tilt interaction. */
 .home-card:hover {
   transform: translateY(-3px);
   box-shadow:
-    0 1px 0 rgba(229, 231, 235, 0.04) inset,
-    0 18px 40px rgba(0, 0, 0, 0.22);
+    0 1px 0 rgba(244, 246, 249, 0.04) inset,
+    0 18px 40px rgba(0, 0, 0, 0.4);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -212,13 +336,13 @@ body {
 .home-showcase-frame,
 .home-pilot-panel,
 .home-final-panel {
-  box-shadow: var(--home-shadow-strong);
+  box-shadow: var(--home-shadow-strong, 0 22px 58px rgba(0, 0, 0, 0.45));
 }
 
 .home-elevated-panel {
   box-shadow:
-    0 1px 0 rgba(229, 231, 235, 0.03) inset,
-    0 14px 34px rgba(0, 0, 0, 0.16);
+    0 1px 0 rgba(244, 246, 249, 0.03) inset,
+    0 14px 34px rgba(0, 0, 0, 0.35);
 }
 
 .workspace-stage-mesh {
@@ -226,11 +350,11 @@ body {
   inset: 4% 14%;
   z-index: 0;
   pointer-events: none;
-  border: 1px solid rgba(215, 217, 221, 0.035);
+  border: 1px solid rgba(226, 233, 244, 0.035);
   background:
-    radial-gradient(ellipse at center, rgba(168, 255, 83, 0.055), transparent 66%),
-    linear-gradient(135deg, transparent 46%, rgba(215, 217, 221, 0.045) 46.2%, transparent 46.4%),
-    linear-gradient(45deg, transparent 52%, rgba(215, 217, 221, 0.03) 52.2%, transparent 52.4%);
+    radial-gradient(ellipse at center, rgba(168, 255, 83, 0.05), transparent 66%),
+    linear-gradient(135deg, transparent 46%, rgba(226, 233, 244, 0.045) 46.2%, transparent 46.4%),
+    linear-gradient(45deg, transparent 52%, rgba(226, 233, 244, 0.03) 52.2%, transparent 52.4%);
   clip-path: polygon(12% 0, 88% 0, 100% 24%, 92% 100%, 8% 100%, 0 24%);
 }
 
@@ -253,9 +377,8 @@ body {
   box-shadow: 0 0 0 4px rgba(168, 255, 83, 0.1);
 }
 
-/* Marquee ticker strip — horizontal, continuously scrolling feature pills.
-   The track is doubled (two identical sets), so animating -50% loops cleanly.
-   Pauses on hover and on prefers-reduced-motion. */
+/* Marquee ticker strip — track is doubled, animating -50% loops cleanly.
+   Pauses on hover and under prefers-reduced-motion. */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -265,7 +388,7 @@ body {
   }
 }
 .marquee-track {
-  animation: marquee 28s linear infinite;
+  animation: marquee 32s linear infinite;
 }
 .marquee-viewport:hover .marquee-track {
   animation-play-state: paused;
@@ -288,8 +411,28 @@ body {
 .cue-ring {
   outline: 2px solid rgba(168, 255, 83, 0.3);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 8px;
   animation: cueRingPulse 1.9s ease-in-out infinite;
+}
+
+/* Footer sign-off wordmark — the letters ripple up and down in a staggered
+   wave, the Invoice X take on RideX's footer sign-off hop. Continuous and
+   subtle; each letter's --i offsets its phase so the wave travels across
+   the word. Killed under prefers-reduced-motion below. */
+@keyframes footerWordmarkHop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.12em);
+  }
+}
+.footer-wordmark__letter {
+  display: inline-block;
+  animation: footerWordmarkHop 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.09s);
+  will-change: transform;
 }
 
 .log-cursor {
@@ -308,7 +451,15 @@ body {
   .log-cursor,
   .signal-pulse,
   .cue-ring,
-  .marquee-track {
+  .footer-wordmark__letter,
+  .marquee-track,
+  .aurora-blob,
+  .shimmer-border,
+  .animate-shimmer,
+  .animate-shimmer-slide,
+  .animate-aurora,
+  .animate-float,
+  .animate-pulse-soft {
     animation: none !important;
     transform: none !important;
   }
@@ -336,8 +487,8 @@ body {
   .home-pilot-panel,
   .home-final-panel {
     box-shadow:
-      0 1px 0 rgba(229, 231, 235, 0.025) inset,
-      0 14px 36px rgba(0, 0, 0, 0.16);
+      0 1px 0 rgba(244, 246, 249, 0.025) inset,
+      0 14px 36px rgba(0, 0, 0, 0.3);
   }
 }
 

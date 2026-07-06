@@ -1,6 +1,0 @@
-# Ride X — robots.txt
-# REPLACE-ME: update the sitemap URL once the real domain is live.
-User-agent: *
-Allow: /
-
-Sitemap: https://ridex.sa/sitemap.xml

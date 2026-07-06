@@ -53,7 +53,7 @@ function Chip({ children, tone = "muted" }: { children: React.ReactNode; tone?: 
 
 function IconBox({ icon: Icon, tone, well }: { icon: LucideIcon; tone: string; well: string }) {
   return (
-    <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-[4px] border border-hairline", well, tone)}>
+    <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-hairline", well, tone)}>
       <Icon className="h-5 w-5" />
     </span>
   );
@@ -75,7 +75,7 @@ function SectionHeader({
   size?: "default" | "lg";
 }) {
   const titleClass = cn(
-    "text-balance font-display font-medium leading-[1.12] tracking-[0.025em] text-bone",
+    "text-balance font-display font-semibold leading-[1.08] tracking-tight text-metal",
     size === "lg" ? "text-3xl sm:text-4xl lg:text-5xl" : "text-3xl sm:text-4xl",
   );
 
@@ -128,7 +128,7 @@ function ProblemFragment({ index }: { index: number }) {
             direction="left"
             distance={14}
             scaleFrom={0.992}
-            className="flex items-center gap-3 rounded-[4px] border border-hairline bg-canvas px-3 py-2 text-xs"
+            className="flex items-center gap-3 rounded-xl border border-hairline bg-canvas px-3 py-2 text-xs"
           >
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-mute-red/80" />
             <span className="w-16 shrink-0 font-mono text-[10px] uppercase tracking-[0.06em] text-fog">
@@ -143,7 +143,7 @@ function ProblemFragment({ index }: { index: number }) {
   }
   if (index === 1) {
     return (
-      <div className="rounded-[4px] border border-hairline bg-canvas p-3 font-mono text-[11px]">
+      <div className="rounded-xl border border-hairline bg-canvas p-3 font-mono text-[11px]">
         <SceneReveal direction="left" distance={12} className="flex items-center justify-between">
           <span className="text-fog">subtotal</span>
           <span className="text-cloud">SAR 12,000</span>
@@ -174,11 +174,11 @@ function ProblemFragment({ index }: { index: number }) {
   }
   return (
     <div className="space-y-2">
-      <SceneReveal direction="left" distance={14} className="max-w-[82%] rounded-[4px] rounded-bl-none border border-hairline bg-canvas px-3 py-2 text-xs text-cloud">
+      <SceneReveal direction="left" distance={14} className="max-w-[82%] rounded-xl rounded-bl-none border border-hairline bg-canvas px-3 py-2 text-xs text-cloud">
         Did INV-1207 get paid?
       </SceneReveal>
-      <SceneReveal delay={120} direction="right" distance={14} className="ml-auto max-w-[82%] rounded-[4px] rounded-br-none border border-mute-red/20 bg-ink px-3 py-2 text-xs text-fog">
-        not sure — will check the sheet
+      <SceneReveal delay={120} direction="right" distance={14} className="ml-auto max-w-[82%] rounded-xl rounded-br-none border border-mute-red/20 bg-ink px-3 py-2 text-xs text-fog">
+        not sure, will check the sheet
         <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-mute-red align-middle" />
       </SceneReveal>
     </div>
@@ -207,13 +207,13 @@ export function ProblemSection() {
               distance={34}
               rotate={i === 0 ? -1.2 : i === 2 ? 1.2 : 0}
               scaleFrom={0.965}
-              className="home-card group flex h-full flex-col rounded-[4px] border border-hairline bg-ink p-5 transition hover:border-graphite"
+              className="home-card group flex h-full flex-col rounded-2xl border border-hairline bg-ink p-5 transition hover:border-graphite"
             >
               <div className="flex items-center justify-between">
                 <IconBox icon={p.icon} tone={PROBLEM_TONES[i]} well="bg-canvas" />
                 <Chip tone="muted">{PROBLEM_CHIPS[i]}</Chip>
               </div>
-              <h3 className="mt-5 font-display text-lg font-medium tracking-[0.025em] text-bone">
+              <h3 className="mt-5 font-display text-lg font-semibold tracking-tight text-bone">
                 {p.title}
               </h3>
               <div className="mt-4">
@@ -291,7 +291,7 @@ export function WorkflowSection() {
                   direction="left"
                   distance={28 + i * 4}
                   scaleFrom={0.972}
-                  className="home-card relative rounded-[4px] border border-hairline bg-canvas p-5 transition hover:border-graphite"
+                  className="home-card relative rounded-2xl border border-hairline bg-canvas p-5 transition hover:border-graphite"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-fog">
@@ -299,7 +299,7 @@ export function WorkflowSection() {
                     </span>
                     <s.icon className="h-5 w-5 text-signal" />
                   </div>
-                  <h3 className="mt-6 font-display text-lg font-medium tracking-[0.025em] text-bone">
+                  <h3 className="mt-6 font-display text-lg font-semibold tracking-tight text-bone">
                     {copy.title}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-fog">{copy.description}</p>
@@ -327,7 +327,7 @@ export function WorkflowSection() {
         </div>
 
         <SceneReveal delay={120} direction="none" scaleFrom={0.965} className="mt-4">
-          <div className="home-elevated-panel flex flex-col items-start justify-between gap-3 rounded-[4px] border border-signal/25 bg-canvas px-5 py-4 sm:flex-row sm:items-center">
+          <div className="home-elevated-panel flex flex-col items-start justify-between gap-3 rounded-2xl border border-signal/25 bg-canvas px-5 py-4 sm:flex-row sm:items-center">
             <div className="font-mono text-[11px] text-fog">
               customer.record <span className="text-graphite">→</span> invoice.build{" "}
               <span className="text-graphite">→</span> vat.check{" "}
@@ -367,7 +367,7 @@ export function BuiltForSection() {
         <div className="mt-12 grid gap-4 lg:grid-cols-3">
           {/* roadmap panel */}
           <SceneReveal direction="left" distance={34} className="lg:col-span-1">
-            <div className="home-card flex h-full flex-col rounded-[4px] border border-hairline bg-ink p-6">
+            <div className="home-card flex h-full flex-col rounded-2xl border border-hairline bg-ink p-6">
               <Chip tone="signal">focus</Chip>
               <div className="relative mt-6 pl-1">
                 <div
@@ -409,12 +409,12 @@ export function BuiltForSection() {
                 delay={i * 70}
                 direction={i % 2 === 0 ? "left" : "right"}
                 distance={22}
-                className="home-card group flex items-start gap-4 rounded-[4px] border border-hairline bg-ink p-5 transition hover:border-graphite"
+                className="home-card group flex items-start gap-4 rounded-2xl border border-hairline bg-ink p-5 transition hover:border-graphite"
               >
                 <IconBox icon={b.icon} tone={SEGMENT_TONES[i]} well="bg-canvas" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3">
-                    <h3 className="font-display font-medium tracking-[0.025em] text-bone">{b.label}</h3>
+                    <h3 className="font-display font-semibold tracking-tight text-bone">{b.label}</h3>
                     <span className="shrink-0 font-mono text-[10px] text-fog">{SEGMENT_TAGS[i]}</span>
                   </div>
                   <p className="mt-1.5 text-sm leading-relaxed text-fog">{b.description}</p>
@@ -458,7 +458,7 @@ function FeatureCell({
       direction={index % 3 === 0 ? "left" : index % 3 === 2 ? "right" : "up"}
       distance={24}
       className={cn(
-        "home-card group flex flex-col rounded-[4px] border border-hairline bg-canvas p-5 transition hover:border-graphite",
+        "home-card group flex flex-col rounded-2xl border border-hairline bg-canvas p-5 transition hover:border-graphite",
         span,
       )}
     >
@@ -466,7 +466,7 @@ function FeatureCell({
         <IconBox icon={f.icon} tone={FEATURE_TONES[index]} well="bg-ink" />
         {chip ? <Chip tone="muted">{chip}</Chip> : null}
       </div>
-      <h3 className="mt-4 font-display font-medium tracking-[0.025em] text-bone">{f.title}</h3>
+      <h3 className="mt-4 font-display font-semibold tracking-tight text-bone">{f.title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-fog">{f.description}</p>
     </SceneReveal>
   );
@@ -501,14 +501,15 @@ export function FeatureGridSection() {
             direction="left"
             distance={32}
             scaleFrom={0.97}
-            className="home-card group flex flex-col justify-between gap-5 rounded-[4px] border border-hairline bg-canvas p-5 transition hover:border-graphite sm:col-span-2 sm:flex-row sm:items-end lg:col-span-3"
+            className="home-card group relative flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-hairline bg-canvas p-5 transition hover:border-graphite sm:col-span-2 sm:flex-row sm:items-end lg:col-span-3"
           >
+            <div aria-hidden="true" className="shimmer-border absolute inset-x-0 top-0 h-px" />
             <div>
               <IconBox icon={vat.icon} tone="text-signal" well="bg-ink" />
-              <h3 className="mt-4 font-display font-medium tracking-[0.025em] text-bone">{vat.title}</h3>
+              <h3 className="mt-4 font-display font-semibold tracking-tight text-bone">{vat.title}</h3>
               <p className="mt-2 max-w-xs text-sm leading-relaxed text-fog">{vat.description}</p>
             </div>
-            <div className="w-full shrink-0 rounded-[4px] border border-hairline bg-ink p-3 sm:w-44">
+            <div className="w-full shrink-0 rounded-xl border border-hairline bg-ink p-3 sm:w-44">
               <div className="flex items-center justify-between font-mono text-[11px]">
                 <span className="text-fog">subtotal</span>
                 <span className="text-cloud">12,000</span>
@@ -530,15 +531,16 @@ export function FeatureGridSection() {
             direction="right"
             distance={32}
             scaleFrom={0.97}
-            className="home-card group flex flex-col justify-between gap-5 rounded-[4px] border border-hairline bg-canvas p-5 transition hover:border-graphite sm:col-span-2 sm:flex-row sm:items-end lg:col-span-3"
+            className="home-card group relative flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-hairline bg-canvas p-5 transition hover:border-graphite sm:col-span-2 sm:flex-row sm:items-end lg:col-span-3"
           >
+            <div aria-hidden="true" className="shimmer-border absolute inset-x-0 top-0 h-px" />
             <div>
               <IconBox icon={pay.icon} tone="text-signal" well="bg-ink" />
-              <h3 className="mt-4 font-display font-medium tracking-[0.025em] text-bone">{pay.title}</h3>
+              <h3 className="mt-4 font-display font-semibold tracking-tight text-bone">{pay.title}</h3>
               <p className="mt-2 max-w-xs text-sm leading-relaxed text-fog">{pay.description}</p>
             </div>
             <div className="w-full shrink-0 sm:w-56">
-              <div className="grid grid-cols-4 overflow-hidden rounded-[4px] border border-hairline">
+              <div className="grid grid-cols-4 overflow-hidden rounded-xl border border-hairline">
                 {PAY_STATES.map((state, idx) => (
                   <div
                     key={state}
@@ -569,14 +571,14 @@ export function FeatureGridSection() {
             delay={250}
             direction="none"
             scaleFrom={0.975}
-            className="flex flex-col justify-center rounded-[4px] border border-dashed border-hairline bg-canvas/40 p-5 sm:col-span-2 lg:col-span-2"
+            className="flex flex-col justify-center rounded-xl border border-dashed border-hairline bg-canvas/40 p-5 sm:col-span-2 lg:col-span-2"
           >
             <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fog">
               <ShieldCheck className="h-4 w-4 text-signal" />
               compliance note
             </div>
             <p className="mt-3 text-xs leading-relaxed text-fog">
-              Placeholder provides a ZATCA-ready workflow foundation and VAT readiness checks — it does not
+              Invoice X provides a ZATCA-ready workflow foundation and VAT readiness checks. It does not
               claim official ZATCA compliance. A final compliance review is required before production use.
             </p>
           </SceneReveal>
@@ -604,21 +606,21 @@ export function PilotSection() {
     <section className="home-section border-b border-hairline bg-canvas/95 py-24 sm:py-36 lg:py-40">
       <ScrollScene className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SceneReveal direction="none" distance={0} scaleFrom={0.945}>
-          <div className="home-pilot-panel overflow-hidden rounded-[4px] border border-signal/35">
+          <div className="home-pilot-panel overflow-hidden rounded-2xl border border-signal/35">
             <div className="grid lg:grid-cols-2">
               {/* left — pitch */}
               <div className="aurora relative p-8 sm:p-10">
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em]">
-                    <span className="text-signal">{"// 08"}</span>
+                    <span className="text-signal">{"// 09"}</span>
                     <span className="h-px w-8 bg-graphite" />
                     <span className="text-fog">Early access</span>
                   </div>
-                  <h2 className="mt-4 font-display text-3xl font-medium leading-[1.12] tracking-[0.025em] text-bone sm:text-4xl">
+                  <h2 className="mt-4 font-display text-3xl font-semibold leading-[1.08] tracking-tight text-metal sm:text-4xl">
                     Start with a guided pilot
                   </h2>
                   <p className="mt-4 max-w-md text-sm leading-relaxed text-fog">
-                    Placeholder is in early pilot. Manual onboarding. Direct support. Feedback-based
+                    Invoice X is in early pilot. Manual onboarding. Direct support. Feedback-based
                     improvements as you use it on real invoices.
                   </p>
                   <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-signal/25 bg-ink px-3 py-1.5 font-mono text-[11px] text-fog">
@@ -668,11 +670,11 @@ export function FaqSection() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16 lg:px-8">
         <SceneReveal distance={16} className="lg:sticky lg:top-24 lg:self-start">
           <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em]">
-            <span className="text-signal">{"// 09"}</span>
+            <span className="text-signal">{"// 10"}</span>
             <span className="h-px w-8 bg-graphite" />
             <span className="text-fog">FAQ</span>
           </div>
-          <h2 className="mt-4 font-display text-3xl font-medium leading-[1.12] tracking-[0.025em] text-bone sm:text-4xl">
+          <h2 className="mt-4 font-display text-3xl font-semibold leading-[1.08] tracking-tight text-metal sm:text-4xl">
             Operational questions, answered
           </h2>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-fog">
@@ -703,19 +705,19 @@ export function FinalCtaSection() {
     <section className="home-section bg-canvas/95 py-24 sm:py-32">
       <ScrollScene exit={false} className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SceneReveal direction="none" distance={0} scaleFrom={0.93}>
-          <div className="aurora home-final-panel relative overflow-hidden rounded-[4px] border border-graphite/70 px-6 py-12 sm:px-12 sm:py-16">
+          <div className="aurora home-final-panel relative overflow-hidden rounded-2xl border border-graphite/70 px-6 py-12 sm:px-12 sm:py-16">
             <div className="relative z-10 grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
               <div className="max-w-2xl">
                 <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em]">
-                  <span className="text-signal">{"// 10"}</span>
+                  <span className="text-signal">{"// 11"}</span>
                   <span className="h-px w-8 bg-graphite" />
                   <span className="text-fog">Get started</span>
                 </div>
-                <h2 className="mt-4 font-display text-3xl font-medium leading-[1.1] tracking-[0.025em] text-bone sm:text-4xl lg:text-5xl">
+                <h2 className="mt-4 font-display text-3xl font-semibold leading-[1.08] tracking-tight text-metal sm:text-4xl lg:text-5xl">
                   Pilot a cleaner invoice workflow before your team outgrows spreadsheets.
                 </h2>
                 <p className="mt-4 max-w-xl text-sm leading-relaxed text-fog">
-                  Placeholder is an MVP for small teams ready to test customer records, VAT checks,
+                  Invoice X is an MVP for small teams ready to test customer records, VAT checks,
                   and payment follow-up in one place before committing to a heavier system.
                 </p>
               </div>
@@ -760,7 +762,7 @@ export function TrustStrip() {
                 i > 0 && "lg:border-l lg:border-hairline",
               )}
             >
-              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-[4px] border border-hairline bg-canvas text-signal">
+              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-hairline bg-canvas text-signal">
                 <t.icon className="h-4 w-4" strokeWidth={1.75} />
               </span>
               <div className="min-w-0">
@@ -790,7 +792,7 @@ export function PilotJourneySection() {
             index="// 07"
             eyebrow="The pilot"
             title="What a pilot actually looks like"
-            lead="No long sales cycle and no contracts. Onboarding is manual and hands-on — and you can walk away at any point."
+            lead="No long sales cycle and no contracts. Onboarding is manual and hands-on, and you can walk away at any point."
           />
         </SceneReveal>
 
@@ -802,7 +804,7 @@ export function PilotJourneySection() {
               direction="up"
               distance={26}
               scaleFrom={0.97}
-              className="home-card flex flex-col rounded-[4px] border border-hairline bg-canvas p-5 transition hover:border-graphite"
+              className="home-card flex flex-col rounded-2xl border border-hairline bg-canvas p-5 transition hover:border-graphite"
             >
               <div className="flex items-center justify-between">
                 <span className="nums-tabular grid h-9 w-9 place-items-center rounded-full border border-signal/30 bg-signal/10 font-mono text-sm text-signal">
@@ -818,7 +820,7 @@ export function PilotJourneySection() {
         </div>
 
         <SceneReveal delay={140} direction="none" scaleFrom={0.965} className="mt-4">
-          <div className="home-elevated-panel flex flex-col items-start justify-between gap-3 rounded-[4px] border border-signal/25 bg-canvas px-5 py-4 sm:flex-row sm:items-center">
+          <div className="home-elevated-panel flex flex-col items-start justify-between gap-3 rounded-2xl border border-signal/25 bg-canvas px-5 py-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2.5 text-sm text-cloud">
               <Unlock className="h-4 w-4 shrink-0 text-signal" />
               No lock-in, no auto-charges, and no account is created without you.
@@ -841,16 +843,101 @@ const MARQUEE_ITEMS = [
   "VAT-aware totals",
   "Customer records",
   "15% KSA VAT",
+  "Bilingual EN/AR invoices",
   "Payment tracking",
-  "Net 14 terms",
+  "UBL 2.1 XML",
   "Readiness checks",
-  "Reusable records",
-  "Invoice workflow",
+  "Invoice hash chaining",
   "Draft · Sent · Open · Paid",
   "ZATCA-ready foundation",
   "Receivables overview",
   "SAR invoicing",
 ] as const;
+
+/* ------------------------------------------------------------------ */
+/* Ecosystem — the X family (PayX · RideX) — mirrors the ecosystem      */
+/* section on PayX's site, which lists InvoiceX as a sibling product.   */
+/* ------------------------------------------------------------------ */
+
+const X_FAMILY = [
+  {
+    name: "PayX",
+    role: "Virtual cards & private payments",
+    line: "Invoices that settle through PayX and reconcile themselves.",
+    status: "Planned",
+  },
+  {
+    name: "RideX",
+    role: "Premium ground transport",
+    line: "Corporate travel billed straight into your receivables view.",
+    status: "Planned",
+  },
+] as const;
+
+export function EcosystemSection() {
+  return (
+    <section className="home-section border-b border-hairline bg-canvas/95 py-16 sm:py-24">
+      <ScrollScene className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SceneReveal distance={24}>
+          <SectionHeader
+            index="// 08"
+            eyebrow="The X family"
+            title="One family. Shared identity, payments, and reporting."
+            lead="Invoice X is built to connect with its siblings: money coming in, money going out, and the operations in between."
+          />
+        </SceneReveal>
+
+        <div className="mt-12 grid gap-4 lg:grid-cols-3">
+          {/* Invoice X — the anchor card */}
+          <SceneReveal
+            direction="left"
+            distance={30}
+            className="home-card relative flex h-full flex-col overflow-hidden rounded-2xl border border-signal/30 bg-ink p-6"
+          >
+            <div aria-hidden="true" className="shimmer-border absolute inset-x-0 top-0 h-px" />
+            <div className="flex items-center justify-between">
+              <span className="font-display text-lg font-semibold tracking-tight text-bone">
+                Invoice<span className="text-gradient-x">X</span>
+              </span>
+              <Chip tone="signal">you are here</Chip>
+            </div>
+            <p className="mt-2 text-sm text-fog">E-invoicing & business workflows</p>
+            <p className="mt-5 text-sm leading-relaxed text-cloud">
+              Customer records, VAT-aware invoices, ZATCA-ready foundations, and receivables: the
+              money-in side of the family.
+            </p>
+            <div className="mt-auto pt-5 font-mono text-[11px] text-fog">
+              family.role <span className="text-signal">money-in</span>
+            </div>
+          </SceneReveal>
+
+          {X_FAMILY.map((p, i) => (
+            <SceneReveal
+              key={p.name}
+              delay={(i + 1) * 90}
+              direction={i === 1 ? "right" : "up"}
+              distance={30}
+              className="home-card flex h-full flex-col rounded-2xl border border-hairline bg-ink p-6 transition hover:border-graphite"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-display text-lg font-semibold tracking-tight text-bone">
+                  {p.name.replace(/X$/, "")}
+                  <span className="text-gradient-x">X</span>
+                </span>
+                <Chip tone="muted">{p.status}</Chip>
+              </div>
+              <p className="mt-2 text-sm text-fog">{p.role}</p>
+              <p className="mt-5 text-sm leading-relaxed text-cloud">{p.line}</p>
+              <div className="mt-auto pt-5 font-mono text-[11px] text-fog">
+                link.status <span className="text-ash">designed, not wired</span>
+              </div>
+            </SceneReveal>
+          ))}
+        </div>
+      </ScrollScene>
+    </section>
+  );
+}
 
 export function MarqueeStrip() {
   // Two identical sets side by side so translating -50% loops seamlessly.

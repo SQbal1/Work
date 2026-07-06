@@ -6,7 +6,7 @@ import { LegalLayout, LegalSection, LegalList } from "@/components/marketing/Leg
 export const metadata: Metadata = {
   title: "VAT & Compliance",
   description:
-    "Where Placeholder stands on VAT and ZATCA — a VAT-ready workflow foundation for Saudi & GCC SMEs, not certified ZATCA compliance.",
+    "Where Invoice X stands on VAT and ZATCA: a VAT-ready workflow foundation for Saudi & GCC SMEs, not certified ZATCA compliance.",
   alternates: { canonical: "/compliance" },
 };
 
@@ -15,9 +15,9 @@ export default function CompliancePage() {
     <LegalLayout
       eyebrow="VAT & compliance"
       title="VAT & compliance"
-      intro={`Exactly what ${brand.name} does and does not claim about VAT and ZATCA — stated plainly so there is no confusion.`}
+      intro={`Exactly what ${brand.name} does and does not claim about VAT and ZATCA, stated plainly so there is no confusion.`}
     >
-      <LegalSection number="01" heading="What Placeholder is">
+      <LegalSection number="01" heading="What Invoice X is">
         <p>
           {brand.name} gives small businesses a cleaner, VAT-aware invoicing workflow: structured
           customer records, per-line VAT at the standard {brand.country} rate of{" "}
@@ -26,7 +26,7 @@ export default function CompliancePage() {
         </p>
       </LegalSection>
 
-      <LegalSection number="02" heading="What Placeholder is not">
+      <LegalSection number="02" heading="What Invoice X is not">
         <p>
           {brand.name} does <strong className="text-bone">not</strong> claim official ZATCA
           compliance, and it is not a certified e-invoicing or Fatoorah integration. In particular,
@@ -35,10 +35,16 @@ export default function CompliancePage() {
         <LegalList
           items={[
             "Integrate directly with ZATCA or submit invoices to any tax authority.",
-            "Generate cryptographically signed or cleared tax invoices.",
+            "Generate a ZATCA-certified cryptographic stamp, or clear or report invoices with ZATCA.",
             "Replace advice from a qualified accountant or tax advisor.",
           ]}
         />
+        <p>
+          Invoices can optionally generate a UBL XML file with a hash chain and digital signature,
+          but that signature comes from a self-signed development key generated locally, not a
+          ZATCA-issued Cryptographic Stamp Identifier (CSID). It demonstrates the structure of the
+          workflow, not a compliance guarantee.
+        </p>
         <p>
           We describe this as a <strong className="text-bone">VAT-ready workflow foundation</strong>{" "}
           rather than certified compliance, on purpose.
@@ -56,7 +62,7 @@ export default function CompliancePage() {
 
       <LegalSection number="04" heading="Where this is heading">
         <p>
-          Deeper compliance — including official ZATCA integration — is on the roadmap for after the
+          Deeper compliance (including official ZATCA integration) is on the roadmap for after the
           pilot, once we have validated the core workflow with real businesses. We would rather ship
           honest readiness today than overclaim compliance we have not certified.
         </p>
