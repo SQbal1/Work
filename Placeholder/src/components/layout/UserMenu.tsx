@@ -14,7 +14,7 @@ import { cn } from "@/lib/cn";
 export function UserMenu() {
   const router = useRouter();
   const toast = useToast();
-  const { company, usingSupabase } = useStore();
+  const { company, usingSupabase, ready } = useStore();
   const [open, setOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -46,6 +46,18 @@ export function UserMenu() {
     }
     router.push("/login");
     router.refresh();
+  }
+
+  // Until the store has resolved the session, show a neutral skeleton rather
+  // than empty/demo defaults — otherwise a signed-in user briefly sees "Your
+  // company" / demo state while their workspace loads.
+  if (!ready) {
+    return (
+      <div className="flex items-center gap-2 rounded-full border border-hairline py-1 pl-1 pr-2.5">
+        <div className="h-8 w-8 animate-pulse rounded-full bg-white/[0.06]" />
+        <div className="hidden h-3 w-24 animate-pulse rounded bg-white/[0.06] sm:block" />
+      </div>
+    );
   }
 
   return (

@@ -37,8 +37,10 @@ function AccountCard() {
 
   useEffect(() => {
     if (!usingSupabase) return;
+    // Read the email off the local session (no network round-trip) so it
+    // appears immediately instead of after a getUser() request.
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user?.email ?? null));
   }, [usingSupabase]);
 
   async function onSignOut() {
@@ -111,15 +113,25 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader title="Settings" description="Manage your company, invoice defaults, and data." />
 
-      <AccountCard />
+      <section id="account" className="scroll-mt-24">
+        <AccountCard />
+      </section>
 
-      {usingSupabase ? <PasskeysCard /> : null}
+      {usingSupabase ? (
+        <section id="passkeys" className="scroll-mt-24">
+          <PasskeysCard />
+        </section>
+      ) : null}
 
-      <CompanyProfileCard />
-      <InvoicePreferencesCard />
+      <section id="company" className="scroll-mt-24">
+        <CompanyProfileCard />
+      </section>
+      <section id="preferences" className="scroll-mt-24">
+        <InvoicePreferencesCard />
+      </section>
 
       {/* VAT & ZATCA placeholder */}
-      <Card>
+      <Card id="vat" className="scroll-mt-24">
         <CardHeader title="VAT & ZATCA" subtitle="E-invoicing compliance workflow (placeholder)." />
         <CardBody className="space-y-4">
           <div className="flex items-start gap-3 rounded-[10px] border border-key-lime/20 bg-key-lime/10 p-4 text-sm text-key-lime">
@@ -159,10 +171,12 @@ export default function SettingsPage() {
         </CardBody>
       </Card>
 
-      <ZatcaCsrCard />
+      <section id="zatca-csid" className="scroll-mt-24">
+        <ZatcaCsrCard />
+      </section>
 
       {/* Team members placeholder */}
-      <Card>
+      <Card id="team" className="scroll-mt-24">
         <CardHeader
           title="Team members"
           subtitle="Invite teammates to collaborate (coming soon)."
@@ -190,7 +204,7 @@ export default function SettingsPage() {
       </Card>
 
       {/* Data & export */}
-      <Card>
+      <Card id="data" className="scroll-mt-24">
         <CardHeader
           title="Data & export"
           subtitle={
