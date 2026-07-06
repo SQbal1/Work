@@ -22,16 +22,20 @@ export function CardHeader({
   subtitle,
   action,
   className,
+  bordered = true,
 }: {
   title: ReactNode;
   subtitle?: ReactNode;
   action?: ReactNode;
   className?: string;
+  /** Divider rule under the header. Off for dashboard cards (less form-like). */
+  bordered?: boolean;
 }) {
   return (
     <div
       className={cn(
-        "flex items-start justify-between gap-4 border-b border-hairline px-5 py-4 sm:px-6",
+        "flex items-start justify-between gap-4 px-5 py-4 sm:px-6",
+        bordered && "border-b border-hairline",
         className,
       )}
     >

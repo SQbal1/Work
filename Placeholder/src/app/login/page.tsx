@@ -6,7 +6,9 @@ import Link from "next/link";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { OAuthButtons } from "@/components/auth/OAuthButtons";
+import { PasskeySignInButton } from "@/components/auth/PasskeySignInButton";
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
 import { createClient } from "@/lib/supabase/client";
@@ -65,7 +67,7 @@ export default function LoginPage() {
       toast.error(error.message);
       return;
     }
-    toast.success(`Reset link sent to ${email.trim()} — check your inbox.`);
+    toast.success(`Reset link sent to ${email.trim()}. Check your inbox.`);
   }
 
   return (
@@ -82,6 +84,7 @@ export default function LoginPage() {
       }
     >
       <OAuthButtons />
+      <PasskeySignInButton className="mt-2.5" />
 
       <div className="my-5 flex items-center gap-3">
         <span className="h-px flex-1 bg-hairline" />
@@ -101,9 +104,8 @@ export default function LoginPage() {
           autoFocus
           required
         />
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           label="Password"
           leftIcon={<Lock className="h-4 w-4" />}
           value={password}

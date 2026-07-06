@@ -46,8 +46,8 @@ export default function DemoPage() {
               <a href="#start-walkthrough" className={buttonStyles("primary", "lg")}>
                 Start walkthrough <ArrowRight className="h-4 w-4" />
               </a>
-              <Link href="/pricing" className={buttonStyles("secondary", "lg")}>
-                Request pilot access
+              <Link href="/dashboard" className={buttonStyles("secondary", "lg")}>
+                Skip to the full app
               </Link>
             </div>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
@@ -96,15 +96,15 @@ export default function DemoPage() {
               Want to run this on your own invoices?
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-fog">
-              The demo shows the workflow on sample data. Pilot teams get hands-on onboarding and a
-              direct feedback loop, free during the pilot.
+              The demo runs on sample data. Create your account to start invoicing for real, or open
+              the full dashboard to explore everything first.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/pricing" className={buttonStyles("primary", "lg")}>
-                Request pilot access <ArrowRight className="h-4 w-4" />
+              <Link href="/signup" className={buttonStyles("primary", "lg")}>
+                Create your account <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="/features" className={buttonStyles("secondary", "lg")}>
-                See all features
+              <Link href="/dashboard" className={buttonStyles("secondary", "lg")}>
+                Open the full dashboard
               </Link>
             </div>
           </Reveal>

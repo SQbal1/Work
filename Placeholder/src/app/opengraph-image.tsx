@@ -6,7 +6,7 @@ import { brand } from "@/config/brand";
  * On-brand: near-black canvas, faint grid, lime→mint gradient X. Next.js
  * wires this into og:image automatically (twitter-image.tsx re-exports it).
  */
-export const alt = `${brand.name} — Simple e-invoicing for SMEs in Saudi Arabia & the GCC`;
+export const alt = `${brand.name}: Simple e-invoicing for SMEs in Saudi Arabia and the GCC`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

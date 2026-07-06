@@ -9,6 +9,7 @@ import { OAuthButtons } from "@/components/auth/OAuthButtons";
 import { WorkspacePreview } from "@/components/auth/WorkspacePreview";
 import { PasswordStrength } from "@/components/auth/PasswordStrength";
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
 import { createClient } from "@/lib/supabase/client";
@@ -147,9 +148,8 @@ export default function SignupPage() {
           required
         />
         <div>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             label="Password"
             placeholder="At least 8 characters"
             leftIcon={<Lock className="h-4 w-4" />}
@@ -162,16 +162,15 @@ export default function SignupPage() {
             <PasswordStrength password={form.password} />
           </div>
         </div>
-        <Input
+        <PasswordInput
           id="confirm-password"
-          type="password"
           label="Confirm password"
           placeholder="Re-enter your password"
           leftIcon={<Lock className="h-4 w-4" />}
           value={form.confirmPassword}
           onChange={(e) => set("confirmPassword", e.target.value)}
-          error={passwordMismatch ? "Passwords don’t match" : undefined}
-          hint={passwordsMatch ? "Passwords match ✓" : undefined}
+          error={passwordMismatch ? "Passwords do not match" : undefined}
+          hint={passwordsMatch ? "Passwords match" : undefined}
           minLength={8}
           required
         />

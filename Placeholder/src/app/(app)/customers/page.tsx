@@ -202,7 +202,7 @@ export default function CustomersPage() {
                 onChange={(e) => setSort(e.target.value as SortKey)}
                 className="sm:w-52"
                 options={[
-                  { value: "company", label: "Sort: Company (A–Z)" },
+                  { value: "company", label: "Sort: Company (A-Z)" },
                   { value: "recent", label: "Sort: Recently added" },
                   { value: "revenue", label: "Sort: Revenue (high→low)" },
                 ]}

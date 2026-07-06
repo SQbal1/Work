@@ -77,7 +77,7 @@ export function ZatcaCsrCard() {
       const result = await generateZatcaCsr(form);
       setStatus(result);
       setOtp("");
-      toast.success("CSR generated — download it and submit it through ZATCA's Fatoora portal");
+      toast.success("CSR generated. Download it and submit it through ZATCA's Fatoora portal");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to generate the CSR");
     } finally {
@@ -118,7 +118,7 @@ export function ZatcaCsrCard() {
       toast.success("CSR copied to clipboard");
     } catch {
       // Clipboard can be blocked (permissions / insecure context) — fall back to Download.
-      toast.error("Couldn't copy — use Download .csr instead");
+      toast.error("Couldn't copy. Use Download .csr instead");
     }
   }
 
@@ -132,9 +132,9 @@ export function ZatcaCsrCard() {
       />
       <CardBody className="space-y-5">
         <p className="text-sm text-fog">
-          This generates a private key and a CSR shaped to ZATCA&rsquo;s documented CSR fields —
-          cross-checked against Microsoft&rsquo;s published Saudi e-invoicing onboarding guide, not
-          yet verified against a live ZATCA submission from this codebase. Submit the CSR through
+          This generates a private key and a CSR shaped to ZATCA&rsquo;s documented CSR fields,
+          cross-checked against Microsoft&rsquo;s published Saudi e-invoicing onboarding guide, though
+          not yet verified against a live ZATCA submission from this codebase. Submit the CSR through
           the Fatoora portal (with an OTP from your ZATCA account), then paste that OTP below to
           request a Compliance CSID directly from ZATCA. If ZATCA&rsquo;s validator rejects a field,
           that tells us exactly what to correct here.
@@ -166,7 +166,7 @@ export function ZatcaCsrCard() {
             <p className="mt-1.5 text-xs text-fog">
               {form.environment === "simulation"
                 ? "Recommended first: tests the full onboarding flow with a real OTP against ZATCA's pre-production environment."
-                : "Live — this requests a real Production-track Compliance CSID. Only use once Simulation has worked end-to-end."}
+                : "Live: this requests a real Production-track Compliance CSID. Only use once Simulation has worked end-to-end."}
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export function ZatcaCsrCard() {
               id="csr-branch"
               label="Branch name"
               placeholder="e.g. Riyadh HQ"
-              hint={form.environment === "simulation" ? "Ignored in Simulation — ZATCA requires a fixed CN there" : undefined}
+              hint={form.environment === "simulation" ? "Ignored in Simulation, where ZATCA requires a fixed CN" : undefined}
               value={form.branchName}
               onChange={(e) => setForm((f) => ({ ...f, branchName: e.target.value }))}
             />
@@ -277,7 +277,7 @@ export function ZatcaCsrCard() {
                 </div>
                 <p className="text-xs text-fog">
                   Next: run ZATCA&rsquo;s compliance checks (sample invoice submissions) using this
-                  CSID, then request a Production CSID — not yet built.
+                  CSID, then request a Production CSID (not yet built).
                 </p>
               </div>
             ) : (

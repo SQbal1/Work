@@ -7,10 +7,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   hint?: ReactNode;
   error?: ReactNode;
   leftIcon?: ReactNode;
+  /** Interactive slot pinned to the right edge (e.g. a show-password toggle). */
+  rightSlot?: ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, hint, error, leftIcon, required, className, id, ...props },
+  { label, hint, error, leftIcon, rightSlot, required, className, id, ...props },
   ref,
 ) {
   return (
@@ -29,11 +31,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             controlClass,
             "h-11",
             leftIcon ? "pl-10" : null,
+            rightSlot ? "pr-11" : null,
             error ? "border-mute-red/60 focus:border-mute-red focus:ring-mute-red/15" : null,
             className,
           )}
           {...props}
         />
+        {rightSlot ? (
+          <span className="absolute right-1.5 top-1/2 -translate-y-1/2">{rightSlot}</span>
+        ) : null}
       </div>
     </Field>
   );

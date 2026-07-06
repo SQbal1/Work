@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Lock } from "lucide-react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { PasswordStrength } from "@/components/auth/PasswordStrength";
-import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { useToast } from "@/lib/toast";
 import { createClient } from "@/lib/supabase/client";
@@ -58,7 +58,7 @@ export default function ResetPasswordPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Password updated — you're all set.");
+    toast.success("Password updated. You're all set.");
     router.push("/dashboard");
     router.refresh();
   }
@@ -82,9 +82,8 @@ export default function ResetPasswordPage() {
     <AuthShell title="Set a new password" subtitle="Choose a strong password to secure your workspace.">
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             label="New password"
             placeholder="At least 8 characters"
             leftIcon={<Lock className="h-4 w-4" />}
@@ -98,16 +97,15 @@ export default function ResetPasswordPage() {
             <PasswordStrength password={password} />
           </div>
         </div>
-        <Input
+        <PasswordInput
           id="confirm-password"
-          type="password"
           label="Confirm new password"
           placeholder="Re-enter your password"
           leftIcon={<Lock className="h-4 w-4" />}
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          error={mismatch ? "Passwords don’t match" : undefined}
-          hint={confirm.length > 0 && !mismatch ? "Passwords match ✓" : undefined}
+          error={mismatch ? "Passwords do not match" : undefined}
+          hint={confirm.length > 0 && !mismatch ? "Passwords match" : undefined}
           minLength={8}
           required
         />

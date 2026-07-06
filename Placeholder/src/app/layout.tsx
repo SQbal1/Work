@@ -34,7 +34,7 @@ const fontArabic = IBM_Plex_Sans_Arabic({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? brand.url;
-const title = `${brand.name} — Simple e-invoicing for SMEs`;
+const title = `${brand.name}: Simple e-invoicing for SMEs`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

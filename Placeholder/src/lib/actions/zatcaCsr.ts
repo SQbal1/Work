@@ -172,7 +172,7 @@ export async function requestZatcaCompliance(otp: string): Promise<ZatcaCsrStatu
   if (selectError) throw selectError;
   if (!existing) throw new Error("Generate a CSR before requesting a Compliance CSID");
   if (existing.status === "compliance_csid_received") {
-    throw new Error("This workspace already has a Compliance CSID — regenerate the CSR first to request a new one");
+    throw new Error("This workspace already has a Compliance CSID. Regenerate the CSR first to request a new one");
   }
 
   let result;

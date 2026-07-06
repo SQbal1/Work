@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { getEffectiveStatus } from "@/lib/status";
 import { cn } from "@/lib/cn";
 import type { Invoice } from "@/types";
@@ -40,7 +40,7 @@ export function ActivityStrip({ invoices }: { invoices: Invoice[] }) {
   return (
     <div className="mt-6 flex animate-fade-in flex-wrap items-center gap-x-5 gap-y-2 rounded-[10px] border border-hairline bg-ink/60 px-4 py-3 text-sm">
       <span className="flex items-center gap-2 font-medium text-cloud">
-        <Sparkles className="h-4 w-4 text-signal" />
+        <span className="signal-pulse h-2 w-2 rounded-full bg-signal" />
         {firstVisit ? "In the last 7 days" : "Since your last visit"}
       </span>
       {created > 0 ? <Item dot="bg-tag-magenta" text={`${created} ${created === 1 ? "invoice" : "invoices"} created`} /> : null}

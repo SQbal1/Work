@@ -21,6 +21,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Modal } from "@/components/ui/Modal";
 import { CompanyProfileCard } from "@/components/settings/CompanyProfileCard";
 import { InvoicePreferencesCard } from "@/components/settings/InvoicePreferencesCard";
+import { PasskeysCard } from "@/components/settings/PasskeysCard";
 import { ZatcaCsrCard } from "@/components/settings/ZatcaCsrCard";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
@@ -63,7 +64,7 @@ function AccountCard() {
         <div className="flex flex-col gap-3 rounded-[10px] border border-hairline bg-ink p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-sm font-medium text-bone">
-              {usingSupabase ? email ?? "Signed in" : "No account — local demo only"}
+              {usingSupabase ? email ?? "Signed in" : "No account, local demo only"}
             </div>
             <div className="text-xs text-fog">
               {usingSupabase
@@ -111,6 +112,8 @@ export default function SettingsPage() {
       <PageHeader title="Settings" description="Manage your company, invoice defaults, and data." />
 
       <AccountCard />
+
+      {usingSupabase ? <PasskeysCard /> : null}
 
       <CompanyProfileCard />
       <InvoicePreferencesCard />

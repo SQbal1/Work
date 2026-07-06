@@ -168,7 +168,7 @@ export function PilotRequestForm() {
         className="hidden"
       />
       {/* Nicer subject line in the Formspree notification email. */}
-      <input type="hidden" name="_subject" value={`New pilot request — ${brand.name}`} />
+      <input type="hidden" name="_subject" value={`New pilot request: ${brand.name}`} />
 
       {status === "error" ? (
         <p

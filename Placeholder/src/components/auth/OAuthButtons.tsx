@@ -75,7 +75,7 @@ export function OAuthButtons({ className }: { className?: string }) {
     // only runs on failure (e.g. provider not enabled in Supabase yet).
     if (error) {
       setPending(null);
-      toast.error(`${provider[0].toUpperCase()}${provider.slice(1)} sign-in isn't available yet — ${error.message}`);
+      toast.error(`${provider[0].toUpperCase()}${provider.slice(1)} sign-in isn't available yet. ${error.message}`);
     }
   }
 

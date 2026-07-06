@@ -65,7 +65,7 @@ export function WorkspacePreview({ name, company }: { name: string; company: str
       {/* Reassurance — value, not friction */}
       <ul className="mt-auto grid gap-2 text-xs text-fog">
         {[
-          { icon: Languages, label: "Bilingual invoices — English & Arabic, out of the box" },
+          { icon: Languages, label: "Bilingual invoices in English and Arabic, out of the box" },
           { icon: BadgeCheck, label: `VAT auto-calculated at the ${Math.round(brand.vatRate * 100)}% ${brand.country} rate` },
           { icon: ShieldCheck, label: "ZATCA-ready workflow foundation" },
         ].map(({ icon: Icon, label }) => (
