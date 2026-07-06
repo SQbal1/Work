@@ -5,9 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Search } from "lucide-react";
 import { NAV_ITEMS } from "@/config/nav";
-import { Avatar } from "@/components/ui/Avatar";
 import { OPEN_EVENT } from "./CommandPalette";
-import { useStore } from "@/lib/store";
+import { UserMenu } from "./UserMenu";
 
 function sectionTitle(pathname: string): string {
   if (pathname.startsWith("/invoices/new")) return "New invoice";
@@ -20,7 +19,6 @@ function sectionTitle(pathname: string): string {
 
 export function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const pathname = usePathname() ?? "";
-  const { company } = useStore();
   const [isMac, setIsMac] = useState(true);
 
   useEffect(() => {
@@ -63,12 +61,7 @@ export function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
         >
           View site
         </Link>
-        <span className="flex items-center gap-2 rounded-full border border-hairline py-1 pl-1 pr-3">
-          <Avatar name={company.name || "You"} size="sm" />
-          <span className="hidden max-w-[12rem] truncate text-sm font-medium text-cloud sm:block">
-            {company.name || "Your company"}
-          </span>
-        </span>
+        <UserMenu />
       </div>
     </header>
   );
