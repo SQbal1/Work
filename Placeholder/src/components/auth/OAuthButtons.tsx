@@ -48,34 +48,37 @@ const GitHubIcon = (
   </svg>
 );
 
-const AppleIcon = (
-  <svg viewBox="0 0 24 24" className="h-[19px] w-[19px] fill-bone" aria-hidden="true">
-    <path d="M17.05 12.7c-.03-2.5 2.04-3.7 2.13-3.76-1.16-1.7-2.97-1.93-3.61-1.96-1.54-.15-3 .9-3.78.9-.78 0-1.98-.88-3.25-.86-1.67.03-3.21.97-4.07 2.47-1.73 3-.44 7.45 1.25 9.89.82 1.19 1.8 2.53 3.08 2.48 1.24-.05 1.7-.8 3.2-.8 1.48 0 1.9.8 3.2.77 1.32-.02 2.16-1.21 2.97-2.41.94-1.38 1.32-2.72 1.34-2.79-.03-.01-2.57-.99-2.6-3.92-.01.02.01.03.01.05ZM14.63 5.09c.68-.83 1.14-1.98 1.02-3.13-.98.04-2.17.65-2.88 1.48-.63.73-1.19 1.9-1.04 3.02 1.09.09 2.21-.55 2.9-1.37Z" />
+const MicrosoftIcon = (
+  <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" aria-hidden="true">
+    <rect x="2" y="2" width="9.2" height="9.2" fill="#F35325" />
+    <rect x="12.8" y="2" width="9.2" height="9.2" fill="#81BC06" />
+    <rect x="2" y="12.8" width="9.2" height="9.2" fill="#05A6F0" />
+    <rect x="12.8" y="12.8" width="9.2" height="9.2" fill="#FFBA08" />
   </svg>
 );
 
 const PROVIDERS: ProviderConfig[] = [
   { id: "google", label: "Google", icon: GoogleIcon },
   { id: "github", label: "GitHub", icon: GitHubIcon },
-  { id: "apple", label: "Apple", icon: AppleIcon },
+  { id: "azure", label: "Microsoft", icon: MicrosoftIcon },
 ];
 
 export function OAuthButtons({ className }: { className?: string }) {
   const toast = useToast();
   const [pending, setPending] = useState<Provider | null>(null);
 
-  async function signIn(provider: Provider) {
-    setPending(provider);
+  async function signIn(config: ProviderConfig) {
+    setPending(config.id);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
-      provider,
+      provider: config.id,
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     // On success the browser is already navigating to the provider, so this
     // only runs on failure (e.g. provider not enabled in Supabase yet).
     if (error) {
       setPending(null);
-      toast.error(`${provider[0].toUpperCase()}${provider.slice(1)} sign-in isn't available yet. ${error.message}`);
+      toast.error(`${config.label} sign-in isn't available yet. ${error.message}`);
     }
   }
 
@@ -85,7 +88,7 @@ export function OAuthButtons({ className }: { className?: string }) {
         <button
           key={p.id}
           type="button"
-          onClick={() => signIn(p.id)}
+          onClick={() => signIn(p)}
           disabled={pending !== null}
           aria-label={`Continue with ${p.label}`}
           className={cn(
