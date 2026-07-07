@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, MotionConfig, type Variants } from "framer-motion";
 import {
@@ -12,6 +12,7 @@ import {
   Package,
   FileText,
   ShieldCheck,
+  DatabaseZap,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Card, CardBody } from "@/components/ui/Card";
@@ -22,6 +23,12 @@ import { SPRINGS, STAGGER } from "@/components/marketing/motion";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { cn } from "@/lib/cn";
+import {
+  planDemoImport,
+  runDemoImport,
+  summarizeImportPlan,
+  type DemoImportPlan,
+} from "@/lib/demoMigration";
 import type { BusinessTypeId } from "@/types";
 
 // Reuse the marketing site's tuned motion vocabulary so onboarding feels part
@@ -55,8 +62,18 @@ export default function OnboardingPage() {
     updateCompany,
     addCustomer,
     addProduct,
+    addInvoice,
     setOnboarded,
   } = useStore();
+
+  // Offer to carry the visitor's own demo work into their new workspace. Only
+  // meaningful before a workspace exists (a fresh signup); computed on the
+  // client since it reads localStorage.
+  const [importPlan, setImportPlan] = useState<DemoImportPlan | null>(null);
+  const [includeDemo, setIncludeDemo] = useState(true);
+  useEffect(() => {
+    if (!hasWorkspace) setImportPlan(planDemoImport());
+  }, [hasWorkspace]);
 
   const [step, setStep] = useState(1);
   const [businessType, setBusinessType] = useState<BusinessTypeId>(company.businessType);
@@ -78,6 +95,17 @@ export default function OnboardingPage() {
       await createWorkspace(companyForm.name.trim() || "My Workspace");
     }
     await updateCompany({ ...companyForm, businessType });
+    // Bring the visitor's demo work across before their own onboarding entries,
+    // so any duplicate names read as "already had it" rather than the reverse.
+    if (importPlan && includeDemo) {
+      const result = await runDemoImport(importPlan, { addCustomer, addProduct, addInvoice });
+      const bits = [
+        result.customers && `${result.customers} customers`,
+        result.products && `${result.products} services`,
+        result.invoices && `${result.invoices} invoices`,
+      ].filter(Boolean);
+      if (bits.length) toast.success(`Imported ${bits.join(", ")} from your demo`);
+    }
     if (customerForm.name.trim()) {
       await addCustomer({
         name: customerForm.name.trim(),
@@ -123,6 +151,54 @@ export default function OnboardingPage() {
           </h1>
           <p className="mt-1 text-sm text-fog">Five quick steps. Most are optional.</p>
         </div>
+
+        {importPlan ? (
+          <button
+            type="button"
+            onClick={() => setIncludeDemo((v) => !v)}
+            aria-pressed={includeDemo}
+            className={cn(
+              "mb-6 flex w-full items-center gap-3 rounded-xl border p-4 text-left transition",
+              includeDemo
+                ? "border-signal/30 bg-signal/[0.06]"
+                : "border-hairline bg-ink hover:border-graphite",
+            )}
+          >
+            <span
+              className={cn(
+                "grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border transition",
+                includeDemo
+                  ? "border-signal/30 bg-signal/10 text-signal"
+                  : "border-hairline bg-ink text-fog",
+              )}
+            >
+              <DatabaseZap className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-medium text-bone">Bring your demo data</span>
+              <span className="block text-xs text-fog">
+                We found {summarizeImportPlan(importPlan)} from your demo. Add{" "}
+                {importPlan.customers.length + importPlan.products.length + importPlan.invoices.length === 1
+                  ? "it"
+                  : "them"}{" "}
+                to your new workspace.
+              </span>
+            </span>
+            <span
+              className={cn(
+                "relative h-6 w-11 shrink-0 rounded-full transition",
+                includeDemo ? "bg-signal" : "bg-graphite",
+              )}
+            >
+              <span
+                className={cn(
+                  "absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all",
+                  includeDemo ? "left-[1.375rem]" : "left-0.5",
+                )}
+              />
+            </span>
+          </button>
+        ) : null}
 
         {/* Stepper */}
         <div className="mb-6 flex items-center justify-between">

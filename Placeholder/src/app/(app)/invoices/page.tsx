@@ -147,6 +147,72 @@ export default function InvoicesPage() {
               />
             </div>
           ) : (
+            <div>
+            {/* Phones get a card per invoice; a horizontally-scrolling table
+                pushes status and actions off-screen on a narrow viewport. */}
+            <ul className="divide-y divide-hairline sm:hidden">
+              {filtered.map((inv) => {
+                const customer = getCustomer(inv.customerId);
+                const isPaid = inv.status === "paid";
+                const isDraft = inv.status === "draft";
+                return (
+                  <li key={inv.id} className="p-3.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <Link
+                          href={`/invoices/${inv.id}`}
+                          className="font-mono text-sm font-medium text-signal hover:text-key-lime"
+                        >
+                          {inv.number}
+                        </Link>
+                        <div className="mt-0.5 truncate text-sm text-cloud">
+                          {customer?.company || customer?.name || "—"}
+                        </div>
+                      </div>
+                      <StatusBadge invoice={inv} />
+                    </div>
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="font-mono text-sm font-semibold text-bone nums-tabular">
+                        {formatCurrency(invoiceTotal(inv))}
+                      </span>
+                      <span className="font-mono text-xs text-fog">{formatDate(inv.issueDate)}</span>
+                    </div>
+                    <div className="mt-2.5 flex items-center gap-1 border-t border-hairline pt-2">
+                      <IconAction href={`/invoices/${inv.id}`} label="View" icon={<Eye className="h-4 w-4" />} />
+                      {!isPaid ? (
+                        <IconAction
+                          label="Mark as paid"
+                          icon={<CheckCircle2 className="h-4 w-4" />}
+                          onClick={() => {
+                            markInvoicePaid(inv.id);
+                            toast.success(`${inv.number} marked as paid`);
+                          }}
+                        />
+                      ) : null}
+                      <IconAction
+                        label="Duplicate"
+                        icon={<Copy className="h-4 w-4" />}
+                        onClick={async () => {
+                          const dup = await duplicateInvoice(inv.id);
+                          if (dup) toast.success(`Duplicated as ${dup.number}`);
+                        }}
+                      />
+                      {isDraft ? (
+                        <IconAction
+                          label="Delete draft"
+                          icon={<Trash2 className="h-4 w-4" />}
+                          danger
+                          onClick={() => setDeleting(inv)}
+                        />
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* Small screens and up: the full table. */}
+            <div className="hidden sm:block">
             <Table>
               <Thead>
                 <Tr>
@@ -221,6 +287,8 @@ export default function InvoicesPage() {
                 })}
               </Tbody>
             </Table>
+            </div>
+            </div>
           )}
         </Card>
         </FadeIn>

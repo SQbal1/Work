@@ -24,6 +24,7 @@ import { RevenueChart } from "@/components/dashboard/RevenueChart";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { TopCustomers } from "@/components/dashboard/TopCustomers";
 import { ActivityStrip } from "@/components/dashboard/ActivityStrip";
+import { PasskeyNudge } from "@/components/dashboard/PasskeyNudge";
 import { StatusBadge } from "@/components/invoices/StatusBadge";
 import { useStore } from "@/lib/store";
 import { computeDashboard, invoiceTotal } from "@/lib/metrics";
@@ -110,6 +111,8 @@ export default function DashboardPage() {
   return (
     <div>
       <GreetingHeader fact={fact} />
+
+      <PasskeyNudge />
 
       {/* Hero band — money at risk (left) and the collected figure (right). */}
       <FadeIn>
@@ -332,6 +335,8 @@ function FirstRunDashboard() {
   return (
     <div>
       <GreetingHeader fact="Your workspace is ready. Let's set it up." />
+
+      <PasskeyNudge />
 
       <div className="glass-strong relative overflow-hidden rounded-2xl p-7 sm:p-9">
         <div className="max-w-xl">

@@ -289,9 +289,25 @@ export default function CustomersPage() {
                     <Td className="hidden font-mono text-xs text-fog lg:table-cell">
                       {c.vatNumber || "—"}
                     </Td>
-                    <Td className="text-center font-mono text-cloud">{invoiceCount.get(c.id) ?? 0}</Td>
-                    <Td className="hidden text-right font-mono font-medium text-bone nums-tabular sm:table-cell">
-                      {formatCurrency(revenueByCustomer.get(c.id) ?? 0)}
+                    <Td
+                      className={cn(
+                        "text-center font-mono",
+                        (invoiceCount.get(c.id) ?? 0) === 0 ? "text-fog/60" : "text-cloud",
+                      )}
+                    >
+                      {(invoiceCount.get(c.id) ?? 0) === 0 ? "—" : invoiceCount.get(c.id)}
+                    </Td>
+                    <Td
+                      className={cn(
+                        "hidden text-right font-mono nums-tabular sm:table-cell",
+                        (revenueByCustomer.get(c.id) ?? 0) === 0
+                          ? "text-fog/60"
+                          : "font-medium text-bone",
+                      )}
+                    >
+                      {(revenueByCustomer.get(c.id) ?? 0) === 0
+                        ? "—"
+                        : formatCurrency(revenueByCustomer.get(c.id) ?? 0)}
                     </Td>
                     <Td>
                       <div className="flex items-center justify-end gap-1">
