@@ -48,19 +48,9 @@ const GitHubIcon = (
   </svg>
 );
 
-const MicrosoftIcon = (
-  <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" aria-hidden="true">
-    <rect x="2" y="2" width="9.2" height="9.2" fill="#F35325" />
-    <rect x="12.8" y="2" width="9.2" height="9.2" fill="#81BC06" />
-    <rect x="2" y="12.8" width="9.2" height="9.2" fill="#05A6F0" />
-    <rect x="12.8" y="12.8" width="9.2" height="9.2" fill="#FFBA08" />
-  </svg>
-);
-
 const PROVIDERS: ProviderConfig[] = [
   { id: "google", label: "Google", icon: GoogleIcon },
   { id: "github", label: "GitHub", icon: GitHubIcon },
-  { id: "azure", label: "Microsoft", icon: MicrosoftIcon },
 ];
 
 export function OAuthButtons({ className }: { className?: string }) {
@@ -83,7 +73,7 @@ export function OAuthButtons({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn("grid grid-cols-3 gap-2.5", className)}>
+    <div className={cn("grid grid-cols-2 gap-2.5", className)}>
       {PROVIDERS.map((p) => (
         <button
           key={p.id}
