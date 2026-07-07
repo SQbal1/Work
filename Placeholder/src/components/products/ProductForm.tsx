@@ -80,7 +80,7 @@ export function ProductForm({
         <Select
           id="p-vat"
           label="VAT category"
-          hint="Placeholder, confirm before production use"
+          hint="Confirm the right treatment with your accountant"
           value={vatCategory}
           onChange={(e) => setVatCategory(e.target.value as VatCategory)}
           options={VAT_CATEGORIES.map((c) => ({ value: c.id, label: c.label }))}

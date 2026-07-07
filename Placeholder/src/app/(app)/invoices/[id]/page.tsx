@@ -67,7 +67,7 @@ export default function InvoicePreviewPage() {
   const isDraft = invoice.status === "draft";
 
   function placeholderSend(channel: string) {
-    toast.info(`${channel} sending is a placeholder in this MVP.`);
+    toast.info(`${channel} delivery isn't connected yet in this MVP.`);
   }
 
   function downloadPdf() {
@@ -142,7 +142,7 @@ export default function InvoicePreviewPage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Document */}
-        <div className="lg:col-span-2">
+        <div className="min-w-0 lg:col-span-2">
           <div className="print-area overflow-hidden rounded-[10px] border border-hairline bg-ink print:bg-white">
             <InvoiceDocument
               company={company}
@@ -166,7 +166,7 @@ export default function InvoicePreviewPage() {
         <div className="no-print space-y-6">
           <div className="space-y-6 lg:sticky lg:top-20">
             <Card>
-              <CardHeader title="Send & share" subtitle="Delivery is a placeholder for now." />
+              <CardHeader title="Send & share" subtitle="Delivery isn't connected yet in this preview." />
               <CardBody className="space-y-2">
                 <Button variant="secondary" className="w-full justify-start" onClick={downloadPdf}>
                   <Download className="h-4 w-4" /> Download PDF

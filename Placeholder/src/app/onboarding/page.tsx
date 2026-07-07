@@ -184,7 +184,7 @@ export default function OnboardingPage() {
                   <Input
                     id="ob-vat"
                     label="VAT number"
-                    hint="Optional (placeholder)"
+                    hint="Optional, you can add it later"
                     value={companyForm.vatNumber}
                     onChange={(e) => setCompanyForm((p) => ({ ...p, vatNumber: e.target.value }))}
                   />

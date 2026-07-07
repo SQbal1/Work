@@ -92,7 +92,7 @@ export function OAuthButtons({ className }: { className?: string }) {
           ) : (
             <>
               {p.icon}
-              <span className="hidden sm:inline">{p.label}</span>
+              <span>{p.label}</span>
             </>
           )}
         </button>

@@ -103,7 +103,7 @@ export default function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `placeholder-data-${todayISO()}.json`;
+    a.download = `invoice-x-data-${todayISO()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Data exported as JSON");
@@ -132,7 +132,7 @@ export default function SettingsPage() {
 
       {/* VAT & ZATCA placeholder */}
       <Card id="vat" className="scroll-mt-24">
-        <CardHeader title="VAT & ZATCA" subtitle="E-invoicing compliance workflow (placeholder)." />
+        <CardHeader title="VAT & ZATCA" subtitle="E-invoicing compliance workflow (preview)." />
         <CardBody className="space-y-4">
           <div className="flex items-start gap-3 rounded-[10px] border border-key-lime/20 bg-key-lime/10 p-4 text-sm text-key-lime">
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" />
@@ -198,7 +198,7 @@ export default function SettingsPage() {
             <Badge tone="violet">You</Badge>
           </div>
           <p className="mt-3 flex items-center gap-1.5 text-xs text-fog">
-            <Info className="h-3.5 w-3.5" /> Team management is a placeholder in this MVP.
+            <Info className="h-3.5 w-3.5" /> Team invites aren&apos;t available yet in this MVP.
           </p>
         </CardBody>
       </Card>

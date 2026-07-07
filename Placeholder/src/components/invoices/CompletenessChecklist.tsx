@@ -53,7 +53,7 @@ export function CompletenessChecklist({ items }: { items: ChecklistItem[] }) {
       <div className="mt-4 flex items-start gap-2 rounded-[10px] border border-key-lime/20 bg-key-lime/10 p-3 text-xs text-key-lime">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-key-lime" />
         <p>
-          Compliance checklist placeholder. {brand.name} provides a ZATCA-ready workflow foundation. A
+          Readiness guide, not legal advice. {brand.name} provides a ZATCA-ready workflow foundation. A
           final compliance review is required before production use.
         </p>
       </div>

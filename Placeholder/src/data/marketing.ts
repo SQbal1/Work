@@ -139,8 +139,8 @@ export const MVP_FEATURES: IconItem[] = [
   },
   {
     icon: FileDown,
-    title: "PDF export placeholder",
-    description: "Export is scaffolded as a placeholder. Real generation comes after the pilot.",
+    title: "Print-ready PDF export",
+    description: "Download a print-ready PDF of any invoice. Native PDF generation comes after the pilot.",
   },
 ];
 

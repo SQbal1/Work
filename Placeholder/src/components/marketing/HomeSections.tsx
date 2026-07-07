@@ -564,7 +564,7 @@ export function FeatureGridSection() {
           </SceneReveal>
 
           <FeatureCell index={5} span="lg:col-span-2" />
-          <FeatureCell index={6} span="lg:col-span-2" chip="placeholder" />
+          <FeatureCell index={6} span="lg:col-span-2" chip="preview" />
 
           {/* Compliance note cell */}
           <SceneReveal

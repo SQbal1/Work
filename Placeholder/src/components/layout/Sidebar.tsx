@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Plus, Settings, ChevronLeft } from "lucide-react";
@@ -13,8 +13,20 @@ import { getBusinessType } from "@/data/businessTypes";
 import { cn } from "@/lib/cn";
 
 /** Scroll-spy: which of the given section ids is currently near the top. */
-function useActiveSection(ids: string[], enabled: boolean, ready: boolean): string {
+function useActiveSection(
+  ids: string[],
+  enabled: boolean,
+  ready: boolean,
+): [string, (id: string) => void] {
   const [active, setActive] = useState("");
+  // The last sections can never reach the top of the viewport, so a click
+  // sets the highlight directly and pauses the observer while the smooth
+  // scroll settles — otherwise it would snap back to an earlier section.
+  const lockUntil = useRef(0);
+  const select = useCallback((id: string) => {
+    lockUntil.current = Date.now() + 1200;
+    setActive(id);
+  }, []);
   // ids is rebuilt each render; the joined key is the stable dep.
   const idsKey = ids.join("|");
   useEffect(() => {
@@ -26,6 +38,7 @@ function useActiveSection(ids: string[], enabled: boolean, ready: boolean): stri
     if (els.length === 0) return;
     const observer = new IntersectionObserver(
       (entries) => {
+        if (Date.now() < lockUntil.current) return;
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -36,7 +49,7 @@ function useActiveSection(ids: string[], enabled: boolean, ready: boolean): stri
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [enabled, ready, idsKey]);
-  return active;
+  return [active, select];
 }
 
 const railClass =
@@ -59,7 +72,7 @@ export function Sidebar({
 
   const inSettings = pathname.startsWith("/settings");
   const sections = SETTINGS_SECTIONS.filter((s) => !s.authOnly || usingSupabase);
-  const activeSection = useActiveSection(
+  const [activeSection, selectSection] = useActiveSection(
     sections.map((s) => s.id),
     inSettings,
     ready,
@@ -100,6 +113,7 @@ export function Sidebar({
                     const el = document.getElementById(s.id);
                     if (el) {
                       e.preventDefault();
+                      selectSection(s.id);
                       el.scrollIntoView({ behavior: "smooth", block: "start" });
                       history.replaceState(null, "", `#${s.id}`);
                     }

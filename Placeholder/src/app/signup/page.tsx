@@ -187,7 +187,7 @@ export default function SignupPage() {
       </form>
 
       <p className="mt-4 text-center text-xs text-fog">
-        By continuing you agree to our placeholder{" "}
+        By continuing you agree to our{" "}
         <Link href="/terms" className="text-cloud underline decoration-fog/60 underline-offset-2 hover:text-signal hover:decoration-signal/60">
           Terms
         </Link>{" "}
