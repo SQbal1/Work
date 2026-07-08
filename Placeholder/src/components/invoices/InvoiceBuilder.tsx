@@ -463,6 +463,10 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
               discountPercent={discountPercent}
               notes={notes}
               currency={settings.currency}
+              headerMode={settings.invoiceHeaderMode}
+              letterheadTopMm={settings.invoiceLetterheadTopMm}
+              letterheadBottomMm={settings.invoiceLetterheadBottomMm}
+              footerText={settings.invoiceFooterText}
             />
           </div>
         </div>

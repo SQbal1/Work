@@ -95,6 +95,10 @@ export interface Invoice {
   zatcaSignedAt?: string | null;
 }
 
+/** How the printed invoice header renders. "letterhead" leaves blank space at the
+ *  top/bottom of the page so the invoice can be printed onto pre-printed stationery. */
+export type InvoiceHeaderMode = "standard" | "letterhead";
+
 export interface Settings {
   invoicePrefix: string; // e.g. "INV-"
   nextInvoiceNumber: number; // e.g. 1006
@@ -102,6 +106,10 @@ export interface Settings {
   defaultDueDays: number; // net terms in days
   defaultNotes: string;
   currency: string; // e.g. "SAR"
+  invoiceHeaderMode: InvoiceHeaderMode;
+  invoiceLetterheadTopMm: number; // blank space reserved at the top in letterhead mode
+  invoiceLetterheadBottomMm: number; // blank space reserved at the bottom in letterhead mode
+  invoiceFooterText: string; // custom footer (bank details, CR number, a thank-you line…)
 }
 
 /** The full persisted shape (one localStorage key). Mirrors a future DB schema. */

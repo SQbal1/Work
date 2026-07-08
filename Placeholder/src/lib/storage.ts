@@ -1,4 +1,4 @@
-import type { Database } from "@/types";
+import type { Database, Settings } from "@/types";
 
 /**
  * Safe localStorage wrapper. All access is guarded for SSR (no `window`) and
@@ -6,6 +6,17 @@ import type { Database } from "@/types";
  * the app. This is the single seam to replace when wiring a real backend.
  */
 const STORAGE_KEY = "placeholder_db_v2";
+
+/** Fields added after v2 shipped — merged into older stored databases on load. */
+const SETTINGS_ADDITIONS: Pick<
+  Settings,
+  "invoiceHeaderMode" | "invoiceLetterheadTopMm" | "invoiceLetterheadBottomMm" | "invoiceFooterText"
+> = {
+  invoiceHeaderMode: "standard",
+  invoiceLetterheadTopMm: 45,
+  invoiceLetterheadBottomMm: 25,
+  invoiceFooterText: "",
+};
 
 export function isBrowser(): boolean {
   return typeof window !== "undefined";
@@ -27,6 +38,8 @@ export function loadDatabase(): Database | null {
     ) {
       return null;
     }
+    // Backfill settings fields introduced after the stored copy was written.
+    parsed.settings = { ...SETTINGS_ADDITIONS, ...parsed.settings };
     return parsed;
   } catch {
     return null;

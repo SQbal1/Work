@@ -3,6 +3,7 @@ import type {
   Company,
   Customer,
   Invoice,
+  InvoiceHeaderMode,
   InvoiceLineItem,
   InvoiceStatus,
   Product,
@@ -35,6 +36,10 @@ export function rowToSettings(row: Tables<"settings">): Settings {
     defaultDueDays: row.default_due_days,
     defaultNotes: row.default_notes,
     currency: row.currency,
+    invoiceHeaderMode: row.invoice_header_mode as InvoiceHeaderMode,
+    invoiceLetterheadTopMm: row.invoice_letterhead_top_mm,
+    invoiceLetterheadBottomMm: row.invoice_letterhead_bottom_mm,
+    invoiceFooterText: row.invoice_footer_text,
   };
 }
 

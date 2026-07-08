@@ -237,6 +237,10 @@ export default function InvoicePreviewPage() {
               discountPercent={invoice.discountPercent}
               notes={invoice.notes}
               currency={settings.currency}
+              headerMode={settings.invoiceHeaderMode}
+              letterheadTopMm={settings.invoiceLetterheadTopMm}
+              letterheadBottomMm={settings.invoiceLetterheadBottomMm}
+              footerText={settings.invoiceFooterText}
               zatcaInvoiceHash={invoice.zatcaInvoiceHash}
               zatcaSignature={invoice.zatcaSignature}
               zatcaPublicKey={invoice.zatcaPublicKey}

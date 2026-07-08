@@ -355,6 +355,10 @@ export type Database = {
           default_due_days: number
           default_notes: string
           default_vat_rate: number
+          invoice_footer_text: string
+          invoice_header_mode: string
+          invoice_letterhead_bottom_mm: number
+          invoice_letterhead_top_mm: number
           invoice_prefix: string
           next_invoice_number: number
           onboarded: boolean
@@ -366,6 +370,10 @@ export type Database = {
           default_due_days?: number
           default_notes?: string
           default_vat_rate?: number
+          invoice_footer_text?: string
+          invoice_header_mode?: string
+          invoice_letterhead_bottom_mm?: number
+          invoice_letterhead_top_mm?: number
           invoice_prefix?: string
           next_invoice_number?: number
           onboarded?: boolean
@@ -377,6 +385,10 @@ export type Database = {
           default_due_days?: number
           default_notes?: string
           default_vat_rate?: number
+          invoice_footer_text?: string
+          invoice_header_mode?: string
+          invoice_letterhead_bottom_mm?: number
+          invoice_letterhead_top_mm?: number
           invoice_prefix?: string
           next_invoice_number?: number
           onboarded?: boolean
