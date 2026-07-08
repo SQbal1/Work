@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -9,8 +9,10 @@ import {
   MessageCircle,
   Mail,
   CheckCircle2,
+  ClipboardCopy,
   Copy,
   Pencil,
+  Share2,
   Trash2,
   FileQuestion,
   FileSignature,
@@ -25,6 +27,9 @@ import { StatusBadge } from "@/components/invoices/StatusBadge";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { signInvoiceZatca, getZatcaSignedXml } from "@/lib/actions/zatcaSigning";
+import { computeTotals } from "@/lib/calc";
+import { formatCurrency, formatDate } from "@/lib/format";
+import { downloadBlob, elementToPdfBlob } from "@/lib/pdf";
 
 export default function InvoicePreviewPage() {
   const params = useParams<{ id: string }>();
@@ -46,6 +51,13 @@ export default function InvoicePreviewPage() {
   const invoice = getInvoice(id);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [signingZatca, setSigningZatca] = useState(false);
+  const [pdfBusy, setPdfBusy] = useState(false);
+  const [canNativeShare, setCanNativeShare] = useState(false);
+  const documentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setCanNativeShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
+  }, []);
 
   if (!invoice) {
     return (
@@ -66,15 +78,82 @@ export default function InvoicePreviewPage() {
   const isPaid = invoice.status === "paid";
   const isDraft = invoice.status === "draft";
 
-  function placeholderSend(channel: string) {
-    toast.info(`${channel} delivery isn't connected yet in this MVP.`);
-  }
+  const buildShareMessage = (): string => {
+    const totals = computeTotals(invoice.items, invoice.discountPercent);
+    return [
+      `Invoice ${invoice.number} from ${company.name || "our company"}`,
+      customer ? `Bill to: ${customer.company || customer.name}` : null,
+      `Total due: ${formatCurrency(totals.total, settings.currency)}`,
+      `Due date: ${formatDate(invoice.dueDate)}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+  };
 
-  function downloadPdf() {
-    toast.info("Use your browser's dialog to Save as PDF.");
-    // Give the toast a beat, then open the native print dialog.
-    window.setTimeout(() => window.print(), 300);
-  }
+  const generatePdfFile = async (): Promise<File> => {
+    const node = documentRef.current;
+    if (!node) throw new Error("The invoice preview isn't ready yet.");
+    const blob = await elementToPdfBlob(node);
+    return new File([blob], `${invoice.number}.pdf`, { type: "application/pdf" });
+  };
+
+  const downloadPdf = async () => {
+    setPdfBusy(true);
+    try {
+      const file = await generatePdfFile();
+      downloadBlob(file, file.name);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't generate the PDF.");
+    } finally {
+      setPdfBusy(false);
+    }
+  };
+
+  const sendViaWhatsApp = () => {
+    const text = buildShareMessage();
+    const digits = (customer?.phone ?? "").replace(/[^\d]/g, "");
+    const url = digits
+      ? `https://wa.me/${digits}?text=${encodeURIComponent(text)}`
+      : `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const sendViaEmail = () => {
+    const subject = `Invoice ${invoice.number} from ${company.name || "our company"}`;
+    const to = customer?.email ?? "";
+    window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildShareMessage())}`;
+  };
+
+  const shareNative = async () => {
+    if (typeof navigator === "undefined" || typeof navigator.share !== "function") {
+      toast.info("Native sharing isn't supported in this browser — try WhatsApp, email, or download instead.");
+      return;
+    }
+    setPdfBusy(true);
+    try {
+      const file = await generatePdfFile();
+      const shareData: ShareData & { files?: File[] } =
+        typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })
+          ? { files: [file], title: `Invoice ${invoice.number}`, text: buildShareMessage() }
+          : { title: `Invoice ${invoice.number}`, text: buildShareMessage() };
+      await navigator.share(shareData);
+    } catch (err) {
+      if (err instanceof Error && err.name !== "AbortError") {
+        toast.error("Couldn't open the share sheet.");
+      }
+    } finally {
+      setPdfBusy(false);
+    }
+  };
+
+  const copySummary = async () => {
+    try {
+      await navigator.clipboard.writeText(buildShareMessage());
+      toast.success("Invoice summary copied to clipboard");
+    } catch {
+      toast.error("Couldn't copy to clipboard");
+    }
+  };
 
   const handleSignZatca = async () => {
     setSigningZatca(true);
@@ -134,8 +213,8 @@ export default function InvoicePreviewPage() {
           <Link href={`/invoices/${invoice.id}/edit`} className={buttonStyles("secondary", "md")}>
             <Pencil className="h-4 w-4" /> Edit
           </Link>
-          <Button onClick={downloadPdf}>
-            <Download className="h-4 w-4" /> Download PDF
+          <Button onClick={downloadPdf} disabled={pdfBusy}>
+            <Download className="h-4 w-4" /> {pdfBusy ? "Generating…" : "Download PDF"}
           </Button>
         </div>
       </div>
@@ -143,7 +222,10 @@ export default function InvoicePreviewPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Document */}
         <div className="min-w-0 lg:col-span-2">
-          <div className="print-area overflow-hidden rounded-[10px] border border-hairline bg-ink print:bg-white">
+          <div
+            ref={documentRef}
+            className="print-area overflow-hidden rounded-[10px] border border-hairline bg-ink print:bg-white"
+          >
             <InvoiceDocument
               company={company}
               customer={customer}
@@ -166,24 +248,37 @@ export default function InvoicePreviewPage() {
         <div className="no-print space-y-6">
           <div className="space-y-6 lg:sticky lg:top-20">
             <Card>
-              <CardHeader title="Send & share" subtitle="Delivery isn't connected yet in this preview." />
+              <CardHeader
+                title="Send & share"
+                subtitle="Downloads a real PDF and opens WhatsApp, email, or your device's share sheet — nothing is sent automatically from here."
+              />
               <CardBody className="space-y-2">
-                <Button variant="secondary" className="w-full justify-start" onClick={downloadPdf}>
-                  <Download className="h-4 w-4" /> Download PDF
-                </Button>
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
-                  onClick={() => placeholderSend("WhatsApp")}
+                  onClick={downloadPdf}
+                  disabled={pdfBusy}
                 >
+                  <Download className="h-4 w-4" /> {pdfBusy ? "Generating…" : "Download PDF"}
+                </Button>
+                {canNativeShare ? (
+                  <Button
+                    variant="secondary"
+                    className="w-full justify-start"
+                    onClick={shareNative}
+                    disabled={pdfBusy}
+                  >
+                    <Share2 className="h-4 w-4" /> Share…
+                  </Button>
+                ) : null}
+                <Button variant="secondary" className="w-full justify-start" onClick={sendViaWhatsApp}>
                   <MessageCircle className="h-4 w-4" /> Send via WhatsApp
                 </Button>
-                <Button
-                  variant="secondary"
-                  className="w-full justify-start"
-                  onClick={() => placeholderSend("Email")}
-                >
+                <Button variant="secondary" className="w-full justify-start" onClick={sendViaEmail}>
                   <Mail className="h-4 w-4" /> Send via email
+                </Button>
+                <Button variant="secondary" className="w-full justify-start" onClick={copySummary}>
+                  <ClipboardCopy className="h-4 w-4" /> Copy summary
                 </Button>
               </CardBody>
             </Card>
