@@ -10,12 +10,25 @@ const STORAGE_KEY = "placeholder_db_v2";
 /** Fields added after v2 shipped — merged into older stored databases on load. */
 const SETTINGS_ADDITIONS: Pick<
   Settings,
-  "invoiceHeaderMode" | "invoiceLetterheadTopMm" | "invoiceLetterheadBottomMm" | "invoiceFooterText"
+  | "invoiceHeaderMode"
+  | "invoiceLetterheadTopMm"
+  | "invoiceLetterheadBottomMm"
+  | "invoiceFooterText"
+  | "invoiceLogoDataUrl"
+  | "invoiceStampDataUrl"
+  | "invoiceStampEnabled"
+  | "invoiceTermsText"
+  | "invoiceBankDetails"
 > = {
   invoiceHeaderMode: "standard",
   invoiceLetterheadTopMm: 45,
   invoiceLetterheadBottomMm: 25,
   invoiceFooterText: "",
+  invoiceLogoDataUrl: "",
+  invoiceStampDataUrl: "",
+  invoiceStampEnabled: false,
+  invoiceTermsText: "",
+  invoiceBankDetails: "",
 };
 
 export function isBrowser(): boolean {

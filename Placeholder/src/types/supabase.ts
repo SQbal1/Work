@@ -355,11 +355,16 @@ export type Database = {
           default_due_days: number
           default_notes: string
           default_vat_rate: number
+          invoice_bank_details: string
           invoice_footer_text: string
           invoice_header_mode: string
           invoice_letterhead_bottom_mm: number
           invoice_letterhead_top_mm: number
+          invoice_logo_data_url: string
           invoice_prefix: string
+          invoice_stamp_data_url: string
+          invoice_stamp_enabled: boolean
+          invoice_terms_text: string
           next_invoice_number: number
           onboarded: boolean
           updated_at: string
@@ -370,11 +375,16 @@ export type Database = {
           default_due_days?: number
           default_notes?: string
           default_vat_rate?: number
+          invoice_bank_details?: string
           invoice_footer_text?: string
           invoice_header_mode?: string
           invoice_letterhead_bottom_mm?: number
           invoice_letterhead_top_mm?: number
+          invoice_logo_data_url?: string
           invoice_prefix?: string
+          invoice_stamp_data_url?: string
+          invoice_stamp_enabled?: boolean
+          invoice_terms_text?: string
           next_invoice_number?: number
           onboarded?: boolean
           updated_at?: string
@@ -385,11 +395,16 @@ export type Database = {
           default_due_days?: number
           default_notes?: string
           default_vat_rate?: number
+          invoice_bank_details?: string
           invoice_footer_text?: string
           invoice_header_mode?: string
           invoice_letterhead_bottom_mm?: number
           invoice_letterhead_top_mm?: number
+          invoice_logo_data_url?: string
           invoice_prefix?: string
+          invoice_stamp_data_url?: string
+          invoice_stamp_enabled?: boolean
+          invoice_terms_text?: string
           next_invoice_number?: number
           onboarded?: boolean
           updated_at?: string

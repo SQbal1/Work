@@ -36,6 +36,11 @@ export async function updateSettings(data: Partial<Settings>): Promise<void> {
   if (data.invoiceLetterheadBottomMm !== undefined)
     patch.invoice_letterhead_bottom_mm = data.invoiceLetterheadBottomMm;
   if (data.invoiceFooterText !== undefined) patch.invoice_footer_text = data.invoiceFooterText;
+  if (data.invoiceLogoDataUrl !== undefined) patch.invoice_logo_data_url = data.invoiceLogoDataUrl;
+  if (data.invoiceStampDataUrl !== undefined) patch.invoice_stamp_data_url = data.invoiceStampDataUrl;
+  if (data.invoiceStampEnabled !== undefined) patch.invoice_stamp_enabled = data.invoiceStampEnabled;
+  if (data.invoiceTermsText !== undefined) patch.invoice_terms_text = data.invoiceTermsText;
+  if (data.invoiceBankDetails !== undefined) patch.invoice_bank_details = data.invoiceBankDetails;
 
   const { error } = await supabase.from("settings").update(patch).eq("workspace_id", workspaceId);
   if (error) throw error;

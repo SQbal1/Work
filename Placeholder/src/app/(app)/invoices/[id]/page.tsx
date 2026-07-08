@@ -241,6 +241,11 @@ export default function InvoicePreviewPage() {
               letterheadTopMm={settings.invoiceLetterheadTopMm}
               letterheadBottomMm={settings.invoiceLetterheadBottomMm}
               footerText={settings.invoiceFooterText}
+              logoDataUrl={settings.invoiceLogoDataUrl}
+              stampDataUrl={settings.invoiceStampDataUrl}
+              stampEnabled={settings.invoiceStampEnabled}
+              termsText={settings.invoiceTermsText}
+              bankDetails={settings.invoiceBankDetails}
               zatcaInvoiceHash={invoice.zatcaInvoiceHash}
               zatcaSignature={invoice.zatcaSignature}
               zatcaPublicKey={invoice.zatcaPublicKey}

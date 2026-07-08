@@ -109,7 +109,12 @@ export interface Settings {
   invoiceHeaderMode: InvoiceHeaderMode;
   invoiceLetterheadTopMm: number; // blank space reserved at the top in letterhead mode
   invoiceLetterheadBottomMm: number; // blank space reserved at the bottom in letterhead mode
-  invoiceFooterText: string; // custom footer (bank details, CR number, a thank-you line…)
+  invoiceFooterText: string; // custom footer (a thank-you line, small print…)
+  invoiceLogoDataUrl: string; // uploaded company logo (data URL); empty → Invoice X default mark
+  invoiceStampDataUrl: string; // uploaded stamp/seal image (data URL)
+  invoiceStampEnabled: boolean; // auto-apply the stamp to generated invoices
+  invoiceTermsText: string; // terms & conditions block
+  invoiceBankDetails: string; // bank account details block
 }
 
 /** The full persisted shape (one localStorage key). Mirrors a future DB schema. */

@@ -467,6 +467,11 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
               letterheadTopMm={settings.invoiceLetterheadTopMm}
               letterheadBottomMm={settings.invoiceLetterheadBottomMm}
               footerText={settings.invoiceFooterText}
+              logoDataUrl={settings.invoiceLogoDataUrl}
+              stampDataUrl={settings.invoiceStampDataUrl}
+              stampEnabled={settings.invoiceStampEnabled}
+              termsText={settings.invoiceTermsText}
+              bankDetails={settings.invoiceBankDetails}
             />
           </div>
         </div>

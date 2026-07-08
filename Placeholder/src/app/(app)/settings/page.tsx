@@ -21,6 +21,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Modal } from "@/components/ui/Modal";
 import { CompanyProfileCard } from "@/components/settings/CompanyProfileCard";
 import { InvoicePreferencesCard } from "@/components/settings/InvoicePreferencesCard";
+import { InvoiceBrandingCard } from "@/components/settings/InvoiceBrandingCard";
 import { InvoiceTemplateCard } from "@/components/settings/InvoiceTemplateCard";
 import { PasskeysCard } from "@/components/settings/PasskeysCard";
 import { ZatcaCsrCard } from "@/components/settings/ZatcaCsrCard";
@@ -129,6 +130,9 @@ export default function SettingsPage() {
       </section>
       <section id="preferences" className="scroll-mt-24">
         <InvoicePreferencesCard />
+      </section>
+      <section id="branding" className="scroll-mt-24">
+        <InvoiceBrandingCard />
       </section>
       <section id="template" className="scroll-mt-24">
         <InvoiceTemplateCard />

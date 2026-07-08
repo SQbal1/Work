@@ -30,6 +30,8 @@ export function InvoiceTemplateCard() {
   const [headerMode, setHeaderMode] = useState<InvoiceHeaderMode>(settings.invoiceHeaderMode);
   const [topMm, setTopMm] = useState(String(settings.invoiceLetterheadTopMm));
   const [bottomMm, setBottomMm] = useState(String(settings.invoiceLetterheadBottomMm));
+  const [terms, setTerms] = useState(settings.invoiceTermsText);
+  const [bankDetails, setBankDetails] = useState(settings.invoiceBankDetails);
   const [footerText, setFooterText] = useState(settings.invoiceFooterText);
 
   function handleSubmit(e: FormEvent) {
@@ -38,6 +40,8 @@ export function InvoiceTemplateCard() {
       invoiceHeaderMode: headerMode,
       invoiceLetterheadTopMm: clampMm(topMm, 45),
       invoiceLetterheadBottomMm: clampMm(bottomMm, 25),
+      invoiceTermsText: terms,
+      invoiceBankDetails: bankDetails,
       invoiceFooterText: footerText,
     });
     toast.success("Invoice template saved");
@@ -83,12 +87,28 @@ export function InvoiceTemplateCard() {
             </div>
           ) : null}
           <Textarea
+            id="tpl-terms"
+            label="Terms & conditions"
+            hint="Printed in its own block on every invoice (payment terms, late fees, ownership…)."
+            value={terms}
+            onChange={(e) => setTerms(e.target.value)}
+            rows={3}
+          />
+          <Textarea
+            id="tpl-bank"
+            label="Bank account details"
+            hint="Account name, IBAN, SWIFT/BIC — shown so customers know where to pay."
+            value={bankDetails}
+            onChange={(e) => setBankDetails(e.target.value)}
+            rows={3}
+          />
+          <Textarea
             id="tpl-footer"
-            label="Footer text"
-            hint="Bank details, CR number, or a thank-you line — printed at the bottom of every invoice."
+            label="Footer line"
+            hint="A short line printed at the very bottom (e.g. “This is a computer-generated invoice”)."
             value={footerText}
             onChange={(e) => setFooterText(e.target.value)}
-            rows={3}
+            rows={2}
           />
         </CardBody>
         <div className="flex justify-end border-t border-hairline px-5 py-4 sm:px-6">

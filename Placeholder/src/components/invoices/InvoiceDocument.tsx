@@ -10,6 +10,8 @@ import { ZatcaQr } from "./ZatcaQr";
 
 /** The Invoice X signal gradient, inlined so print/PDF capture never depends on CSS vars. */
 const SIGNAL_GRADIENT = "linear-gradient(100deg, #d9f07c 0%, #a8ff53 42%, #3ee6a0 100%)";
+/** Table header / total bar — green→blue, per Ali's requested colour scheme. */
+const TABLE_GRADIENT = "linear-gradient(90deg, #064e3b 0%, #0e3a52 55%, #0f2f4a 100%)";
 
 export interface InvoiceDocumentProps {
   company: Company;
@@ -26,8 +28,16 @@ export interface InvoiceDocumentProps {
   headerMode?: InvoiceHeaderMode;
   letterheadTopMm?: number;
   letterheadBottomMm?: number;
-  /** Custom footer (bank details, CR number, a thank-you line…). */
+  /** Custom footer small-print line. */
   footerText?: string;
+  /** Uploaded company logo (data URL); empty → the Invoice X default mark. */
+  logoDataUrl?: string;
+  /** Uploaded stamp/seal (data URL) + whether to show it. */
+  stampDataUrl?: string;
+  stampEnabled?: boolean;
+  /** Content blocks printed near the foot of the invoice. */
+  termsText?: string;
+  bankDetails?: string;
   /** ZATCA Phase-2 structural preview fields — present only once the invoice has been signed. */
   zatcaInvoiceHash?: string | null;
   zatcaSignature?: string | null;
@@ -57,12 +67,12 @@ function BoxHeading({ en, ar }: { en: string; ar: string }) {
   );
 }
 
-/** Stacked bilingual label for table headers and meta cells. */
+/** Stacked bilingual label for table headers. */
 function StackLabel({ en, ar, align = "left" }: { en: string; ar: string; align?: "left" | "right" }) {
   return (
     <div className={align === "right" ? "text-right" : "text-left"}>
       <div>{en}</div>
-      <Ar className="font-normal text-slate-400">{ar}</Ar>
+      <Ar className="font-normal text-white/60">{ar}</Ar>
     </div>
   );
 }
@@ -76,14 +86,41 @@ function InlineLabel({ en, ar, className }: { en: string; ar: string; className?
   );
 }
 
+/** The default brand mark (Invoice X): dark tile carrying the gradient X. Used until a tenant uploads their own logo. */
+function InvoiceLogoMark() {
+  return (
+    <span className="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#0d0f12] ring-1 ring-slate-700">
+      <span
+        aria-hidden
+        className="absolute inset-0"
+        style={{ background: "radial-gradient(80% 80% at 30% 20%, rgba(168,255,83,0.18), transparent 70%)" }}
+      />
+      <svg viewBox="0 0 24 24" className="relative h-6 w-6" aria-hidden>
+        <defs>
+          <linearGradient id="ix-doc-x" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#d9f07c" />
+            <stop offset="45%" stopColor="#a8ff53" />
+            <stop offset="100%" stopColor="#3ee6a0" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M4 3.5 L10.4 12 L4 20.5 H8.1 L12.4 14.7 L16.7 20.5 H20.8 L14.4 12 L20.8 3.5 H16.7 L12.4 9.3 L8.1 3.5 Z"
+          fill="url(#ix-doc-x)"
+        />
+      </svg>
+    </span>
+  );
+}
+
 /**
  * The clean, printable invoice layout. Shared by the builder's live preview and
  * the standalone invoice preview page so they can never drift apart. Bilingual
  * (EN/AR, ZATCA-style tax invoice); every Arabic run is bidi-isolated and values
- * always sit in their own flex/grid cell so numbers never garble. In letterhead
- * mode the app header is replaced by reserved blank bands so tenants can print
- * onto their own stationery. The QR is Phase-1-style by default, upgrading to a
- * simulated Phase-2-style stamp once signed — a compliance *preview*, not a claim.
+ * always sit in their own layout cell so numbers never garble. Logo, stamp, terms,
+ * and bank details are workspace settings that flow onto every invoice. In
+ * letterhead mode the app header is replaced by reserved blank bands so tenants
+ * can print onto their own stationery. The QR is Phase-1-style by default,
+ * upgrading to a simulated Phase-2-style stamp once signed — a preview, not a claim.
  */
 export function InvoiceDocument(props: InvoiceDocumentProps) {
   const { company, customer, number, issueDate, dueDate, status, items, discountPercent, notes } = props;
@@ -93,7 +130,17 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
   const totals = computeTotals(items, discountPercent);
   const statusMeta = STATUS_META[status];
   const isZatcaSigned = Boolean(props.zatcaInvoiceHash);
-  const initial = (company.name || company.legalName || "L").trim().charAt(0).toUpperCase();
+  const logoDataUrl = props.logoDataUrl ?? "";
+  const showStamp = Boolean(props.stampEnabled && props.stampDataUrl);
+  const termsText = props.termsText ?? "";
+  const bankDetails = props.bankDetails ?? "";
+
+  const logo = logoDataUrl ? (
+    // eslint-disable-next-line @next/next/no-img-element -- data URL from settings; next/image can't optimize it and it must render into the html2canvas capture.
+    <img src={logoDataUrl} alt={`${company.name || "Company"} logo`} className="h-14 w-auto max-w-[180px] object-contain" />
+  ) : (
+    <InvoiceLogoMark />
+  );
 
   const statusChip = (
     <span
@@ -136,14 +183,7 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
         ) : (
           <div className="flex flex-wrap items-start justify-between gap-4 border-b-2 border-slate-900 pb-6">
             <div className="flex items-center gap-3.5">
-              {/* Logo placeholder — swaps for a real mark when branding lands.
-                  Kept as a designed slot (per Ali's feedback) rather than a hard-coded glyph. */}
-              <span className="relative grid h-14 w-14 shrink-0 place-items-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400">
-                <span className="text-lg font-bold text-slate-500">{initial}</span>
-                <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 rounded-full bg-white px-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-slate-400 ring-1 ring-slate-200">
-                  logo
-                </span>
-              </span>
+              {logo}
               <div>
                 <div className="text-lg font-semibold leading-tight text-slate-900">
                   {company.name || "Your Company"}
@@ -225,24 +265,24 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
           </div>
         </div>
 
-        {/* Line items — bilingual stacked headers */}
+        {/* Line items — a proper bordered table with the green→blue header (Ali's ask). */}
         <div className="mt-7 overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full border-collapse overflow-hidden rounded-xl text-sm ring-1 ring-slate-300">
             <thead>
-              <tr className="border-y border-slate-300 bg-slate-50/70 text-xs uppercase tracking-wide text-slate-500">
-                <th className="py-2.5 pl-3 pr-3 font-semibold">
+              <tr className="text-left text-xs uppercase tracking-wide text-white" style={{ background: TABLE_GRADIENT }}>
+                <th className="border-r border-white/10 px-3 py-2.5 font-semibold">
                   <StackLabel en="Description" ar="الوصف" />
                 </th>
-                <th className="px-3 py-2.5 font-semibold">
+                <th className="border-r border-white/10 px-3 py-2.5 font-semibold">
                   <StackLabel en="Qty" ar="الكمية" align="right" />
                 </th>
-                <th className="px-3 py-2.5 font-semibold">
+                <th className="border-r border-white/10 px-3 py-2.5 font-semibold">
                   <StackLabel en="Unit price" ar="سعر الوحدة" align="right" />
                 </th>
-                <th className="px-3 py-2.5 font-semibold">
+                <th className="border-r border-white/10 px-3 py-2.5 font-semibold">
                   <StackLabel en="VAT" ar="الضريبة" align="right" />
                 </th>
-                <th className="py-2.5 pl-3 pr-3 font-semibold">
+                <th className="px-3 py-2.5 font-semibold">
                   <StackLabel en="Amount" ar="المبلغ" align="right" />
                 </th>
               </tr>
@@ -250,24 +290,28 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-6 text-center text-sm italic text-slate-400">
+                  <td colSpan={5} className="border border-slate-200 py-6 text-center text-sm italic text-slate-400">
                     No line items yet
                   </td>
                 </tr>
               ) : (
-                items.map((item) => (
-                  <tr key={item.id} className="border-b border-slate-100">
-                    <td className="py-3 pl-3 pr-3 font-medium text-slate-800">{item.name || "—"}</td>
-                    <td className="px-3 py-3 text-right text-slate-600 nums-tabular">{item.quantity}</td>
-                    <td className="px-3 py-3 text-right text-slate-600">
+                items.map((item, i) => (
+                  <tr key={item.id} className={i % 2 === 1 ? "bg-emerald-50/40" : "bg-white"}>
+                    <td className="border border-slate-200 px-3 py-3 font-medium text-slate-800">
+                      {item.name || "—"}
+                    </td>
+                    <td className="border border-slate-200 px-3 py-3 text-right text-slate-600 nums-tabular">
+                      {item.quantity}
+                    </td>
+                    <td className="border border-slate-200 px-3 py-3 text-right text-slate-600">
                       <span className="font-mono nums-tabular">
                         <Money amount={item.unitPrice} currency={currency} />
                       </span>
                     </td>
-                    <td className="px-3 py-3 text-right text-slate-500 nums-tabular">
+                    <td className="border border-slate-200 px-3 py-3 text-right text-slate-500 nums-tabular">
                       {Math.round((item.vatRate || 0) * 100)}%
                     </td>
-                    <td className="py-3 pl-3 pr-3 text-right font-semibold text-slate-900">
+                    <td className="border border-slate-200 px-3 py-3 text-right font-semibold text-slate-900">
                       <span className="font-mono nums-tabular">
                         <Money amount={lineSubtotal(item)} currency={currency} />
                       </span>
@@ -304,9 +348,12 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
                   value={<Money amount={totals.vatTotal} currency={currency} />}
                 />
               </div>
-              <div className="flex items-center justify-between gap-4 bg-slate-900 px-4 py-3 text-base font-semibold text-white sm:px-5">
+              <div
+                className="flex items-center justify-between gap-4 px-4 py-3 text-base font-semibold text-white sm:px-5"
+                style={{ background: TABLE_GRADIENT }}
+              >
                 <span>
-                  Total due <Ar className="font-medium text-slate-300">الإجمالي المستحق</Ar>
+                  Total due <Ar className="font-medium text-white/70">الإجمالي المستحق</Ar>
                 </span>
                 <span className="font-mono nums-tabular">
                   <Money amount={totals.total} currency={currency} />
@@ -351,6 +398,42 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
           <div className="mt-7 rounded-xl bg-slate-50/70 p-4 ring-1 ring-slate-200 sm:p-5">
             <BoxHeading en="Notes" ar="ملاحظات" />
             <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-slate-600">{notes}</p>
+          </div>
+        ) : null}
+
+        {/* Terms & bank details — side by side; each shown only when filled in. */}
+        {termsText || bankDetails ? (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {termsText ? (
+              <div className="rounded-xl bg-slate-50/70 p-4 ring-1 ring-slate-200 sm:p-5">
+                <BoxHeading en="Terms & conditions" ar="الشروط والأحكام" />
+                <p className="mt-3 whitespace-pre-line text-xs leading-relaxed text-slate-600">{termsText}</p>
+              </div>
+            ) : null}
+            {bankDetails ? (
+              <div className="rounded-xl bg-slate-50/70 p-4 ring-1 ring-slate-200 sm:p-5">
+                <BoxHeading en="Bank details" ar="التفاصيل البنكية" />
+                <p className="mt-3 whitespace-pre-line text-xs leading-relaxed text-slate-600">{bankDetails}</p>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
+        {/* Stamp / authorised-signature zone — appears automatically once a stamp is set. */}
+        {showStamp ? (
+          <div className="mt-7 flex justify-end">
+            <div className="text-center">
+              {/* eslint-disable-next-line @next/next/no-img-element -- data URL from settings; must render into the html2canvas capture. */}
+              <img
+                src={props.stampDataUrl}
+                alt="Company stamp"
+                className="mx-auto h-28 w-auto max-w-[180px] object-contain"
+                style={{ mixBlendMode: "multiply" }}
+              />
+              <div className="mt-1 border-t border-slate-300 pt-1 text-[11px] font-medium text-slate-500">
+                Authorised signature <Ar className="text-slate-400">التوقيع المعتمد</Ar>
+              </div>
+            </div>
           </div>
         ) : null}
 
