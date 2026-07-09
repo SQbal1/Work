@@ -23,8 +23,8 @@ import { useStore } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { uid } from "@/lib/id";
 import { computeTotals, lineSubtotal } from "@/lib/calc";
-import { vatRateForCategory } from "@/data/constants";
-import { addDaysISO, todayISO, formatCurrency } from "@/lib/format";
+import { vatRateForCategory, DUE_DATE_PRESETS } from "@/data/constants";
+import { addDaysISO, daysBetweenISO, todayISO, formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import type { InvoiceLineItem, InvoiceStatus } from "@/types";
 
@@ -56,6 +56,14 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
   const [dueDate, setDueDate] = useState(
     existing?.dueDate ?? addDaysISO(todayISO(), settings.defaultDueDays),
   );
+  // Payment terms — a preset (days from issue date) or "custom" for a manually picked date.
+  const [termsPreset, setTermsPreset] = useState<number | "custom">(() => {
+    const days = daysBetweenISO(
+      existing?.issueDate ?? todayISO(),
+      existing?.dueDate ?? addDaysISO(todayISO(), settings.defaultDueDays),
+    );
+    return DUE_DATE_PRESETS.some((p) => p.days === days) ? days : "custom";
+  });
   const [status, setStatus] = useState<InvoiceStatus>(existing?.status ?? "draft");
   const [items, setItems] = useState<InvoiceLineItem[]>(
     existing ? existing.items.map((i) => ({ ...i })) : [],
@@ -115,6 +123,23 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
     flashNewLine(id);
   }
 
+  /** Issue date changed — if a payment-terms preset is active, keep the due date in sync. */
+  function handleIssueDateChange(next: string) {
+    setIssueDate(next);
+    if (termsPreset !== "custom") setDueDate(addDaysISO(next, termsPreset));
+  }
+
+  /** Payment terms changed — a preset recomputes the due date; "Custom" leaves it editable. */
+  function handleTermsChange(value: string) {
+    if (value === "custom") {
+      setTermsPreset("custom");
+      return;
+    }
+    const days = Number(value);
+    setTermsPreset(days);
+    setDueDate(addDaysISO(issueDate, days));
+  }
+
   /** Scroll a field into view and focus it (used by the completeness checklist). */
   function focusField(id: string) {
     setMobileView("edit");
@@ -146,7 +171,7 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
     {
       label: "Due date added",
       done: !!dueDate,
-      action: { label: "Set", onClick: () => focusField("inv-due") },
+      action: { label: "Set", onClick: () => focusField("inv-terms") },
     },
     {
       label: "At least one line item",
@@ -269,13 +294,25 @@ export function InvoiceBuilder({ invoiceId }: { invoiceId?: string }) {
                 type="date"
                 label="Issue date"
                 value={issueDate}
-                onChange={(e) => setIssueDate(e.target.value)}
+                onChange={(e) => handleIssueDateChange(e.target.value)}
+              />
+              <Select
+                id="inv-terms"
+                label="Payment terms"
+                value={String(termsPreset)}
+                onChange={(e) => handleTermsChange(e.target.value)}
+                options={[
+                  ...DUE_DATE_PRESETS.map((p) => ({ value: String(p.days), label: p.label })),
+                  { value: "custom", label: "Custom date" },
+                ]}
               />
               <Input
                 id="inv-due"
                 type="date"
                 label="Due date"
+                hint={termsPreset === "custom" ? undefined : "Set from payment terms"}
                 value={dueDate}
+                disabled={termsPreset !== "custom"}
                 onChange={(e) => setDueDate(e.target.value)}
               />
               <Select

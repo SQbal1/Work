@@ -50,6 +50,14 @@ export function addDaysISO(baseISO: string, days: number): string {
   return toISODate(d);
 }
 
+/** Whole days from one yyyy-mm-dd date to another (may be negative). */
+export function daysBetweenISO(fromISO: string, toISO: string): number {
+  const from = parseISODate(fromISO);
+  const to = parseISODate(toISO);
+  if (!from || !to) return NaN;
+  return Math.round((to.getTime() - from.getTime()) / 86_400_000);
+}
+
 /** Human date, e.g. "16 Jun 2026". */
 export function formatDate(iso: string): string {
   const d = parseISODate(iso) ?? (iso ? new Date(iso) : null);

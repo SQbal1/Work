@@ -27,8 +27,8 @@ export function vatCategoryLabel(category: VatCategory): string {
 /** Common net payment terms offered in invoice/settings dropdowns. */
 export const DUE_DATE_PRESETS = [
   { label: "Due on receipt", days: 0 },
-  { label: "Net 7", days: 7 },
-  { label: "Net 14", days: 14 },
+  { label: "Net 10", days: 10 },
+  { label: "Net 15", days: 15 },
   { label: "Net 30", days: 30 },
   { label: "Net 60", days: 60 },
 ];
