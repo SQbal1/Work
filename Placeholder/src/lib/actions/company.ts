@@ -37,10 +37,17 @@ export async function updateSettings(data: Partial<Settings>): Promise<void> {
     patch.invoice_letterhead_bottom_mm = data.invoiceLetterheadBottomMm;
   if (data.invoiceFooterText !== undefined) patch.invoice_footer_text = data.invoiceFooterText;
   if (data.invoiceLogoDataUrl !== undefined) patch.invoice_logo_data_url = data.invoiceLogoDataUrl;
+  if (data.invoiceLogoScale !== undefined) patch.invoice_logo_scale = data.invoiceLogoScale;
   if (data.invoiceStampDataUrl !== undefined) patch.invoice_stamp_data_url = data.invoiceStampDataUrl;
   if (data.invoiceStampEnabled !== undefined) patch.invoice_stamp_enabled = data.invoiceStampEnabled;
   if (data.invoiceTermsText !== undefined) patch.invoice_terms_text = data.invoiceTermsText;
   if (data.invoiceBankDetails !== undefined) patch.invoice_bank_details = data.invoiceBankDetails;
+  if (data.invoiceLetterheadImageEnabled !== undefined)
+    patch.invoice_letterhead_image_enabled = data.invoiceLetterheadImageEnabled;
+  if (data.invoiceHeaderImageDataUrl !== undefined)
+    patch.invoice_header_image_data_url = data.invoiceHeaderImageDataUrl;
+  if (data.invoiceFooterImageDataUrl !== undefined)
+    patch.invoice_footer_image_data_url = data.invoiceFooterImageDataUrl;
 
   const { error } = await supabase.from("settings").update(patch).eq("workspace_id", workspaceId);
   if (error) throw error;

@@ -356,11 +356,15 @@ export type Database = {
           default_notes: string
           default_vat_rate: number
           invoice_bank_details: string
+          invoice_footer_image_data_url: string
           invoice_footer_text: string
+          invoice_header_image_data_url: string
           invoice_header_mode: string
           invoice_letterhead_bottom_mm: number
+          invoice_letterhead_image_enabled: boolean
           invoice_letterhead_top_mm: number
           invoice_logo_data_url: string
+          invoice_logo_scale: number
           invoice_prefix: string
           invoice_stamp_data_url: string
           invoice_stamp_enabled: boolean
@@ -376,11 +380,15 @@ export type Database = {
           default_notes?: string
           default_vat_rate?: number
           invoice_bank_details?: string
+          invoice_footer_image_data_url?: string
           invoice_footer_text?: string
+          invoice_header_image_data_url?: string
           invoice_header_mode?: string
           invoice_letterhead_bottom_mm?: number
+          invoice_letterhead_image_enabled?: boolean
           invoice_letterhead_top_mm?: number
           invoice_logo_data_url?: string
+          invoice_logo_scale?: number
           invoice_prefix?: string
           invoice_stamp_data_url?: string
           invoice_stamp_enabled?: boolean
@@ -396,11 +404,15 @@ export type Database = {
           default_notes?: string
           default_vat_rate?: number
           invoice_bank_details?: string
+          invoice_footer_image_data_url?: string
           invoice_footer_text?: string
+          invoice_header_image_data_url?: string
           invoice_header_mode?: string
           invoice_letterhead_bottom_mm?: number
+          invoice_letterhead_image_enabled?: boolean
           invoice_letterhead_top_mm?: number
           invoice_logo_data_url?: string
+          invoice_logo_scale?: number
           invoice_prefix?: string
           invoice_stamp_data_url?: string
           invoice_stamp_enabled?: boolean

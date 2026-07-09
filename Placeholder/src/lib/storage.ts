@@ -15,20 +15,28 @@ const SETTINGS_ADDITIONS: Pick<
   | "invoiceLetterheadBottomMm"
   | "invoiceFooterText"
   | "invoiceLogoDataUrl"
+  | "invoiceLogoScale"
   | "invoiceStampDataUrl"
   | "invoiceStampEnabled"
   | "invoiceTermsText"
   | "invoiceBankDetails"
+  | "invoiceLetterheadImageEnabled"
+  | "invoiceHeaderImageDataUrl"
+  | "invoiceFooterImageDataUrl"
 > = {
   invoiceHeaderMode: "standard",
   invoiceLetterheadTopMm: 45,
   invoiceLetterheadBottomMm: 25,
   invoiceFooterText: "",
   invoiceLogoDataUrl: "",
+  invoiceLogoScale: 100,
   invoiceStampDataUrl: "",
   invoiceStampEnabled: false,
   invoiceTermsText: "",
   invoiceBankDetails: "",
+  invoiceLetterheadImageEnabled: false,
+  invoiceHeaderImageDataUrl: "",
+  invoiceFooterImageDataUrl: "",
 };
 
 export function isBrowser(): boolean {

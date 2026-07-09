@@ -41,10 +41,14 @@ export function rowToSettings(row: Tables<"settings">): Settings {
     invoiceLetterheadBottomMm: row.invoice_letterhead_bottom_mm,
     invoiceFooterText: row.invoice_footer_text,
     invoiceLogoDataUrl: row.invoice_logo_data_url,
+    invoiceLogoScale: row.invoice_logo_scale,
     invoiceStampDataUrl: row.invoice_stamp_data_url,
     invoiceStampEnabled: row.invoice_stamp_enabled,
     invoiceTermsText: row.invoice_terms_text,
     invoiceBankDetails: row.invoice_bank_details,
+    invoiceLetterheadImageEnabled: row.invoice_letterhead_image_enabled,
+    invoiceHeaderImageDataUrl: row.invoice_header_image_data_url,
+    invoiceFooterImageDataUrl: row.invoice_footer_image_data_url,
   };
 }
 

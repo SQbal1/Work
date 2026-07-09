@@ -32,12 +32,18 @@ export interface InvoiceDocumentProps {
   footerText?: string;
   /** Uploaded company logo (data URL); empty → the Invoice X default mark. */
   logoDataUrl?: string;
+  /** Logo size as a percentage of the default (50–200). */
+  logoScale?: number;
   /** Uploaded stamp/seal (data URL) + whether to show it. */
   stampDataUrl?: string;
   stampEnabled?: boolean;
   /** Content blocks printed near the foot of the invoice. */
   termsText?: string;
   bankDetails?: string;
+  /** Full-width letterhead banners embedded at the very top/bottom when enabled. */
+  letterheadImageEnabled?: boolean;
+  headerImageDataUrl?: string;
+  footerImageDataUrl?: string;
   /** ZATCA Phase-2 structural preview fields — present only once the invoice has been signed. */
   zatcaInvoiceHash?: string | null;
   zatcaSignature?: string | null;
@@ -59,15 +65,18 @@ function Ar({ children, className }: { children: ReactNode; className?: string }
 }
 
 /** The default brand mark (Invoice X): dark tile carrying the gradient X. Used until a tenant uploads their own logo. */
-function InvoiceLogoMark() {
+function InvoiceLogoMark({ size }: { size: number }) {
   return (
-    <span className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#0d0f12] ring-1 ring-slate-700">
+    <span
+      className="relative grid shrink-0 place-items-center overflow-hidden rounded-xl bg-[#0d0f12] ring-1 ring-slate-700"
+      style={{ height: size, width: size }}
+    >
       <span
         aria-hidden
         className="absolute inset-0"
         style={{ background: "radial-gradient(80% 80% at 30% 20%, rgba(168,255,83,0.18), transparent 70%)" }}
       />
-      <svg viewBox="0 0 24 24" className="relative h-7 w-7" aria-hidden>
+      <svg viewBox="0 0 24 24" className="relative" style={{ height: size * 0.44, width: size * 0.44 }} aria-hidden>
         <defs>
           <linearGradient id="ix-doc-x" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#d9f07c" />
@@ -171,11 +180,25 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
   const termsText = props.termsText ?? "";
   const bankDetails = props.bankDetails ?? "";
 
+  // Logo sizing — base 64px scaled by the tenant's percentage (clamped 50–200).
+  const logoScale = Math.min(200, Math.max(50, props.logoScale ?? 100)) / 100;
+  const logoSize = Math.round(64 * logoScale);
+
+  // Embedded letterhead banners — full-bleed header/footer images.
+  const letterheadOn = Boolean(props.letterheadImageEnabled);
+  const headerImg = letterheadOn ? props.headerImageDataUrl ?? "" : "";
+  const footerImg = letterheadOn ? props.footerImageDataUrl ?? "" : "";
+
   const logo = logoDataUrl ? (
     // eslint-disable-next-line @next/next/no-img-element -- data URL from settings; must render into the html2canvas capture.
-    <img src={logoDataUrl} alt={`${company.name || "Company"} logo`} className="h-16 w-auto max-w-[220px] object-contain" />
+    <img
+      src={logoDataUrl}
+      alt={`${company.name || "Company"} logo`}
+      className="w-auto object-contain"
+      style={{ height: logoSize, maxWidth: Math.round(logoSize * 3.5) }}
+    />
   ) : (
-    <InvoiceLogoMark />
+    <InvoiceLogoMark size={logoSize} />
   );
 
   const statusChip = (
@@ -194,22 +217,28 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
   );
 
   return (
-    <div className="print-area mx-auto w-full max-w-3xl bg-white text-slate-800">
-      {/* Signal keyline — the one surgical accent; skipped on letterhead paper. */}
-      {!isLetterhead ? <div className="h-1 w-full" style={{ background: SIGNAL_GRADIENT }} /> : null}
+    <div className="print-area mx-auto w-full max-w-3xl overflow-hidden bg-white text-slate-800">
+      {/* Letterhead header banner (full-bleed) or the signal keyline. */}
+      {headerImg ? (
+        // eslint-disable-next-line @next/next/no-img-element -- data URL from settings; must render into the html2canvas capture.
+        <img src={headerImg} alt="Letterhead header" className="block w-full object-contain" />
+      ) : !isLetterhead ? (
+        <div className="h-1 w-full" style={{ background: SIGNAL_GRADIENT }} />
+      ) : null}
 
       <div className="p-6 sm:p-10">
         {isLetterhead ? (
           <div aria-hidden style={{ height: `${Math.max(0, props.letterheadTopMm ?? 45)}mm` }} />
         ) : null}
 
-        {/* Header — logo on top (centred), title below it. */}
+        {/* Header — logo on top (centred), title below it. The logo is hidden when a
+            letterhead banner already carries the tenant's branding. */}
         <div className="flex flex-col items-center gap-3 text-center">
-          {!isLetterhead ? logo : null}
+          {!isLetterhead && !headerImg ? logo : null}
           <div className="text-2xl font-bold leading-none tracking-tight text-slate-900 sm:text-3xl">
             <Ar className="align-middle">فاتورة ضريبية</Ar> <span className="align-middle">Tax Invoice</span>
           </div>
-          {!isLetterhead && (company.name || company.legalName) ? (
+          {!isLetterhead && !headerImg && (company.name || company.legalName) ? (
             <div className="text-sm font-medium text-slate-500">{company.name || company.legalName}</div>
           ) : null}
         </div>
@@ -460,6 +489,12 @@ export function InvoiceDocument(props: InvoiceDocumentProps) {
           <div aria-hidden style={{ height: `${Math.max(0, props.letterheadBottomMm ?? 25)}mm` }} />
         ) : null}
       </div>
+
+      {/* Letterhead footer banner (full-bleed). */}
+      {footerImg ? (
+        // eslint-disable-next-line @next/next/no-img-element -- data URL from settings; must render into the html2canvas capture.
+        <img src={footerImg} alt="Letterhead footer" className="block w-full object-contain" />
+      ) : null}
     </div>
   );
 }
